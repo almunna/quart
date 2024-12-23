@@ -1,0 +1,117 @@
+<!--Start Back To Top Button-->
+    <a href="javaScript:;" class="wl-primary-button back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+<!--End Back To Top Button-->
+
+<!--footer -->
+<div class="footer">
+    <p class="mb-0">© {{ current_year }} {{ WhiteLabel['Bezeichnung'] }} | Alle Rechte vorbehalten.
+    </p>
+</div>
+<!-- end footer -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    let entryTime = Date.now();  // Zeitpunkt des Seitenaufrufs
+
+    // Funktion, um die aktuelle Zeit in der Zeitzone 'Europe/Berlin' zu erhalten
+    function getCurrentTimeInBerlin() {
+        return new Intl.DateTimeFormat('de-DE', {
+            timeZone: 'Europe/Berlin',
+            dateStyle: 'short',
+            timeStyle: 'long'
+        }).format(new Date());
+    }
+
+    window.addEventListener("beforeunload", async function(event) {
+        let timeSpent = Date.now() - entryTime;  // Verweildauer in Millisekunden
+        console.log(`Verweildauer: ${timeSpent} ms`);  // Debug-Ausgabe
+
+        // Aktuelle Zeit in Berlin abrufen
+        let currentTimeBerlin = getCurrentTimeInBerlin();
+        console.log(`Aktuelle Zeit in Berlin: ${currentTimeBerlin}`);  // Debug-Ausgabe
+
+        let sessionID = "{{ Session_Info }}";  // Stelle sicher, dass dies korrekt ersetzt wird
+        let session_Nutzer = "{{ nutzername }}";
+
+        // Überprüfe, ob sessionID gültig ist
+        if (sessionID) {
+            try {
+                await axios.post('https://cdn.personalpeak360.de/track_time', {
+                    time_spent: timeSpent,
+                    session_ID: sessionID,
+                    session_Nutzer: session_Nutzer,
+                    timestamp: currentTimeBerlin  // Füge die aktuelle Zeit hinzu
+                });
+            } catch (error) {
+                console.error('Error sending data:', error);  // Fehlerbehandlung
+            }
+        }
+    });
+</script>
+
+
+
+<script>
+    // Create an instance of Notyf
+    var message = new nachricht({
+        duration: 6000,
+        position: {
+            x: 'left',
+            y: 'top',
+        },
+        dismissible: true
+    });
+
+    
+    // Nutzer-ID sollte dynamisch aus der Session oder dem Kontext abgerufen werden
+    const userId = "{{ nutzer_ID }}"; // Beispielhafte Nutzer-ID; sollte dynamisch gesetzt werden
+    const socket = new WebSocket(`wss://dashboard.personalpeak360.de/ws/${userId}`);
+
+    socket.onopen = function () {
+        console.log("WebSocket-Verbindung erfolgreich hergestellt.");
+
+        // Keep-Alive-Nachricht alle 30 Sekunden senden
+        keepAliveInterval = setInterval(() => {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send("ping");
+            }
+        }, 30000);
+    };
+
+    socket.onmessage = function (event) {
+        const text_nachricht = event.data;
+
+        if (text_nachricht == "ping") {
+            console.log("Keep-Alive Nachricht vom Server.");
+        } else {
+            // Display an error notification
+            message.success(text_nachricht);
+            console.log("Neue Nachricht:", text_nachricht);
+        }
+    };
+
+    socket.onclose = function () {
+        console.log("WebSocket-Verbindung geschlossen.");
+    };
+
+    socket.onerror = function (error) {
+        console.error("WebSocket-Fehler:", error);
+    };
+
+    window.addEventListener("beforeunload", function(event) {
+        if (socket.readyState === WebSocket.OPEN) {
+            socket.close(); // Schließt die WebSocket-Verbindung sicher
+        }
+        if (keepAliveInterval) {
+            clearInterval(keepAliveInterval); // Stoppe das Keep-Alive-Intervall, wenn das Fenster geschlossen wird
+        }
+    });
+</script>
+
+
+<!-- <script>
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+</script> -->

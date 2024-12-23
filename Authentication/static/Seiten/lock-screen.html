@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Sperrbildschirm</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body class="bg-lock-screen">
+	<!-- wrapper -->
+	<div class="wrapper">
+		<div class="authentication-lock-screen d-flex align-items-center justify-content-center">
+            <form class="row g-3" action="https://auth.{{WHITELABEL_Domain}}/sperrbildschirm" method="post">
+                <div class="card shadow-none bg-transparent">
+                    <div class="card-body p-md-5 text-center">
+                        <h2 id="time" class="text-white"></h2>
+                        <h5 id="date" class="text-white"></h5>
+                        <div class="">
+                            <img src="{{ avatar_url }}" class="mt-5 user-img" style="width: 100px; height: auto;" alt="" />
+                        </div>
+                        <p class="mt-2 text-white">{{ nutzername }}</p>
+                        <div class="mb-3 mt-3">
+                            <input type="password" class="form-control" placeholder="Passwort" id="passwort" name="passwort" />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-light">ENTSPERREN</button>
+                            <a type="button" href="https://auth.{{WHITELABEL_Domain}}/logout" class="btn btn-danger">Abmelden</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+		</div>
+	</div>
+
+	<!-- end wrapper -->
+    <script>
+        function updateTimeAndDate() {
+            const now = new Date();
+
+            // Format the time as HH:MM
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes} Uhr`;
+
+            // Format the date as Wochentag, der DD.MM.YYYY
+            const days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+            const dayName = days[now.getDay()];
+            let day = now.getDate().toString().padStart(2, '0');
+            let month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const dateString = `${dayName}, der ${day}.${month}.${year}`;
+
+            // Update the elements
+            document.getElementById("time").textContent = timeString;
+            document.getElementById("date").textContent = dateString;
+        }
+
+        // Update every minute
+        setInterval(updateTimeAndDate, 60000);
+
+        // Initial call
+        updateTimeAndDate();
+    </script>
+
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            error: "{{ error }}",
+            success: "{{ success }}"
+        },
+        methods: {
+            showMessages() {
+            if (this.isErrorVisible) {
+                this.showError();
+            }
+            if (this.isSuccessVisible) {
+                this.showSuccess();
+            }
+            },
+            showError() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+  
+                // Display an error notification
+                message.error('{{ error }}');
+            },
+            showSuccess() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+  
+                // Display an error notification
+                message.success('{{ success }}');
+            }
+        },
+        computed: {
+            isErrorVisible: function () {
+                return this.error && this.error !== '' && this.error !== 'None';
+            },
+            isSuccessVisible: function() {
+                return this.success && this.success !== '' && this.success !== 'None';
+            }
+        },
+        watch: {
+            isErrorVisible(newVal) {
+                if (!newVal) {
+                    this.closeError();
+                }
+            },
+            isSuccessVisible(newVal) {
+                if (!newVal) {
+                    this.closeSuccess();
+                }
+            }
+        },
+        created() {
+            this.$nextTick(() => {
+                this.showMessages();
+            })
+        }
+    });
+  </script>
+</body>
+
+</html>

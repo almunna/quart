@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Kanban ('{{ Kanban_Board['Name'] }}') → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/kanban/kanban.css">
+
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<style>
+			/* PFLICHTFELDER IM FORMULAR */
+			.required:after {
+				content: " (*)";
+				color: red;
+			}
+		</style>
+
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="card radius-15">
+						<div class="card-body">
+							<div class="card-title">
+								<h4 class="mb-0">{{ Kanban_Board['Name'] }}</h4>
+                                <h6 class="mb-0">Auf dieser Seite kannst du auf das Kanban-Board namens '{{ Kanban_Board['Name'] }}' zugreifen.</h6>
+
+								<br>
+								<a class="btn btn-dark me-3" href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban">Zurück zur Übersicht</a>
+								{% if Kanban_Board['Nutzer_ID_ERSTELLER']['key'] == Nutzer_ID %}
+									<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Einladungslink">Zugriffe</button>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					
+					{% if Kanban_Board['Nutzer_ID_ERSTELLER']['key'] == Nutzer_ID %}
+						<div class="modal fade" id="Einladungslink" tabindex="-1" aria-labelledby="modalBoardErstellen" style="display: none;" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Einladungslinks verwalten</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+										<div class="mb-3">
+											<b>Nutzer mit Zugriff:</b>
+											<ul>
+												{% for nutzer in Nutzer_Liste %}
+													<li>{{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }} ({{ nutzer['Benutzername'] }})</li>
+												{% endfor %}
+											</ul>
+										</div>
+
+										{% if Kanban_Board['Tokens'] %}
+											<div>
+												<b>Aktive Einladungslinks:</b>
+												<ul>
+													{% for token in Kanban_Board['Tokens'] %}
+														<li>https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban/join/{{ token }}</li> <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban/delete-join-token/{{ token }}">Löschen</a>
+													{% endfor %}
+												</ul>
+											</div>
+										{% endif %}
+										
+										<div id="GENERIERTER_EINLADUNGSLINK" class="alert alert-info alert-dismissible fade show" role="alert" style="display: none;">
+											<b>Einladungslink:</b> <br>
+											<span id="invitationLink">LINK</span>
+										</div>
+										<button class="btn btn-primary" onclick="generateInvitationLink()">Einladungslink generieren</button>
+										
+										<script>
+											async function generateInvitationLink() {
+												try {
+													// URL, die den Einladungslink als JSON zurückgibt
+													const response = await fetch('https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban/{{ Kanban_Board['id'] }}/GenerateLink');
+													
+													// Überprüfe, ob die Anfrage erfolgreich war
+													if (!response.ok) {
+														throw new Error('Fehler beim Abrufen des Einladungslinks');
+													}
+											
+													// JSON-Daten aus der Antwort extrahieren
+													const data = await response.json();
+													
+													// Den Link-Text im Alert-Element setzen
+													document.getElementById("invitationLink").innerText = data.link;
+											
+													// Das Alert-Element sichtbar machen
+													document.getElementById("GENERIERTER_EINLADUNGSLINK").style.display = 'block';
+												} catch (error) {
+													console.error('Fehler:', error);
+												}
+											}
+										</script>										
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
+
+                    <div class="card radius-15">
+                        <div class="card-body text-center">
+    						<div id="Kanban-Board-Container">
+								<!-- Entfernen Sie den inneren div, sodass der Flex-Stil direkt auf das #Kanban-Board angewendet wird -->
+								<div id="Kanban-Board"></div>
+							</div>
+							
+							
+							<br>
+							<br>
+							<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNeuesPanel">Neues Panel erstellen</button>
+                        </div>
+                    </div>
+
+					<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="modalBoardErstellen" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Item bearbeiten</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<form id="editForm">
+									<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+										<div class="form-group">
+											<textarea id="editTextarea" class="form-control" rows="4"></textarea>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" id="cancelEditModal">Abbrechen</button>
+										<button type="button" class="btn btn-danger" id="deleteEditModal">Item löschen</button>
+										<button type="submit" class="btn btn-primary">Speichern</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+					
+					<style>
+						.kanban-item {
+							position: relative;
+							cursor: pointer !important;
+						}
+
+						.drag-handle {
+							position: absolute;
+							top: 5px;
+							left: 5px;
+							cursor: move;
+							z-index: 1;
+						}
+
+						#Kanban-Board {
+							display: grid;
+							grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Standard: mehrere Boards pro Zeile */
+							gap: 20px; /* Abstand zwischen den Boards, horizontal und vertikal */
+						}
+
+						.kanban-board {
+							min-height: 400px; /* Mindesthöhe für die Boards */
+							padding: 15px;
+							background-color: #f9f9f9;
+							border: 1px solid #ddd;
+							border-radius: 8px;
+							display: flex;
+							flex-direction: column;
+							margin-bottom: 40px;
+						}
+
+						/* Media Query für kleine Bildschirme */
+						@media (max-width: 600px) {
+							#Kanban-Board {
+								grid-template-columns: 1fr; /* Nur ein Board pro Zeile */
+							}
+						}
+
+					</style>
+					
+
+					<script src="https://cdn.personalpeak360.de/static/assets/custom/kanban/kanban.js"></script>
+					<script>
+						var KanbanTest = new jKanban({
+							element: "#Kanban-Board",
+							gutter: "20px", // Abstand zwischen den Boards
+							widthBoard: "calc(33.33% - 20px)", // Verteilt drei Boards gleichmäßig über die Zeile
+							itemHandleOptions:{
+								enabled: true
+							},
+							click: function(el) {
+								// Hole das Modal-Element und das Textfeld für die Bearbeitung
+								var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+								var editTextarea = document.getElementById("editTextarea");
+
+								// Hole den aktuellen Textinhalt direkt aus dem Item
+								var currentText = el.innerText.trim();
+
+								// Zeige das Modal und fülle das Textfeld mit dem Inhalt
+								editTextarea.value = currentText;
+								editModal.show();  // Öffnet das Modal
+
+								// Speichern der Änderungen
+								var editForm = document.getElementById("editForm");
+								editForm.onsubmit = function(e) {
+									e.preventDefault();
+									var updatedText = editTextarea.value;
+									
+									// Ersetzen des Textes im Item ohne Drag-Handle zu beeinträchtigen
+									el.childNodes[1].innerText = updatedText; // Nur den Inhaltstext aktualisieren
+									editModal.hide();  // Schließt das Modal
+
+
+									// Bei jeder Verschiebung wird das Board-JSON exportiert und gesendet
+									sendBoardData();
+								};
+
+								// Item löschen
+								document.getElementById("deleteEditModal").onclick = function() {
+									if (confirm("Sind Sie sicher, dass Sie dieses Item löschen möchten?")) {
+										el.remove(); // Entfernt das Element aus dem DOM
+										editModal.hide(); // Schließt das Modal
+										sendBoardData(); // Board-JSON exportieren und senden
+									}
+								};
+								
+								// Abbrechen und Modal schließen
+								document.getElementById("cancelEditModal").onclick = function() {
+									editModal.hide();  // Schließt das Modal ohne Änderungen
+								};
+
+								// Modal schließen durch das Schließen-Symbol
+								document.querySelector(".btn-close").onclick = function() {
+									editModal.hide();  // Schließt das Modal ohne Änderungen
+								};
+							},
+							context: function(el, e) {
+								console.log("Trigger on all items right-click!");
+							},
+							dropEl: function(el, target, source, sibling){
+								console.log(target.parentElement.getAttribute('data-id'));
+								console.log(el, target, source, sibling)
+
+								// Bei jeder Verschiebung wird das Board-JSON exportiert und gesendet
+								sendBoardData();
+							},
+							dragendBoard: function(board) {
+								// Diese Funktion wird aufgerufen, wenn ein Board verschoben wird
+								console.log("Board verschoben:", board.id);
+								sendBoardData(); // Exportiere die Board-Daten und sende sie
+							},
+							buttonClick: function(el, boardId) {
+								console.log(el);
+								console.log(boardId);
+								// create a form to enter element
+								var formItem = document.createElement("form");
+								formItem.setAttribute("class", "itemform");
+								formItem.innerHTML = `
+									<div class="form-group">
+										<textarea class="form-control" id="itemInput" rows="2" autofocus></textarea>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary btn-xs pull-right">Erstellen</button>
+										<button type="button" id="CancelBtn" class="btn btn-default btn-xs pull-right">Abbrechen</button>
+									</div>
+								`;
+								KanbanTest.addForm(boardId, formItem);
+								formItem.addEventListener("submit", function(e) {
+									e.preventDefault();
+									var text = e.target[0].value;
+									KanbanTest.addElement(boardId, {
+									title: text
+									});
+									formItem.parentNode.removeChild(formItem);
+								});
+								document.getElementById("CancelBtn").onclick = function() {
+									formItem.parentNode.removeChild(formItem);
+								};
+							},
+							itemAddOptions: {
+								enabled: true,
+								content: '+ Neuer Eintrag',
+								class: 'btn btn-primary mb-3',
+								footer: true
+							},
+							boards: {{ Kanban_Board['Boards'] | safe }}
+						});
+
+						// Funktion zur Hinzufügung eines zusätzlichen Buttons
+						function addExtraButtons() {
+							// Selektiert alle Footer innerhalb der Kanban-Boards
+							document.querySelectorAll('.kanban-board').forEach(board => {
+								const footer = board.querySelector('footer');
+								
+								// Holt die ID des aktuellen Boards
+								const boardId = board.getAttribute('data-id');
+
+								// Erstellen eines <br>-Elements
+								const lineBreak = document.createElement('br');
+								
+								// Erstellen des "Panel löschen" Buttons
+								const extraButton = document.createElement('button');
+								extraButton.classList.add('btn', 'btn-danger', 'mb-3', 'ml-2');
+								extraButton.innerHTML = 'Panel löschen';
+
+								// Event-Listener für den Lösch-Button
+								extraButton.addEventListener('click', function(e) {
+									e.stopPropagation(); // Verhindert das Auslösen anderer Klick-Events
+									
+									// Bestätigungsdialog vor dem Löschen
+									if (confirm('Sind Sie sicher, dass Sie dieses Panel löschen möchten?')) {
+										KanbanTest.removeBoard(boardId); // Löscht das Board mit der spezifischen ID
+										sendBoardData();
+									}
+								});
+
+								// Fügt das <br>-Element und den Lösch-Button zum Footer hinzu
+								footer.appendChild(lineBreak);
+								footer.appendChild(extraButton);
+							});
+						}
+
+						// Fügt die zusätzlichen Buttons nach der Kanban-Initialisierung hinzu
+						addExtraButtons();
+
+
+
+
+						var kanbanBoards = {{ Kanban_Board['Boards'] | safe }};
+						
+						function sendBoardData() {
+							// Erhalte alle aktuellen Boards in ihrer Reihenfolge aus dem Kanban-Container
+							var boardData = Array.from(document.querySelectorAll("#Kanban-Board .kanban-board")).map(board => {
+								var boardId = board.dataset.id; // Holt die ID des Boards
+
+								// Hole alle Elemente des Boards und filtere nur die mit gültigem Inhalt
+								var items = Array.from(KanbanTest.getBoardElements(boardId))
+									.filter(element => {
+										var titleText = element.querySelector('.item-content') ? element.querySelector('.item-content').innerText.trim() : element.innerText.trim();
+										return titleText !== "Erstellen Abbrechen"; // Filtert unerwünschte Einträge heraus
+									})
+									.map(element => ({
+										id: element.dataset.eid,
+										title: element.querySelector('.item-content') ? element.querySelector('.item-content').innerText.trim() : element.innerText.trim()
+									}));
+
+								return {
+									id: boardId,
+									title: board.querySelector(".kanban-title-board").innerText.trim(),
+									item: items
+								};
+							});
+
+							console.log("Exportierte Board-Daten mit Reihenfolge:", boardData);
+
+							// Sende die Daten an die API
+							fetch('https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban/update/{{ Kanban_Board['id'] }}', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(boardData)
+							})
+							.then(response => response.json())
+							.then(data => console.log("Board-Daten erfolgreich gesendet:", data))
+							.catch(error => console.error("Fehler beim Senden der Board-Daten:", error));
+						}
+
+
+
+
+						KanbanTest.addElement = (function (original) {
+							return function (boardId, element, position) {
+								// Sicherstellen, dass nur der Textinhalt gesetzt wird
+								var titleText = element.title || "";  // Verwende nur den Textwert ohne Buttons
+
+								// Erstelle das Drag-Handle und den Inhalt direkt im Element-Objekt
+								var dragHandle = document.createElement("div");
+								dragHandle.classList.add("drag-handle");
+								dragHandle.innerHTML = "&#x2630;"; // Drag-Symbol
+
+								var itemContent = document.createElement("div");
+								itemContent.classList.add("item-content");
+								itemContent.innerText = titleText; // Setze nur den Titel-Text
+
+								// Temporäres Container-Div zum Hinzufügen von Drag-Handle und Inhalt
+								var tempContainer = document.createElement("div");
+								tempContainer.appendChild(dragHandle);
+								tempContainer.appendChild(itemContent);
+
+								// Setze den HTML-Inhalt auf das Element-Objekt
+								element.innerHTML = tempContainer.innerHTML;
+								
+
+								// Füge das Element mit dem ursprünglichen `addElement`-Funktionsaufruf hinzu
+								var result = original.apply(this, [boardId, element, position]);
+
+								// Exportiere das Board-JSON und sende es, nachdem das Element hinzugefügt wurde
+								sendBoardData();
+
+								return result;
+							};
+						})(KanbanTest.addElement);
+
+
+						var toDoButton = document.getElementById("addToDo");
+						toDoButton.addEventListener("click", function() {
+							KanbanTest.addElement("_todo", {
+							title: "Test Add"
+							});
+						});
+
+						var toDoButtonAtPosition = document.getElementById("addToDoAtPosition");
+						toDoButtonAtPosition.addEventListener("click", function() {
+							KanbanTest.addElement("_todo", {
+							title: "Test Add at Pos"
+							}, 1);
+						});
+
+						var addBoardDefault = document.getElementById("addDefault");
+						addBoardDefault.addEventListener("click", function() {
+							KanbanTest.addBoards([
+							{
+								id: "_default",
+								title: "Kanban Default",
+								item: [
+								{
+									title: "Default Item"
+								},
+								{
+									title: "Default Item 2"
+								},
+								{
+									title: "Default Item 3"
+								}
+								]
+							}
+							]);
+						});
+
+						var removeBoard = document.getElementById("removeBoard");
+						removeBoard.addEventListener("click", function() {
+							KanbanTest.removeBoard("_done");
+						});
+
+						var removeElement = document.getElementById("removeElement");
+						removeElement.addEventListener("click", function() {
+							KanbanTest.removeElement("_test_delete");
+						});
+
+						var allEle = KanbanTest.getBoardElements("_todo");
+						allEle.forEach(function(item, index) {
+							//console.log(item);
+						});
+					</script>
+					
+
+					<div class="modal fade" id="modalNeuesPanel" tabindex="-1" aria-labelledby="modalNeueKategorie" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Neues Panel erstellen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+									<!-- Name -->
+									<div class="form-group mb-2">
+										<label class="required" for="name">Name</label>
+										<input type="text" class="form-control" id="new_panel_name" name="new_panel_name" placeholder="Bezeichnung für das Panel" required>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+									<button type="button" id="createPanelButton" class="btn btn-primary">Panel erstellen</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<script>
+						document.getElementById('createPanelButton').addEventListener('click', function() {
+							// Panel Name eingeben
+							const panelName = document.getElementById('new_panel_name').value;
+					
+							if (panelName) {
+								// Neues Panel zu Kanban hinzufügen
+								KanbanTest.addBoards([
+									{
+										id: new Date().getTime().toString(), // Einzigartige ID basierend auf Zeitstempel
+										title: panelName
+									}
+								]);
+					
+								// Modal schließen
+								const modalElement = document.getElementById('modalNeuesPanel');
+								const modal = bootstrap.Modal.getInstance(modalElement);
+								modal.hide();
+
+								sendBoardData();
+							} else {
+								alert('Bitte geben Sie einen Namen für das Panel ein.');
+							}
+						});
+					</script>
+					
+
+
+					<div class="modal fade" id="modalBoardErstellen" tabindex="-1" aria-labelledby="modalBoardErstellen" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Neues Kanban-Board erstellen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+									<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban" method="post" id="kanbanForm">
+										<!-- Name -->
+										<div class="form-group mb-2">
+											<label class="required" for="name">Name</label>
+											<input type="text" class="form-control" id="name" name="name" placeholder="Bezeichnung für das Kanban-Board" required>
+										</div>
+
+
+										<label for="tabs">Tabs</label>
+										<div id="tabContainer">
+											<div class="tab-item">
+												<input type="text" name="tabs[]" placeholder="Tab-Name" class="form-control mb-2">
+											</div>
+										</div>
+										<button type="button" class="btn btn-light-secondary btn-sm m-1 mt-2" id="addTab">Weiteren Tab hinzufügen</button>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+									<button type="submit" class="btn btn-primary" form="kanbanForm">Board erstellen</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<script>
+						document.getElementById('addTab').addEventListener('click', function() {
+							const tabContainer = document.getElementById('tabContainer');
+							const newTabItem = document.createElement('div');
+							newTabItem.className = 'tab-item';
+							newTabItem.innerHTML = `
+								<input type="text" name="tabs[]" placeholder="Tab-Name" class="form-control mb-2">
+							`;
+							tabContainer.appendChild(newTabItem);
+						});
+					</script>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script src="https://cdn.personalpeak360.de/assets/custom/kanban/kanban.js"></script>
+	
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

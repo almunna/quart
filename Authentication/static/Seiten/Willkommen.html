@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Willkommen bei {{ WhiteLabel['Bezeichnung'] }}, {{name}}!</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/icons.css"/>
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-sidebar.css"/>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-theme.css"/>
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		
+       <!--header-->
+		<header class="top-header">
+			<nav class="navbar navbar-expand">
+				<div class="sidebar-header">
+					<div class="d-none d-lg-flex">
+						<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_lang'] }}" height="80px" alt="">
+					</div>
+				</div>
+
+				{% if WhiteLabel['Buttons'] %}
+					{% for button in WhiteLabel['Buttons'] %}
+						<a type="button" href="{{ button['Link'] }}" class="btn btn-primary me-3 d-flex">{{ button['Titel'] }}</a>
+					{% endfor %}
+				{% endif %}
+
+				
+				<div class="right-topbar ms-auto">
+					<ul class="navbar-nav">
+						<li class="nav-item dropdown dropdown-lg">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="javascript:;" data-bs-toggle="dropdown">	<span class="msg-count">6</span>
+								<i class="bx bx-comment-detail vertical-align-middle"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a href="javascript:;">
+									<div class="msg-header">
+										<h6 class="msg-header-title">6 Neue</h6>
+										<p class="msg-header-subtitle">Direktnachrichten</p>
+									</div>
+								</a>
+								<div class="header-message-list">
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-1.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer John <span class="msg-time float-end">vor 5 Sekunden</span></h6>
+										  <p class="msg-info">Denke daran, genug Wasser zu trinken heute!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-2.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Emily <span class="msg-time float-end">vor 14 Sekunden</span></h6>
+										  <p class="msg-info">Plane heute eine proteinreiche Mahlzeit ein.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-3.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainerin Sarah <span class="msg-time float-end">vor 8 Minuten</span></h6>
+										  <p class="msg-info">Heute: 30 Minuten Cardio-Workout!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-4.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Ben <span class="msg-time float-end">vor 15 Minuten</span></h6>
+										  <p class="msg-info">Hast du heute genug Vitamine?</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-5.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer Max <span class="msg-time float-end">vor 22 Minuten</span></h6>
+										  <p class="msg-info">Vergiss nicht, gut zu dehnen!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-6.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Laura <span class="msg-time float-end">vor 2 Stunden</span></h6>
+										  <p class="msg-info">Ein grüner Smoothie wäre ideal.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-7.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer David <span class="msg-time float-end">vor 5 Stunden</span></h6>
+										  <p class="msg-info">Heute trainieren wir die Beine!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Sophia <span class="msg-time float-end">vor 6 Stunden</span></h6>
+										  <p class="msg-info">Frisches Obst zum Frühstück?</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-9.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer Tim <span class="msg-time float-end">vor 2 Tagen</span></h6>
+										  <p class="msg-info">Heute starten wir mit Oberkörper!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-10.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Anna <span class="msg-time float-end">vor 5 Tagen</span></h6>
+										  <p class="msg-info">Plane eine gesunde Mahlzeit.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-11.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainerin Lisa <span class="msg-time float-end">vor 4 Monaten</span></h6>
+										  <p class="msg-info">Setze dir ein Ziel für die Woche!</p>
+										</div>
+									  </div>
+									</a>
+								  </div>								  
+								<a href="javascript:;">
+									<div class="text-center msg-footer">Alle Direktnachrichten anzeigen</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown dropdown-lg">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="javascript:;" data-bs-toggle="dropdown">	<i class="bx bx-bell vertical-align-middle"></i>
+								<span class="msg-count">2</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a href="javascript:;">
+									<div class="msg-header">
+										<h6 class="msg-header-title">2 Neue</h6>
+										<p class="msg-header-subtitle">System-Benachrichtigungen</p>
+									</div>
+								</a>
+								<div class="header-notifications-list">
+									<a class="dropdown-item" href="javascript:;">
+										<div class="d-flex align-items-center">
+											<div class="notify bg-light-success text-success"><i class='bx bx-check-square'></i>
+											</div>
+											<div class="flex-grow-1">
+												<h6 class="msg-name">Trainingsplan wurde erstellt <span class="msg-time float-end">vor 2 Minuten</span></h6>
+												<p class="msg-info">Fitnesstrainer John hat Dir einen<br> Trainingsplan zukommen lassen.</p>
+											</div>
+										</div>
+									</a>
+									<a class="dropdown-item" href="https://dashboard.{{WHITELABEL_Domain}}/">
+										<div class="d-flex align-items-center">
+											<div class="notify bg-light-shineblue text-shineblue"><i class="bx bx-file"></i>
+											</div>
+											<div class="flex-grow-1">
+												<h6 class="msg-name">Neue Rechnung<span class="msg-time float-end">vor 2 Tagen</span></h6>
+												<p class="msg-info">Es wurde eine neue Rechnung<br> für dich angelegt.<br>(Begleiche diese innerhalb 14 Tage)</p>
+											</div>
+										</div>
+									</a>
+								</div>
+								<a href="javascript:;">
+									<div class="text-center msg-footer">Alle Benachrichtigungen anzeigen</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown dropdown-user-profile">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+								<div class="d-flex user-box align-items-center">
+									<div class="user-info">
+										<p class="user-name mb-0">{{name}}</p>
+										{% if rolle['Bezeichnung'] == "Super-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-danger">{{ rolle['Bezeichnung'] }}</span></p>
+										{% elif rolle['Bezeichnung'] == "Lower-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-warning">{{ rolle['Bezeichnung'] }}</span></p>
+										{% else %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">Nutzer</span></p>
+										{% endif %}
+
+										
+										{% if rolle['Zusatz-Bezeichnung'] == "White-Label" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Basic" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Standard" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Premium" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% endif %}
+									</div>
+									<img src="{{ avatar_url }}" class="user-img" alt="user avatar">
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end" style="z-index: 1100 !important;">	
+								<a class="dropdown-item" href="https://dashboard.{{WHITELABEL_Domain}}/cockpit/profil"><i class="bx bx-user"></i><span>Mein Profil</span></a>
+								<a class="dropdown-item" href="javascript:;" style="cursor: default !important;"><i class="bx bx-coin"></i><span><b>Deine Punkte:</b> {{ Nutzer_Punkte }}</span></a>
+								<div class="dropdown-divider mb-0"></div>
+								<a class="dropdown-item" href="https://auth.{{WHITELABEL_Domain}}/sperren?redirect_url={{url}}"><i class="bx bx-lock"></i><span>Bildschirm sperren</span></a>
+								<a class="dropdown-item" href="https://auth.{{WHITELABEL_Domain}}/logout"><i class="bx bx-power-off"></i><span>Abmelden</span></a>
+							</div>							
+						</li>
+						<li class="nav-item dropdown dropdown-language">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+								<div class="lang d-flex">
+									<div><i class="flag-icon flag-icon-de"></i>
+									</div>
+									<div><span>DE</span>
+									</div>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="javascript:;"><i
+										class="flag-icon flag-icon-de"></i><span>Deutsch</span></a>
+								<a class="dropdown-item" href="javascript:;"><i
+										class="flag-icon flag-icon-um"></i><span>Englisch</span></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!--end header-->
+
+
+		{% if WhiteLabel['Badges_Status'] %}
+			<!-- Banner unter dem Header -->
+			<div class="banner-wrapper">
+				<marquee behavior="alternate" direction="left" loop="infinite" scrollamount="10">
+					<div class="marquee-content">
+						<!-- Dynamischer Inhalt -->
+						<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_' + nutzer_level] }}" alt="Bild links" class="banner-image" style="width: 50px; height: 50px; margin-right: 15px;">
+						<p class="marquee-text" style="margin: 0 20px;">{{ WhiteLabel['Badge_' + nutzer_level + '_Text'] }}</p>
+						<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_' + nutzer_level] }}" alt="Bild rechts" class="banner-image" style="width: 50px; height: 50px; margin-left: 15px;">
+					</div>
+				</marquee>
+			</div>
+
+			<style>
+				.banner-wrapper {
+					background-color: #f8f9fa;
+					padding: 10px 0;
+					overflow: hidden;
+					width: 100%;
+					box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+					margin-top: 70px; /* Abstand vom oberen Rand */
+				}
+			
+				.marquee {
+					display: flex;
+					align-items: center;
+					white-space: nowrap;
+					overflow: hidden;
+				}
+			
+				.marquee-content {
+					display: flex;
+					align-items: center;
+				}
+			
+				.banner-image {
+					height: 50px;
+					margin: 0 15px;
+				}
+			
+				.marquee-text {
+					font-size: 18px;
+					color: #333;
+					margin: 0 15px;
+				}
+			
+			</style>
+			
+		{% endif %}
+
+		
+		<!--page-wrapper-->
+		<div class="page-wrapper" {% if WhiteLabel['Badges_Status'] %}style="margin-top: 0px !important;"{% else %}style="margin-top: 70px !important;"{% endif %}>
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="modal fade" id="badgeDetails" tabindex="-1" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog modal-xl">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Badge-Übersicht für {{name}}</h5>
+								</div>
+								<div class="modal-body">
+									<div class="row mb-3">
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == 'Willkommen' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="Willkommen" {% if nutzer_level == "Willkommen" %}disabled{% endif %} style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_Willkommen'] }}" 
+																alt="Badge Willkommen" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Willkommen</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_Willkommen_Punkte'] }}</p>
+														{% if nutzer_level == "Willkommen" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == '2' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="2" {% if nutzer_level == "2" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_2'] }}" 
+																alt="Badge 2" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 1</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_2_Punkte'] }}</p>
+														{% if nutzer_level == "2" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer_level == "Willkommen" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == '3' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="3" {% if nutzer_level == "3" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_3'] }}" 
+																alt="Badge 3" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 2</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_3_Punkte'] }}</p>
+														{% if nutzer_level == "3" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer_level == "2" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == '4' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="4" {% if nutzer_level == "4" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_4'] }}" 
+																alt="Badge 4" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 3</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_4_Punkte'] }}</p>
+														{% if nutzer_level == "4" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer_level == "3" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == '5' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="5" {% if nutzer_level == "5" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_5'] }}" 
+																alt="Badge 5" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 4</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_5_Punkte'] }}</p>
+														{% if nutzer_level == "5" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer_level == "4" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer_level == '6' %}selected{% endif %}">
+												<div class="card-body" style="cursor: pointer;">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="6" {% if nutzer_level == "6" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_6'] }}" 
+																alt="Badge 6" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 5</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_6_Punkte'] }}</p>
+														{% if nutzer_level == "6" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer_level == "5" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="accordion accordion-flush" id="accordionFlushExample">
+										<div class="accordion-item">
+											<h2 class="accordion-header" id="flush-headingOne">
+												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+													Wie kann ich Punkte sammeln?
+												</button>
+											</h2>
+											<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+												<div class="accordion-body">
+													<div class="table-responsive">
+														<table class="table table-bordered">
+															<thead>
+																<tr>
+																	<th scope="col">Art</th>
+																	<th scope="col">Belohnung</th>
+																	<th scope="col">Einschränkung</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<th scope="row">10 Minuten Aktivität auf Seite</th>
+																	<td>+1 Punkt</td>
+																	<td>Maximal 6 Punkte pro Tag</td>
+																</tr>
+																<tr>
+																	<th scope="row">Ernährungs-Eintrag</th>
+																	<td>+3 Punkte</td>
+																	<td>Einmal täglich; pro vollem Eintrag</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="accordion-item">
+											<h2 class="accordion-header" id="flush-headingOne">
+												<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="flush-collapse2">
+													Wie kann ich {{ WhiteLabel['Bezeichnung'] }} weiterempfehlen?
+												</button>
+											</h2>
+											<div id="flush-collapse2" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+												<div class="accordion-body">Du musst dazu den anderen Interessanten einen sogenannten Referrer-Link zukommen lassen. <br>Dieser lautet bei dir wie folgt: '<a href="https://auth.{{ WhiteLabel['Domain'] }}/register?Referrer_ID={{ Nutzer_ID }}">https://auth.{{ WhiteLabel['Domain'] }}/register?Referrer_ID={{ Nutzer_ID }}</a>'</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<script>
+									function selectBadge(radio) {
+										// Entferne die 'selected'-Klasse von allen Karten
+										const cards = document.querySelectorAll('.badge-card');
+										cards.forEach(card => card.classList.remove('selected'));
+										
+										// Füge die 'selected'-Klasse zur ausgewählten Karte hinzu
+										const selectedCard = radio.closest('.badge-card');
+										selectedCard.classList.add('selected');
+									}
+								</script>
+
+								<style>
+									.badge-card {
+										height: 100%; /* Setzt die Höhe der Card auf 100% */
+										border: 2px solid transparent; /* Standard Rahmen */
+										border-radius: 8px; /* Abrundung der Ecken */
+										transition: border-color 0.3s; /* Sanfte Übergänge */
+										cursor: pointer; /* Zeiger ändern, um anzuzeigen, dass die Karte klickbar ist */
+									}
+								
+									.badge-card.selected {
+										border-color: #007bff; /* Rahmenfarbe für die ausgewählte Karte */
+										background-color: rgba(0, 123, 255, 0.1); /* Helle Hintergrundfarbe für bessere Sichtbarkeit */
+									}
+								</style>
+
+								<div class="modal-footer">
+									<a class="btn btn-secondary" 
+										data-bs-dismiss="modal" 
+										data-bs-toggle="tooltip" 
+										data-bs-placement="bottom">
+										Übersicht schließen
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade" id="disclaimerPP360" tabindex="-1" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog modal-xl">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Haftungsausschluss und Wichtige Sicherheitshinweise von {{ WhiteLabel['Bezeichnung'] }}</h5>
+								</div>
+								<div class="modal-body">
+									<div>
+										<h2>Individuelle Betreuung</h2>
+										<p>Die bei Personal-Peak-360 angebotenen Trainings- und Ernährungspläne werden auf der Grundlage einer individuellen Auswertung erstellt. Unser Team setzt sich aus Fachleuten unterschiedlicher Disziplinen zusammen, darunter zertifizierte Personal Trainer, Trainingstherapeuten, Ernährungsberater, Ärzte, Psychologen, Bachelor Professionals of Physical Fitness, Physiotherapeuten und Sporttherapeuten. Diese Pläne werden in Zusammenarbeit mit unserem Expertenteam konzipiert, wobei nicht immer alle genannten Fachleute direkt beteiligt sind. Die spezifische Zusammensetzung des Beratungsteams kann variieren, um den bestmöglichen Plan für Ihre persönlichen Ziele und Bedürfnisse zu entwickeln.</p>
+										<p>Die Häufigkeit, mit der Trainingspläne erstellt werden, liegt im Ermessen Ihres Trainers. Es besteht kein Anspruch auf eine bestimmte Anzahl von Trainings- oder Ernährungsplänen.</p>
+										
+										<h2>Eigenverantwortung und Sicherheit</h2>
+										<p>Trotz der fachkundigen Beratung durch unser Team liegt die Verantwortung für die Umsetzung und Anwendung der empfohlenen Pläne und Maßnahmen ausschließlich bei Ihnen. Es ist wichtig, dass Sie vor Beginn jeglicher Empfehlungen Ihre individuelle Situation und gesundheitliche Eignung berücksichtigen. Bei Unsicherheiten oder bestehenden gesundheitlichen Bedingungen empfehlen wir dringend, vorab eine ärztliche Beratung einzuholen.</p>
+										
+										<h2>Auswahl der Trainingspläne</h2>
+										<p>Bei der Erstellung Ihres individuellen Trainingsplans müssen Sie zu Beginn auswählen, ob Sie einen Plan für das Training zu Hause ohne Equipment, zu Hause mit Equipment oder für das Gym erhalten möchten. Diese Auswahl kann erst nach den ersten drei Monaten wieder geändert werden, da alle Pläne individuell erstellt werden.</p>
+										
+										<h2>Haftungsausschluss</h2>
+										<p>Personal-Peak-360 übernimmt keine Garantie oder Haftung für die Wirksamkeit, Sicherheit oder Folgen der Anwendung der bereitgestellten Trainings- und Ernährungspläne. Die Nutzung der von Personal-Peak-360 bereitgestellten Informationen und Empfehlungen erfolgt auf eigenes Risiko. Für direkte oder indirekte Schäden, die aus der Anwendung der Inhalte entstehen, lehnen wir jede Haftung ab.</p>
+										
+										<h2>Urheberrechtlicher Hinweis und Schadensersatz</h2>
+										<p>Alle Inhalte, die von Personal-Peak-360 bereitgestellt werden, einschließlich, aber nicht beschränkt auf Trainings- und Ernährungspläne, sind rechtlich geschützt und ausschließlich für den privaten Gebrauch des registrierten Empfängers bestimmt. Jegliche Form der Vervielfältigung, Verbreitung, Modifikation oder sonstigen Nutzung dieser Inhalte ohne unsere ausdrückliche schriftliche Genehmigung, einschließlich der Weitergabe von Zugangsdaten an Dritte, ist strengstens untersagt. Verstöße gegen diese Urheberrechtsbestimmungen können zu Schadensersatzforderungen führen, die sich nach dem Umfang des Verstoßes richten und in der Regel zwischen 500 € und 25.000 € liegen. In Fällen schwerwiegender oder vorsätzlicher Urheberrechtsverletzungen behalten wir uns das Recht vor, höhere Forderungen zu stellen.</p>
+										
+										<h2>Datenschutz-Kurzinformation</h2>
+										<p>Bei Personal-Peak-360 nehmen wir den Schutz Ihrer persönlichen Daten ernst. Die im Rahmen der Nutzung unseres Portals erhobenen Daten (wie z.B. Name, Kontaktinformationen und Nutzungsdaten) werden zum Zweck der individuellen Betreuung, der Bereitstellung unserer Dienste sowie für interne Analyse- und Verbesserungszwecke verarbeitet. Diese Datenverarbeitung erfolgt mit dem Ziel, unser Angebot bestmöglich auf Ihre Bedürfnisse abzustimmen und die Qualität unserer Dienstleistungen zu erhöhen. Ihre Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben, es sei denn, dies ist gesetzlich vorgeschrieben oder für die Erbringung unserer Dienstleistungen erforderlich. Mit der Nutzung unserer Dienste erklären Sie sich mit dieser Verarbeitung Ihrer Daten einverstanden. Sie haben das Recht auf Auskunft, Berichtigung, Löschung und, unter bestimmten Umständen, auf Einschränkung der Verarbeitung Ihrer Daten. Bei Fragen zum Datenschutz können Sie sich jederzeit an uns wenden.</p>
+										<p>Unsere Website trackt die Dauer Ihrer Besuche, um Statistiken zu erstellen und unser Angebot zu verbessern. Diese Informationen helfen uns, Ihre Benutzererfahrung stetig zu optimieren.</p>
+										
+										<h2>Schlussbemerkung und Einverständniserklärung</h2>
+										<p>Die von Personal-Peak-360 bereitgestellten Informationen wurden mit größter Sorgfalt und nach bestem Wissen und Gewissen zusammengestellt. Eine Haftung für die Vollständigkeit, Richtigkeit und Aktualität der Informationen wird jedoch ausgeschlossen. Mit der Fortsetzung der Nutzung unserer Dienste stimmen Sie zu, diese Bedingungen zu akzeptieren und erkennen an, dass Sie die volle Verantwortung für die Anwendung der Empfehlungen tragen.</p>
+										
+										<p><b>COPYRIGHT – ©<span id="currentYear"></span> Personal-Peak 360°</b></p>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<a href="https://auth.{{WHITELABEL_Domain}}/logout" class="btn btn-secondary" 
+										data-bs-dismiss="modal" 
+										data-bs-toggle="tooltip" 
+										data-bs-placement="bottom" 
+										title="(Sie werden abgemeldet)" 
+										onclick="event.preventDefault(); $('#disclaimerPP360').modal('hide'); window.location.href='https://auth.{{ WhiteLabel['Domain'] }}/logout';">
+										Ablehnen
+									</a>
+									<button type="button" class="btn btn-primary"
+										onclick="event.preventDefault(); $('#disclaimerPP360').modal('hide')">
+											Weiter
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<script>
+						document.addEventListener('DOMContentLoaded', function() {
+							var disclaimerModal = new bootstrap.Modal(document.getElementById('disclaimerPP360'), {
+								backdrop: 'static' // Set backdrop to static to prevent closing on background click
+							});
+							disclaimerModal.show();
+						});
+
+						document.addEventListener('DOMContentLoaded', function() {
+							document.getElementById('currentYear').textContent = new Date().getFullYear();
+						});
+					</script>
+
+
+					<style>
+						.badge-img {
+							width: 40px;
+							height: 40px;
+							margin-bottom: 10px;
+						}
+					</style>
+					<div class="row justify-content-center">
+						<div class="col-12 col-lg-4">
+							<div class="card radius-15 overflow-hidden">
+								<div class="card-body d-flex flex-column align-items-center">
+									<div class="text-center">
+										<h2 class="mb-0">Willkommen bei '{{ WhiteLabel['Bezeichnung'] }}'</h2>
+										<p class="mb-0 font-weight-bold" style="font-size: 1.1rem; color: #555; line-height: 1.6;">{{name}}!</p>
+										
+										{% if rolle['Bezeichnung'] == "Super-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-danger">{{ rolle['Bezeichnung'] }}</span></p>
+										{% elif rolle['Bezeichnung'] == "Lower-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-warning">{{ rolle['Bezeichnung'] }}</span></p>
+										{% else %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">Nutzer</span></p>
+										{% endif %}
+					
+										
+										{% if rolle['Zusatz-Bezeichnung'] == "White-Label" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Basic" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Standard" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% elif rolle['Zusatz-Bezeichnung'] == "Premium" %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">{{ rolle['Zusatz-Bezeichnung'] }}</span></p>
+										{% endif %}
+
+										{% if WhiteLabel['Badges_Status'] %}
+											<div>
+												<br>
+												<!-- Badge Image, unabhängig von der Rolle -->
+												<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_' + nutzer_level] }}" style="height: 150px; width: auto; cursor: pointer;" alt="Badge" class="badge-img mb-2" onclick="$('#badgeDetails').modal('show');">
+
+												<p>Du benötigst nur noch {{ Next_Level_Upgrade }} Punkte, um auf die Stufe {{ (nutzer_level | int + 1) }} aufzusteigen. <br><b>Bleib dran!</b></p>
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row row-cols-1 row-cols-lg-3">
+						<div class="col d-flex order-2 order-lg-1">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+								<div class="card-title">
+									<h5 class="mb-0">Nutzer-Ranking</h5>
+								</div>
+								<hr/>
+								{% set current_user_place = None %}
+								{% for nutzer in Nutzer_Ranking %}
+									{# Wenn die IDs übereinstimmen, speichere den Platz des aktuellen Nutzers #}
+									{% if nutzer['id'] == Nutzer_ID %}
+										{% set current_user_place = loop.index %}
+										
+										{# Stelle sicher, dass current_user_place nach der Schleife global verfügbar ist #}
+										{% if current_user_place is not none %}
+											{% if current_user_place == 1 %}
+												<p>Du bist derzeit auf Platz {{ current_user_place }} unter den Top {{ Nutzer_Ranking|length }} auf unserer Plattform. <br><b>Behalte deine Aktivität bei und bleibe weiterhin der erste!</b></p>
+											{% else %}
+												<p>Du bist derzeit auf Platz {{ current_user_place }} unter den Top {{ Nutzer_Ranking|length }} auf unserer Plattform. <br><b>Mach weiter so und werde der Erste!</b></p>
+											{% endif %}
+										{% else %}
+											<p>Aktuell bist du leider nicht unter den Top {{ Nutzer_Ranking|length }} auf unserer Plattform. <br><b>Bleib dran und rangel dich unter die Top {{ Nutzer_Ranking|length }} des Rankings!</b></p>
+										{% endif %}
+									{% endif %}
+								{% endfor %}
+
+
+								{% for nutzer in Nutzer_Ranking %}
+									<div class="d-flex align-items-center gap-3 {% if nutzer['id'] == Nutzer_ID %}bg-light-info{% endif %}">
+										<div>
+											<img class="user-img" src="https://cdn.{{ WhiteLabel['Domain'] }}/avatar/{{ nutzer['Avatar'] }}" width="35" height="35" alt=""/>
+										</div>
+										<div>
+											<h5 class="mb-0">{{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}</h5>
+											<p class="mb-0">Mitglied seit: {{ nutzer['Erstellung'] | format_datetime_time }} <br>Punkte: {% if nutzer['Punkte'] == None %}0{% else %}{{ nutzer['Punkte'] }}{% endif %}</p>
+										</div>
+										<p class="mb-0 ms-auto">Platz {{ loop.index }}</p>
+										<i class='bx bxs-dice-{{ loop.index }}' style="font-size: 48px;"></i>
+									</div>
+									{% if not loop.last %}
+										<hr/>
+									{% endif %}
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+						  
+						<div class="col d-flex order-1 order-lg-2">
+							<div class="card radius-15 w-100">
+								<div class="card-body text-center" style="padding: 15px;">
+									<h2 style="font-weight: bold; font-size: 1.5rem; color: #333; margin-bottom: 15px;">
+										{{ WhiteLabel['STARTSEITE_Titel'] }}
+									</h2>
+									<p style="font-size: 1.1rem; color: #555; line-height: 1.6;">
+										{{ WhiteLabel['STARTSEITE_Beschreibungstext'] }}
+									</p>
+									{% if WhiteLabel['STARTSEITE_Video'] %}
+										<video width="500" controls style="width: 100%; height: auto; border-radius: 15px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+											<source src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['STARTSEITE_Video'] }}" type="video/mp4">
+											Ihr Browser unterstützt das Abspielen dieses Videos leider nicht.
+										</video>
+									{% endif %}
+								</div>
+							</div>
+						</div>						
+						<div class="col d-flex order-3 order-lg-3">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+										<div class="card-title">
+											<h5 class="mb-0">Challenges </h5>
+										</div>
+										<hr/>
+										<div class="row card-collapse">
+											{% if WhiteLabel['Challenges'] %}
+												{% for challenge in WhiteLabel['Challenges'] %}
+													<div class="col-md-12">
+														<div class="card">
+															<div class="card-header has-arrow" style="cursor: pointer;">{{ challenge['Titel'] }}</div>
+															<div class="card-body">
+																<h5 class="card-title">{{ challenge['Titel'] }}</h5>
+																<p class="card-text">{{ challenge['Beschreibung'] }}</p>
+																{% if challenge['Links'] %}
+																	{% for link in challenge['Links'] %}
+																		<a href="{{ link['Link'] }}" target="_blank" class="btn btn-primary">{{ link['Text'] }}</a>
+																	{% endfor %}
+																{% endif %}
+															</div>
+														</div>
+													</div>
+												{% endfor %}
+											{% else %}
+												<p style="font-size: 1.1rem; color: #555; text-align: center; margin-top: 20px;">
+													<strong>Derzeit gibt es keine Challenges!</strong><br>
+													<span style="font-style: italic;">Du hast alles geschafft ;)</span>
+												</p>
+											{% endif %}
+										</div>
+								</div>
+							</div>
+						</div>
+					</div><!--end row-->
+					  
+
+					<div class="row">
+						<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+								var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+									return new bootstrap.Tooltip(tooltipTriggerEl)
+								})
+							});
+						</script>
+
+
+
+						{% if "Admin-Bereich" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-2 d-flex ">
+								<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-cog"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Admin-Panel</h4>
+										<p class="mb-0">Zugriff auf administrative Funktionen</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-2 d-flex" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Admin-Panel</h4>
+										<p class="mb-0">Zugriff auf administrative Funktionen</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Ernährungsanalyse" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-2 d-flex ">
+								<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-cookie"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Ernährung & Analyse</h4>
+										<p class="mb-0">Überwache deine Ernährung und Fortschritte</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-2 d-flex" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Ernährung & Analyse</h4>
+										<p class="mb-0">Überwache deine Ernährung und Fortschritte</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Trainingshalle" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-2 d-flex ">
+								<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-dumbbell"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Trainingshalle</h4>
+										<p class="mb-0">Plane und verfolge deine Workouts</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-2 d-flex" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Trainingshalle</h4>
+										<p class="mb-0">Plane und verfolge deine Workouts</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+						  
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 h-100 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-shopping-bag"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">eCommerce Shop</h4>
+									<p class="mb-0">Abonnements und Funktionen freischalten</p>
+								</div>
+								</div>
+							</a>
+						</div>
+
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 h-100 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-calendar"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Kalender</h4>
+									<p class="mb-0">Plane deine Aktiivtätem und Ereignisse</p>
+								</div>
+								</div>
+							</a>
+						</div>
+						  
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 h-100 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-comment-detail"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Wiki</h4>
+									<p class="mb-0">Finde hilfreiche Artikel und Tipps</p>
+								</div>
+								</div>
+							</a>
+						</div>
+
+						<!-- WEITERE HINZUFÜGEN
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 h-100 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-dumbbell"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Name</h4>
+									<p class="mb-0">Beschreibung</p>
+								</div>
+								</div>
+							</a>
+						</div>
+						-->
+					</div>									
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		<!--footer -->
+		<div class="footer">
+			<p class="mb-0">© 2024 Personal-Peak-360 | Alle Rechte vorbehalten!
+			</p>
+		</div>
+		<!-- end footer -->
+	</div>
+	<!-- end wrapper -->
+	
+	<!--start switcher-->
+	<div class="switcher-body">
+		<button class="wl-primary-button btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="bx bx-cog bx-spin"></i></button>
+		<div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling">
+		<div class="offcanvas-header border-bottom">
+			<h5 class="offcanvas-title" id="offcanvasScrollingLabel">Design-Anpassungen</h5>
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+		</div>
+		<div class="offcanvas-body">
+			<h6 class="mb-0">Farbmodus</h6>
+			<hr>
+			<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="inlineRadioOptions" id="lightmode" value="option1" checked>
+			<label class="form-check-label" for="lightmode">Hell</label>
+			</div>
+			<hr>
+			<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="inlineRadioOptions" id="darkmode" value="option2">
+			<label class="form-check-label" for="darkmode">Dunkel</label>
+			</div>
+		</div>
+		</div>
+	</div>
+	<!--end switcher-->
+
+
+
+
+
+
+	<!--  STYLE FÜR WHITE-LABEL  -->
+	<!--  Primär: {{ WhiteLabel['Primary'] }} (HEX)  -->
+	<!--  Sekundär: {{ WhiteLabel['Secondary'] }} (HEX)  -->
+	<!--  Tertiär: {{ WhiteLabel['Third'] }} (HEX)  -->
+	<style>
+	/*
+		ANLEITUNG ZUR NUTZUNG DER WHITE-LABEL-STYLES
+		============================================
+		
+		Verwende die folgenden Klassen, um die Farben in deinem Layout dynamisch anzupassen. 
+		Die Farben basieren auf den HEX-Werten, die im WhiteLabel-Dictionary definiert sind 
+		(Primär, Sekundär und Tertiär). Diese Klassen setzen die Farben als !important, 
+		um sicherzustellen, dass sie Priorität haben.
+
+		--- BUTTONS ---
+			- .wl-primary-button:
+				Verwende diese Klasse für Buttons, die die Primärfarbe nutzen sollen.
+				Beispiel: <button class="wl-primary-button">Primärer Button</button>
+			
+			- .wl-secondary-button:
+				Verwende diese Klasse für Buttons, die die Sekundärfarbe nutzen sollen.
+				Beispiel: <button class="wl-secondary-button">Sekundärer Button</button>
+		
+		--- LINKS ---
+			- .wl-primary-link:
+				Nutze diese Klasse für Links, die in der Primärfarbe erscheinen sollen.
+				Beispiel: <a href="#" class="wl-primary-link">Primärer Link</a>
+		
+		--- HINTERGRUND ---
+			- .wl-primary-bg:
+				Setze diese Klasse, um einen Hintergrund in der Primärfarbe zu haben.
+				Beispiel: <div class="wl-primary-bg">Primärer Hintergrund</div>
+			
+			- .wl-secondary-bg:
+				Setze diese Klasse, um einen Hintergrund in der Sekundärfarbe zu haben.
+				Beispiel: <div class="wl-secondary-bg">Sekundärer Hintergrund</div>
+			
+			- .wl-tertiary-bg:
+				Setze diese Klasse, um einen Hintergrund in der Tertiärfarbe zu haben.
+				Beispiel: <div class="wl-tertiary-bg">Tertiärer Hintergrund</div>
+		
+		--- RAHMEN ---
+			- .wl-primary-border:
+				Diese Klasse definiert einen Rahmen in der Primärfarbe.
+				Beispiel: <div class="wl-primary-border">Primärer Rahmen</div>
+			
+			- .wl-secondary-border:
+				Diese Klasse definiert einen Rahmen in der Sekundärfarbe.
+				Beispiel: <div class="wl-secondary-border">Sekundärer Rahmen</div>
+		
+		--- TEXTFARBEN ---
+			- .wl-primary-text:
+				Nutze diese Klasse, um Text in der Primärfarbe darzustellen.
+				Beispiel: <p class="wl-primary-text">Text in Primärfarbe</p>
+			
+			- .wl-secondary-text:
+				Nutze diese Klasse, um Text in der Sekundärfarbe darzustellen.
+				Beispiel: <p class="wl-secondary-text">Text in Sekundärfarbe</p>
+			
+			- .wl-tertiary-text:
+				Nutze diese Klasse, um Text in der Tertiärfarbe darzustellen.
+				Beispiel: <p class="wl-tertiary-text">Text in Tertiärfarbe</p>
+		
+		--- ICONS ---
+			- .wl-primary-icon:
+				Verwende diese Klasse, um Icons in der Primärfarbe zu färben.
+				Beispiel für SVG: <svg class="wl-primary-icon" width="24" height="24"><use xlink:href="#icon-id"></use></svg>
+				Beispiel für Font-Icon: <i class="wl-primary-icon fas fa-check"></i>
+			
+			- .wl-secondary-icon:
+				Verwende diese Klasse, um Icons in der Sekundärfarbe zu färben.
+				Beispiel: <svg class="wl-secondary-icon" width="24" height="24"><circle cx="12" cy="12" r="10"></circle></svg>
+			
+			- .wl-tertiary-icon:
+				Verwende diese Klasse, um Icons in der Tertiärfarbe zu färben.
+				Beispiel: <i class="wl-tertiary-icon fas fa-star"></i>
+		
+		============================================
+	*/
+
+
+	/* Farben aus dem WhiteLabel-Dictionary */
+	:root {
+		--primary-color: {{ WhiteLabel['Primary'] }};
+		--secondary-color: {{ WhiteLabel['Secondary'] }};
+		--tertiary-color: {{ WhiteLabel['Third'] }};
+	}
+
+	/* Buttons */
+	.wl-primary-button {
+		background-color: var(--primary-color) !important;
+		color: #ffffff !important;
+		border: 1px solid var(--primary-color) !important;
+	}
+
+	.wl-primary-button:hover {
+		background-color: #ffffff !important;
+		color: var(--primary-color) !important;
+	}
+
+	.wl-secondary-button {
+		background-color: var(--secondary-color) !important;
+		color: #ffffff !important;
+		border: 1px solid var(--secondary-color) !important;
+	}
+
+	.wl-secondary-button:hover {
+		background-color: #ffffff !important;
+		color: var(--secondary-color) !important;
+	}
+
+	/* Links */
+	.wl-primary-link {
+		color: var(--primary-color) !important;
+		text-decoration: none !important;
+	}
+
+	.wl-primary-link:hover {
+		color: var(--secondary-color) !important;
+	}
+
+	/* Hintergrundfarben */
+	.wl-primary-bg {
+		background-color: var(--primary-color) !important;
+		color: #ffffff !important;
+	}
+
+	.wl-secondary-bg {
+		background-color: var(--secondary-color) !important;
+		color: #ffffff !important;
+	}
+
+	.wl-tertiary-bg {
+		background-color: var(--tertiary-color) !important;
+		color: #ffffff !important;
+	}
+
+	/* Rahmen */
+	.wl-primary-border {
+		border: 2px solid var(--primary-color) !important;
+	}
+
+	.wl-secondary-border {
+		border: 2px solid var(--secondary-color) !important;
+	}
+
+	/* Textfarben */
+	.wl-primary-text {
+		color: var(--primary-color) !important;
+	}
+
+	.wl-secondary-text {
+		color: var(--secondary-color) !important;
+	}
+
+	.wl-tertiary-text {
+		color: var(--tertiary-color) !important;
+	}
+
+	/* Icons */
+	.wl-primary-icon {
+		fill: var(--primary-color) !important;
+		color: var(--primary-color) !important;
+	}
+
+	.wl-secondary-icon {
+		fill: var(--secondary-color) !important;
+		color: var(--secondary-color) !important;
+	}
+
+	.wl-tertiary-icon {
+		fill: var(--tertiary-color) !important;
+		color: var(--tertiary-color) !important;
+	}
+	</style>
+
+	<style>
+	/* ÄNDERUNG DER OIGINALEN STYLES */
+
+	.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+		background-color: var(--primary-color) !important;
+	}
+
+	.msg-count {
+		background-color: var(--primary-color) !important;
+	}
+
+	.dropdown-lg .msg-header {
+		background: var(--primary-color) !important;
+	}
+
+	.btn-primary {
+		color: #fff;
+		background-color: var(--primary-color) !important;
+		border-color: var(--primary-color) !important;
+	}
+
+	.form-check-input:checked {
+		background-color: var(--primary-color) !important;
+		border-color: var(--primary-color) !important;
+	}
+	</style>
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/bootstrap.bundle.min.js"></script>
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/index.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			error: "{{ error }}",
+			success: "{{ success }}"
+		},
+		methods: {
+			showMessages() {
+			if (this.isErrorVisible) {
+				this.showError();
+			}
+			if (this.isSuccessVisible) {
+				this.showSuccess();
+			}
+			},
+			showError() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+  
+				// Display an error notification
+				message.error('{{ error }}');
+			},
+			showSuccess() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+  
+				// Display an error notification
+				message.success('{{ success }}');
+			}
+		},
+		computed: {
+			isErrorVisible: function () {
+				return this.error && this.error !== '' && this.error !== 'None';
+			},
+			isSuccessVisible: function() {
+				return this.success && this.success !== '' && this.success !== 'None';
+			}
+		},
+		watch: {
+			isErrorVisible(newVal) {
+				if (!newVal) {
+					this.closeError();
+				}
+			},
+			isSuccessVisible(newVal) {
+				if (!newVal) {
+					this.closeSuccess();
+				}
+			}
+		},
+		created() {
+			this.$nextTick(() => {
+				this.showMessages();
+			})
+		}
+	});
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    let entryTime = Date.now();  // Zeitpunkt des Seitenaufrufs
+
+    // Funktion, um die aktuelle Zeit in der Zeitzone 'Europe/Berlin' zu erhalten
+    function getCurrentTimeInBerlin() {
+        return new Intl.DateTimeFormat('de-DE', {
+            timeZone: 'Europe/Berlin',
+            dateStyle: 'short',
+            timeStyle: 'long'
+        }).format(new Date());
+    }
+
+    window.addEventListener("beforeunload", async function(event) {
+        let timeSpent = Date.now() - entryTime;  // Verweildauer in Millisekunden
+        console.log(`Verweildauer: ${timeSpent} ms`);  // Debug-Ausgabe
+
+        // Aktuelle Zeit in Berlin abrufen
+        let currentTimeBerlin = getCurrentTimeInBerlin();
+        console.log(`Aktuelle Zeit in Berlin: ${currentTimeBerlin}`);  // Debug-Ausgabe
+
+        let sessionID = "{{ Session_Info }}";  // Stelle sicher, dass dies korrekt ersetzt wird
+        let session_Nutzer = "{{ nutzername }}";
+
+        // Überprüfe, ob sessionID gültig ist
+        if (sessionID) {
+            try {
+                await axios.post('https://cdn.personalpeak360.de/track_time', {
+                    time_spent: timeSpent,
+                    session_ID: sessionID,
+                    session_Nutzer: session_Nutzer,
+                    timestamp: currentTimeBerlin  // Füge die aktuelle Zeit hinzu
+                });
+            } catch (error) {
+                console.error('Error sending data:', error);  // Fehlerbehandlung
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

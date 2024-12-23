@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Fitness-Test → Trainingshalle</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/css/apexcharts.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detailsModalBody">
+                    <!-- Dynamische Inhalte hier -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	{% if not Trainingshalle_Details['Status'] %}
+		<!-- Fake Button -->
+		<button id="fakeOpenModalButton" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modal_TrainingsMethode_Festlegen"></button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="modal_TrainingsMethode_Festlegen" tabindex="-1" aria-labelledby="modal_Erstellen" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog">
+				<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/aktualisieren/Methode?Redirect_URL=https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/fitness-test" method="post" id="Erstellen_FORM">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Trainings-Methode festlegen</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group mb-3">
+								<label for="Trainings_Art">Trainings-Methode</label>
+								<select class="form-select" name="Trainings_Art" id="Trainings_Art">
+									<option value="Fitnessstudio">Fitnessstudio</option>
+									<optgroup label="Zuhause">
+										<option value="Zuhause_GERÄTE">Mit Geräten</option>
+										<option value="Zuhause">Ohne Geräte</option>
+									</optgroup>
+									<option value="Gesundheit">Gesundheitsprobleme</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Trainings-Methode festlegen</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<style>
+			/* Standard Body */
+			body {
+				cursor: default; /* Normaler Cursor */
+			}
+		
+			/* Wenn das Modal geöffnet ist */
+			body.modal-open {
+				overflow: hidden; /* Verhindert Scrollen */
+			}
+		
+			/* Zeige gesperrten Cursor für alle Inhalte außerhalb des Modals */
+			body.modal-open > *:not(.modal) {
+				pointer-events: none; /* Blockiert alle Klicks */
+				cursor: not-allowed; /* Zeigt gesperrten Cursor */
+			}
+		
+			/* Erlaube Interaktionen im Modal */
+			.modal {
+				pointer-events: auto; /* Aktiviert Interaktionen im Modal */
+				cursor: default; /* Normaler Cursor im Modal */
+			}
+		</style>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Zeige das Modal an
+				const fakeButton = document.getElementById('fakeOpenModalButton');
+				if (fakeButton) {
+					fakeButton.click();
+				}
+		
+				// Schließen des Modals verhindern
+				const modal = document.getElementById('modal_TrainingsMethode_Festlegen');
+				if (modal) {
+					modal.addEventListener('hide.bs.modal', function (event) {
+						event.preventDefault(); // Verhindert das Schließen
+					});
+				}
+			});
+		</script>
+	{% endif %}
+
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="card radius-15 mb-3">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Fitness-Test
+                                    {% if Trainingshalle_Details['Status'] %}
+                                        {% if Trainingshalle_Details['Art'] == "Fitnessstudio" %}
+                                            (fürs Fitnessstudio)
+                                        {% elif Trainingshalle_Details['Art'] == "Zuhause" %}
+                                            (für Zuhause)
+                                        {% elif Trainingshalle_Details['Art'] == "Zuhause_GERÄTE" %}
+                                            (für Zuhause - mit Geräten)
+                                        {% elif Trainingshalle_Details['Art'] == "Gesundheit" %}
+                                            (für gesundheitliche Probleme)
+                                        {% endif %}
+                                    {% endif %}
+                                </h4>
+                                <h6 class="mb-0">In der Trainingshalle kannst Du unter anderem auf unser komplettes stetig wachsendes Sortiment an Übungen für Dein Training
+                                    {% if Trainingshalle_Details['Status'] %}
+                                        {% if Trainingshalle_Details['Art'] == "Fitnessstudio" %}
+                                            im Fitnessstudio
+                                        {% elif Trainingshalle_Details['Art'] == "Zuhause" %}
+                                            bei Dir Zuhause (mit Deinem eigenen Körpergewicht)
+                                        {% elif Trainingshalle_Details['Art'] == "Zuhause_GERÄTE" %}
+                                            bei Dir Zuhause (mit Geräten)
+                                        {% elif Trainingshalle_Details['Art'] == "Gesundheit" %}
+                                            (perfekt für gesundheitliche Probleme)
+                                        {% endif %}
+                                    {% endif %}
+                                    zugreifen.
+                                </h6>
+                                <h6 class="mb-0">Bevor Du mit Deinem Training beginnen und einen individuellen Trainingsplan erstellen lassen kannst, musst Du diesen Fitness-Test durchführen.</h6>
+                                <hr>
+                                <p class="mb-0">Dieser Test besteht aus 10 Übungen - die es in sich haben - und paar Fragen, welche deinen aktuellen Fitness-Zustand und eventuelle Krankheiten abfragen und überprüfen, damit unsere Trainer Dich mit einem 100%ig individuellen Trainingsplan versorgen können.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Funktion, die den Countdown initialisiert
+                        function initializeFlipDown() {
+                            // Überprüfen, ob das Ziel-Element existiert
+                            const flipdownElement = document.getElementById('flipdown2');
+                            if (!flipdownElement) {
+                                console.error('FlipDown element not found!');
+                                return;
+                            }
+                
+                            // Aktuelles Datum in Sekunden
+                            var currentDate = Math.floor(new Date().getTime() / 1000);
+                
+                            // 48 Stunden in Sekunden
+                            var hours48 = 48 * 60 * 60;
+                
+                            // Ziel-Datum (heute + 48 Stunden)
+                            var targetDate = currentDate + hours48;
+                
+                            // FlipDown initialisieren
+                            var flipdown = new FlipDown(targetDate, 'flipdown2', {
+                                headings: ["Tage", "Stunden", "Minuten", "Sekunden"]
+                            })
+                
+                            // Countdown starten
+                            .start()
+                
+                            // Funktion ausführen, wenn der Countdown endet
+                            .ifEnded(() => {
+                                console.log('Der Countdown ist abgelaufen!');
+                            });
+                
+                            // Version anzeigen
+                            var ver = document.getElementById('ver');
+                            if (ver) {
+                                ver.innerHTML = flipdown.version;
+                            }
+                        }
+                    </script>
+
+
+                    <button class="btn btn-danger text-center" id="skipTestBtn">TEST ÜBERSPRINGEN (NUR WÄHREND ENTWICKLUNG!)</button>
+
+
+
+
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <!-- Navigation Buttons and Current Step Title -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="btn btn-primary" id="prev-step"><i class="bx bx-left-arrow"></i></button>
+                                <div class="card-title">
+                                    <h4 class="mb-3 text-center" id="current-step-title">Persönliche Angaben</h4>
+                                </div>
+                                <button class="btn btn-primary" id="next-step"><i class="bx bx-right-arrow"></i></button>
+                            </div>
+                    
+                            <!-- Content Container -->
+                            <div class="content-container">
+                                <div class="step" id="step-1">
+                                    <form id="personal-details-form" novalidate>
+                                        <div class="card radius-15 mb-4">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h5 class="mb-0">Persönliche Informationen</h5>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label for="Geschlecht">Bitte wähle Dein Geschlecht:</label>
+                                                    <select class="form-select" name="Geschlecht" id="Geschlecht" required>
+                                                        <option value="" disabled selected>Geschlecht auswählen</option>
+                                                        <option value="Männlich">Männlich</option>
+                                                        <option value="Weiblich">Weiblich</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Bitte wähle Dein Geschlecht aus.</div>
+                                                </div>
+
+                                                <div class="form-group mb-2">
+                                                    <label for="Alter">Bitte gib Dein Alter ein:</label>
+                                                    <input type="number" class="form-control" name="Alter" id="Alter" placeholder="Alter" required>
+                                                    <div class="invalid-feedback">Bitte gib Dein Alter an.</div>
+                                                </div>
+
+                                                <div class="form-group mb-2">
+                                                    <label for="Grösse">Bitte gib Deine Größe ein:</label>
+                                                    <input type="number" class="form-control" name="Grösse" id="Grösse" placeholder="Größe (cm)" required>
+                                                    <div class="invalid-feedback">Bitte gib Deine Größe in cm an.</div>
+                                                </div>
+                                
+                                                <div class="form-group mb-2">
+                                                    <label for="Gewicht">Bitte gib Dein derzeitiges Gewicht in Kilogram an:</label>
+                                                    <input type="number" class="form-control" name="Gewicht" id="Gewicht" placeholder="Gewicht (kg)" required min="1" max="300">
+                                                    <div class="invalid-feedback">Bitte gib ein Gewicht zwischen 1 und 300 kg an.</div>
+                                                </div>
+                                
+                                                <div class="form-group mb-3">
+                                                    <label for="Fitness-Level">Bitte wähle Dein derzeitig geschätztes Fitness-Level:</label>
+                                                    <select class="form-select" name="Fitness-Level" id="Fitness-Level" required>
+                                                        <option value="" disabled selected>Fitness-Level auswählen</option>
+                                                        <option value="Anfänger">Anfänger</option>
+                                                        <option value="Fortgeschritten">Fortgeschritten</option>
+                                                        <option value="Experte">Experte</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Bitte wähle ein Fitness-Level aus.</div>
+                                                </div>
+                                
+                                                <div class="alert alert-warning" role="alert">
+                                                    Falls es gesundheitliche Einschränkungen oder andere körperliche Probleme gibt, tragen Sie diese hier ein. Auch andere Informationen, die für den Trainer wichtig sein könnten, sollten hier erwähnt werden.
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="Gesundheitszustand">Bitte gib uns weitere Infos zu Deinem Gesundheitszustand:</label>
+                                                    <textarea class="form-control" name="Gesundheitszustand" id="Gesundheitszustand" rows="5"></textarea>
+                                                    <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                                </div>
+                                
+                                                <div class="form-group mb-2">
+                                                    <label for="Fitness-Ziel">Bitte Gib deine Fitness-Ziele an:</label>
+                                                    <select class="form-select" name="Fitness-Ziel" id="Fitness-Ziel" required>
+                                                        <option value="" disabled selected>Fitness-Ziel auswählen</option>
+                                                        <option value="Gewichtsreduktion">Gewichtsreduktion</option>
+                                                        <option value="Muskelaufbau">Muskelaufbau</option>
+                                                        <option value="Ausdauer">Ausdauer</option>
+                                                        <option value="Allgemeine_Gesundheit">Allgemeine Gesundheit</option>
+                                                        <option value="Orthopädische_Probleme">Orthopädische Probleme</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">Bitte wähle ein Fitness-Ziel aus.</div>
+                                                </div>
+                                                <div class="form-group mb-0">
+                                                    <label for="Trainingserfahrung">Erzähle uns mehr über Deine vorherige Trainingserfahrung:</label>
+                                                    <textarea class="form-control" name="Trainingserfahrung" id="Trainingserfahrung" rows="5"></textarea>
+                                                    <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card radius-15 mb-0">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h5 class="mb-0">Körpermessungen</h5>
+                                                </div>
+                                                <div class="alert alert-warning" role="alert">
+                                                    <h6 class="mb-3">Was wird benötigt:</h6>
+                                                    <ul>
+                                                        <li>Ein flexibles Maßband, das weich genug ist, um den Körperkonturen zu folgen.</li>
+                                                        <li>Ein Notizbuch oder eine App, um die Messungen festzuhalten.</li>
+                                                        <li>Evtl. einen Spiegel, um die Position des Maßbands zu überprüfen.</li>
+                                                    </ul>
+                                                    <hr>
+                                                    <ol>
+                                                        <li>
+                                                            <strong>Oberarm messen:</strong>
+                                                            <ul>
+                                                                <li><strong>Position:</strong> Stehen Sie aufrecht mit entspannten Schultern und lassen Sie den Arm locker an der Seite Ihres Körpers hängen.</li>
+                                                                <li><strong>Messpunkt:</strong> Messen Sie den Umfang des Oberarms an der dicksten Stelle, in der Regel auf halber Strecke zwischen Schulter und Ellenbogen.</li>
+                                                                <li><strong>Achtung:</strong> Das Maßband sollte gerade und parallel zum Boden liegen. Ziehen Sie es fest genug an, um Kontakt zu halten, aber nicht so fest, dass es in die Haut einschneidet.</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <strong>Taille messen:</strong>
+                                                            <ul>
+                                                                <li><strong>Position:</strong> Stehen Sie aufrecht, Füße schulterbreit auseinander.</li>
+                                                                <li><strong>Messpunkt:</strong> Messen Sie die Taille an der schmalsten Stelle, normalerweise direkt über dem Bauchnabel.</li>
+                                                                <li><strong>Achtung:</strong> Achten Sie darauf, dass das Maßband gerade und parallel zum Boden verläuft. Atmen Sie normal und ziehen Sie das Maßband nicht zu fest.</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <strong>Hüfte messen:</strong>
+                                                            <ul>
+                                                                <li><strong>Position:</strong> Stehen Sie mit geschlossenen Füßen aufrecht.</li>
+                                                                <li><strong>Messpunkt:</strong> Messen Sie um die breiteste Stelle Ihrer Hüfte, dies umfasst oft den Gesäßbereich.</li>
+                                                                <li><strong>Achtung:</strong> Das Maßband sollte gerade sein und auf gleicher Höhe mit dem Boden verlaufen. Es sollte locker liegen, um eine genaue Messung zu ermöglichen.</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <strong>Oberschenkel messen:</strong>
+                                                            <ul>
+                                                                <li><strong>Position:</strong> Stehen Sie aufrecht, Beine leicht auseinander, etwa 15 cm.</li>
+                                                                <li><strong>Messpunkt:</strong> Messen Sie den Umfang des Oberschenkels nahe seinem oberen Ende, direkt unter dem Gesäß.</li>
+                                                                <li><strong>Achtung:</strong> Das Maßband sollte waagerecht zum Boden und straff genug sein, um nicht zu verrutschen, ohne in die Haut einzuschneiden.</li>
+                                                            </ul>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <input type="number" class="form-control" id="Oberarm_CM" placeholder="Oberarm (cm):" required>
+                                                    <div class="invalid-feedback">Bitte gib den Umfang Deines Oberarms an.</div>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <input type="number" class="form-control" id="Taille_CM" placeholder="Taille (cm):" required>
+                                                    <div class="invalid-feedback">Bitte gib den Umfang Deiner Taille an.</div>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <input type="number" class="form-control" id="Hüfte_CM" placeholder="Hüfte (cm):" required>
+                                                    <div class="invalid-feedback">Bitte gib den Umfang Deiner Hüfte an.</div>
+                                                </div>
+                                                <div class="form-group mb-0">
+                                                    <input type="number" class="form-control" id="Oberschenkel_CM" placeholder="Oberschenkel (cm):" required>
+                                                    <div class="invalid-feedback">Bitte gib den Umfang Deines Oberschenkels an.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+
+                                <div id="fitness-steps-container"></div>
+
+                                <script>
+                                    // Beispiel für die Datenstruktur der Übungen
+                                    const fitnessTest = {{ Fitness_Test | safe }};
+
+                                    console.log("Fitness-Test:" + fitnessTest)
+
+                                    // Funktion zum Erstellen der Schritte
+                                    function createFitnessSteps() {
+                                        console.log("Fitness-Test:" + fitnessTest)
+                                        const container = document.getElementById('fitness-steps-container');
+                                            
+                                        Object.keys(fitnessTest).forEach((key, index) => {
+                                            if (key.startsWith('Uebung_')) {
+                                                const exercise = fitnessTest[key];
+
+                                                console.log(selectedLang)
+                                                console.log(exercise)
+                                                console.log(exercise?.Texte[selectedLang])
+                                                console.log(exercise?.Texte[selectedLang].Name)
+                                                // Erstellen des HTML-Inhalts für jede Übung
+                                                const step = document.createElement('div');
+                                                step.classList.add('step');
+                                                step.id = `step-${index}`;
+                                                step.style.display = 'none'; // Standardmäßig versteckt
+
+                                                step.innerHTML = `
+                                                    <h5 class="mb-4 text-center">
+                                                        <span>${exercise?.Texte[selectedLang].Name}</span>
+                                                        (<span id="repetitions-count-${index}">10</span>x Wiederholungen)
+                                                    </h5>
+                                                    <div class="exercise-content mb-4 text-center">
+                                                        <video class="exercise-video" autoplay width="100%" loop muted controlsList="nodownload">
+                                                            <source src="https://cdn.personalpeak360.de/trainingshalle/${exercise.Animation}" type="video/mp4">
+                                                            Dein Browser unterstützt kein HTML5-Video.
+                                                        </video>
+                                                        <audio class="mt-3" loop controls controlsList="nodownload">
+                                                            <source src="https://cdn.personalpeak360.de/trainingshalle/${exercise.Texte[selectedLang].Voiceover_ID}" type="audio/mpeg">
+                                                            Dein Browser unterstützt kein Audioelement.
+                                                        </audio>
+                                                    </div>
+                                                    <hr>
+                                                    <!-- Difficulty Slider -->
+                                                    <div class="difficulty-slider-container mt-4">
+                                                        <h5 class="text-center">
+                                                            <label for="customRange${index}" class="form-label">Wie schwer war die Übung?</label>
+                                                        </h5>
+                                                        <div class="current-selection mb-2 text-center">
+                                                            <h6><span id="slider-value-${index}">0</span>/10</h6>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>0 (Ganz leicht)</span>
+                                                            <span>10 (Unmöglich)</span>
+                                                        </div>
+                                                        <input type="range" class="form-range difficulty-slider" min="0" max="10" id="customRange${index}" value="0">
+                                                    </div>
+                                                `;
+
+                                                // Hinzufügen des erstellten Schritts zum Container
+                                                container.appendChild(step);
+                                            }
+                                        });
+                                    }
+
+                                    // Funktion, um die Auswahl des Schwierigkeitsgrads anzuzeigen
+                                    function updateSliderValue(event, index) {
+                                        const value = event.target.value;
+                                        document.getElementById(`slider-value-${index}`).textContent = value;
+                                    }
+
+                                    // Eventlistener für die Slider
+                                    document.addEventListener('input', function(event) {
+                                        if (event.target.classList.contains('difficulty-slider')) {
+                                            const index = event.target.id.replace('customRange', '') - 1;
+                                            updateSliderValue(event, index);
+                                        }
+                                    });
+
+                                    // Initialisieren der Schritte beim Laden der Seite
+                                    document.addEventListener('DOMContentLoaded', createFitnessSteps);
+                                </script>
+
+
+                                <style>
+                                    .spinner-border {
+                                        color: var(--primary-color) !important; /* Farbe des Spinners */
+                                    }
+                                </style>
+
+                                <!-- Step 12: Ergebnisse anzeigen -->
+                                <div class="step" id="step-12" style="display: none;">
+                                    <div id="loading-animation" style="display: none; text-align: center;">
+                                        <h5>Berechnung der Ergebnisse...</h5>
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Die Ergebnisse Deines Fitness-Tests werden berechnet...</span>
+                                        </div>
+                                    </div>
+                                        <ul class="nav nav-pills mb-3" id="pills-tab-ergebnis" role="tablist">
+                                            <li class="nav-item" role="presentation"> <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Ergebnisse</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation"> <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Statistiken</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" id="pills-tabContent">
+                                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                <div id="results-content" style="display: none;">
+                                                    <div class="card radius-15 mb-3">
+                                                        <div class="card-body">
+                                                            <h6>Fitnesslevel: <span id="fitness-level"></span></h6>
+                                                            <p id="evaluation-statement"></p>
+                                                            <div id="visualization" style="margin-top: 20px;"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card radius-15 mb-3">
+                                                        <div class="card-body text-center">
+                                                            <div class="card-title">
+                                                                <h5>Dein individueller Trainingsplan</h5>
+                                                            </div>
+                                                            
+                                                            <div style="display: block; margin-left: auto; margin-right: auto; width: fit-content;" id="flipdown2" class="flipdown"></div>
+                                                        
+                                                            <br>
+                                                            <br>
+                                                            <p>Dein Trainer wird Dir innerhalb der nächsten 2 Tage (48 Stunden) einen individuellen Trainingsplan anhand der Ergebnisse dieses Fitness-Tests anfertigen. <br>In der Zwischenzeit kannst Du den vorgefertigten Trainingsplan für Dein derzeitiges Fitness-Level verwenden: "<span id="fitness-levelTRAININGSPLAN"></span>"</p>
+                                                        </div>
+                                                    </div>
+
+            
+                                                            
+                                                    <div class="card radius-15 mb-0">
+                                                        <div class="card-body">
+                                                            <div class="card-title">
+                                                                <h5>Ergebnisse der Übungen</h5>
+                                                            </div>
+            
+                                                            <!-- Ergebnisse der Übungen -->
+                                                            <div class="exercise-results">
+                                                                <ul id="exercise-results-list">
+                                                                    <!-- Übungsergebnisse werden dynamisch hier eingefügt -->
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                                <!-- Alert-Bereich -->
+                                                <div class="alert alert-warning fade show text-center alert_RESULTS" role="alert" style="display: none;">
+                                                    Es liegen derzeit keine Statistiken für Dich vor. <br>
+                                                    Da dies Dein erster Fitness-Test ist und keine vorherigen Ergebnisse vorhanden sind, können noch keine Auswertungen angezeigt werden.
+                                                </div>
+
+                                                <!-- Hauptinhalt -->
+                                                <div class="main-content_RESULTS">
+                                                    <div class="card radius-15">
+                                                        <div class="card-body" style="position: relative;">
+                                                            <div class="card-title">
+                                                                <h5>Verlauf Deiner Fitnesstest-Ergebnisse</h5>
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Datum</th>
+                                                                            <th>Typ</th>
+                                                                            <th>Fitness Level</th>
+                                                                            <th>Gesamt Punktzahl</th>
+                                                                            <th>Aktionen</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <!-- Dynamischer Inhalt wird hier eingefügt -->
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <th>Datum</th>
+                                                                            <th>Typ</th>
+                                                                            <th>Fitness Level</th>
+                                                                            <th>Gesamt Punktzahl</th>
+                                                                            <th>Aktionen</th>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="card radius-15">
+                                                        <div class="card-body" style="position: relative;">
+                                                            <div class="card-title">
+                                                                <h5>Verlauf Deines Gewichts</h5>
+                                                            </div>
+
+                                                            <div id="Gewichtsverlauf_STATS" style="min-height: 415px;"></div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="card radius-15">
+                                                        <div class="card-body" style="position: relative;">
+                                                            <div class="card-title">
+                                                                <h5>Verlauf Deiner Messungen</h5>
+                                                            </div>
+
+                                                            
+                                                            <ul class="nav nav-pills mb-3" id="pills-tab-ergebnis" role="tablist">
+                                                                <li class="nav-item" role="presentation"> <a class="nav-link active" id="pills-messung-2-tab" data-bs-toggle="pill" href="#pills-messung-1" role="tab" aria-controls="pills-home" aria-selected="true">Balkendiagramm</a>
+                                                                </li>
+                                                                <li class="nav-item" role="presentation"> <a class="nav-link" id="pills-messung-2-tab" data-bs-toggle="pill" href="#pills-messung-2" role="tab" aria-controls="pills-profile" aria-selected="false">Liniendiagramm</a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="tab-content" id="pills-tabContent">
+                                                                <div class="tab-pane fade show active" id="pills-messung-1" role="tabpanel" aria-labelledby="pills-messung-1-tab">
+                                                                    <div id="Messverlauf_STATS" style="min-height: 415px;"></div>
+                                                                </div>
+                                                                <div class="tab-pane fade" id="pills-messung-2" role="tabpanel" aria-labelledby="pills-messung-2-tab">
+                                                                    <div id="Messverlauf_STATS2" style="min-height: 415px;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <style>
+                        /* Begrenze die maximale Breite und Höhe des Videos */
+                        .exercise-video {
+                            max-width: 100%; /* Begrenze die Breite auf 100% des Containers */
+                            height: auto; /* Behalte das Seitenverhältnis des Videos bei */
+                            max-height: 400px; /* Setze eine maximale Höhe */
+                            object-fit: contain; /* Passe das Video an, ohne es zu verzerren */
+                        }
+
+                        /* Initial Slider Styles */
+                        .difficulty-slider {
+                            -webkit-appearance: none;
+                            width: 100%;
+                            height: 8px;
+                            border-radius: 5px;
+                            outline: none;
+                            transition: background 0.15s ease-in-out;
+                            background: linear-gradient(to right, green 0%, red 100%);
+                            margin: 0;
+                        }
+                    
+                        .difficulty-slider::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: #ffffff;
+                            border: 2px solid #000;
+                            cursor: pointer;
+                        }
+                    
+                        .difficulty-slider::-moz-range-thumb {
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 50%;
+                            background: #ffffff;
+                            border: 2px solid #000;
+                            cursor: pointer;
+                        }
+                    
+                        /* Container Styling */
+                        .content-container {
+                            padding: 20px;
+                        }
+                    
+                        .difficulty-slider-container {
+                            text-align: left;
+                        }
+
+                        .is-invalid {
+                            border-color: #dc3545;
+                            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+                        }
+
+                        .invalid-feedback {
+                            display: none;
+                            color: #dc3545;
+                            font-size: 0.875em;
+                        }
+
+                        .is-invalid ~ .invalid-feedback {
+                            display: block;
+                        }
+
+                        .fitness-evaluation {
+                            text-align: center;
+                            margin-top: 20px;
+                        }
+
+                        .fitness-evaluation h3 {
+                            color: var(--fitness-color, black);
+                        }
+
+                        .fitness-evaluation p {
+                            font-size: 16px;
+                            line-height: 1.5;
+                        }
+                    </style>
+                    
+                    <script>
+                        // JavaScript for Step Navigation
+                        let currentStep = 1;
+                        const totalSteps = 12; // Passe die Anzahl an die tatsächlichen Schritte an
+                        const prevStepBtn = document.getElementById('prev-step');
+                        const nextStepBtn = document.getElementById('next-step');
+                        const stepTitle = document.getElementById('current-step-title');
+                    
+                        function updateStep() {
+                            // Iteriere durch alle Schritte und aktualisiere die Anzeige
+                            for (let i = 1; i <= totalSteps; i++) {
+                                const stepElement = document.getElementById(`step-${i}`);
+                                if (stepElement) {
+                                    if (i === currentStep) {
+                                        stepElement.style.display = 'block'; // Zeige aktuellen Schritt
+                                    } else {
+                                        stepElement.style.display = 'none'; // Verstecke alle anderen Schritte
+
+                                        // Stoppe und entlade Video und Audio (nur bei Übungen nötig)
+                                        const video = stepElement.querySelector('video');
+                                        const audio = stepElement.querySelector('audio');
+                                        if (video) {
+                                            video.pause();
+                                            video.currentTime = 0; // Setze das Video auf den Anfang zurück
+                                            video.load(); // Entlade das Video
+                                        }
+                                        if (audio) {
+                                            audio.pause();
+                                            audio.currentTime = 0; // Setze das Audio auf den Anfang zurück
+                                            audio.load(); // Entlade das Audio
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Aktualisiere den Titel basierend auf dem aktuellen Schritt
+                            if (currentStep === 1) {
+                                stepTitle.textContent = 'Persönliche Angaben';
+                            } else if (currentStep === totalSteps) {
+                                stepTitle.textContent = 'Ergebnis des Fitness-Tests';
+                            } else {
+                                stepTitle.textContent = `${currentStep - 1}. Übung`;
+                            }
+
+                            // Zeige Ergebnisse nur, wenn wir bei der letzten Seite sind
+                            if (currentStep === totalSteps) {
+                                showResults(); // Ergebnisse generieren und anzeigen
+                            }
+
+
+                            // Buttons sichtbar machen oder nur verstecken
+                            if (currentStep === 1) {
+                                prevStepBtn.style.visibility = 'hidden';
+                            } else {
+                                prevStepBtn.style.visibility = 'visible';
+                            }
+
+                            if (currentStep === totalSteps) {
+                                prevStepBtn.style.visibility = 'hidden';
+                                nextStepBtn.style.visibility = 'hidden';
+                            }
+                        }
+
+                    
+                        function validateStep(step) {
+                            const stepElement = document.getElementById(`step-${step}`);
+                            const inputs = stepElement.querySelectorAll('input, select, textarea');
+                            let isValid = true;
+
+                            inputs.forEach(input => {
+                                if (!input.checkValidity()) {
+                                    isValid = false;
+
+                                    // Zeige Validierungsfehler an
+                                    input.classList.add('is-invalid');
+                                    input.addEventListener('input', () => {
+                                        if (input.checkValidity()) {
+                                            input.classList.remove('is-invalid');
+                                        }
+                                    });
+                                }
+                            });
+
+                            return isValid;
+                        }
+
+                        
+                        const skipTestBtn = document.getElementById('skipTestBtn');
+
+
+
+                        skipTestBtn.addEventListener('click', () => {
+                            document.getElementById('Geschlecht').value = "Männlich";
+                            document.getElementById('Gewicht').value = parseFloat(76);
+                            document.getElementById('Fitness-Level').value = "Anfänger";
+                            document.getElementById('Grösse').value = parseFloat(176);
+                            document.getElementById('Alter').value = parseInt(19);
+
+                            
+                            document.getElementById('Oberarm_CM').value = parseInt(15);
+                            document.getElementById('Taille_CM').value = parseInt(40);
+                            document.getElementById('Hüfte_CM').value = parseInt(50);
+                            document.getElementById('Oberschenkel_CM').value = parseInt(30);
+
+                            currentStep = totalSteps;
+                            updateStep();
+                        });
+
+
+                        nextStepBtn.addEventListener('click', () => {
+                            // Validierung des aktuellen Schrittes
+                            if (!validateStep(currentStep)) {
+                                return; // Verhindere den Wechsel zum nächsten Schritt
+                            }
+
+                            if (currentStep < totalSteps) {
+                                currentStep++;
+                                updateStep();
+                            }
+                        });
+
+                        prevStepBtn.addEventListener('click', () => {
+                            if (currentStep > 1) {
+                                currentStep--;
+                                updateStep();
+                            }
+                        });
+
+
+                        async function showResults() {
+                            document.getElementById('loading-animation').style.display = 'block';
+                            document.getElementById('results-content').style.display = 'none';
+                            document.getElementById('pills-tab-ergebnis').style.display = 'none';
+
+                            const gender = document.getElementById('Geschlecht').value;
+                            const weight = parseFloat(document.getElementById('Gewicht').value);
+                            const fitnessLevel = document.getElementById('Fitness-Level').value;
+                            const height = parseFloat(document.getElementById('Grösse').value);
+                            const age = parseInt(document.getElementById('Alter').value);
+
+
+                            const Oberarm_CM = parseFloat(document.getElementById('Oberarm_CM').value);
+                            const Taille_CM = parseFloat(document.getElementById('Taille_CM').value);
+                            const Hüfte_CM = parseFloat(document.getElementById('Hüfte_CM').value);
+                            const Oberschenkel_CM = parseFloat(document.getElementById('Oberschenkel_CM').value);
+
+
+                            if (!gender || isNaN(weight) || isNaN(height) || isNaN(age) || !fitnessLevel) {
+                                alert('Bitte füllen Sie alle Pflichtfelder aus.');
+                                document.getElementById('loading-animation').style.display = 'none';
+                                return;
+                            }
+
+                            const exerciseResultsList = document.getElementById('exercise-results-list');
+                            exerciseResultsList.innerHTML = '';
+                            let totalPoints = 0;
+                            let numExercises = 0;
+
+                            try {
+                                const sliders = document.querySelectorAll('.difficulty-slider');
+                                const exerciseNames = document.querySelectorAll('.step h5 span:first-child'); // Alle Namen aus dem HTML
+                                numExercises = sliders.length;
+
+                                // Liste, um die Daten aller Übungen zu speichern
+                                const exerciseResults = [];
+
+                                for (let i = 0; i < numExercises; i++) {
+                                    const difficulty = parseInt(sliders[i].value);
+                                    const exerciseName = exerciseNames[i].innerText; // Richtigen Namen auslesen
+
+                                    const response = await fetch('https://dashboard.personalpeak360.de/trainingshalle/fitness-test', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ gender, weight, height, age, fitness_level: fitnessLevel, difficulty }),
+                                    });
+
+                                    if (!response.ok) {
+                                        const errorResponse = await response.json();
+                                        console.error('Server-Fehler:', errorResponse);
+                                        throw new Error(`Fehler bei der Berechnung für ${exerciseName}`);
+                                    }
+
+                                    const data = await response.json();
+                                    totalPoints += data.level.points;
+
+                                    // Speichere die Daten in der Liste
+                                    exerciseResults.push({
+                                        exercise_name: exerciseName,
+                                        max_reps: data.max_reps,
+                                        points: data.level.points,
+                                    });
+
+                                    const listItem = document.createElement('li');
+                                    listItem.innerHTML = `<strong>${exerciseName}:</strong> Maximale Wiederholungen: ${data.max_reps}, Punkte: ${data.level.points}`;
+                                    exerciseResultsList.appendChild(listItem);
+                                }
+
+                                // Sende die gesammelten Ergebnisse und die Gesamtpunkte an den Endpunkt
+                                const evaluationResponse = await fetch('https://dashboard.personalpeak360.de/trainingshalle/fitness-test/GesamtErgebnis', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        total_points: totalPoints, 
+                                        num_exercises: numExercises,
+                                        exercises: exerciseResults, // Übertrage die gesamte Liste der Ergebnisse
+                                        Trainings_Methode: "{{ Trainingshalle_Details['Art'] }}", // Jinja2 Variable als String
+                                        {% if Trainingshalle_Details['Test_Typ'] == "Individuell" %}
+                                            Fitness_Test_ID: "{{ Fitness_Test_DETAILS_NONJSON['id'] }}", // Jinja2 Variable als String
+                                        {% endif %}
+                                        Daten: {
+                                            Geschlecht: gender,
+                                            Gewicht: weight,
+                                            Grösse: height,
+                                            Fitness_Level: fitnessLevel,
+                                            Alter: age,
+
+                                            
+                                            Messungen: {
+                                                Oberarm: Oberarm_CM,
+                                                Taille: Taille_CM,
+                                                Hüfte: Hüfte_CM,
+                                                Oberschenkel: Oberschenkel_CM,
+                                            }
+                                        }
+                                    }),
+                                });
+
+                                if (!evaluationResponse.ok) {
+                                    const errorResponse = await evaluationResponse.json();
+                                    console.error('Server-Fehler:', errorResponse);
+                                    throw new Error('Fehler bei der Bewertung der Gesamtpunkte.');
+                                }
+
+                                const evaluationData = await evaluationResponse.json();
+
+                                console.log(evaluationData.Test_Verlauf)
+
+                                // Elementreferenzen
+                                const alertDiv = document.querySelector('.alert_RESULTS');
+                                const mainContentDiv = document.querySelector('.main-content_RESULTS'); // Erstelle eine Klasse oder ID für den gesamten Content
+
+                                if (evaluationData.Test_Verlauf.length <= 1) {
+                                    // Zeige Alert an und verstecke den Content
+                                    alertDiv.style.display = 'block';
+                                    alertDiv.classList.add("mb-0");
+                                    mainContentDiv.style.display = 'none';
+                                } else {
+                                    // Zeige Content an und verstecke den Alert
+                                    alertDiv.style.display = 'none';
+                                    mainContentDiv.style.display = 'block';
+
+                                    // Tabelle füllen
+                                    const tableBody = document.querySelector('#example tbody');
+                                    evaluationData.Test_Verlauf.forEach((item, index) => {
+                                        const row = document.createElement('tr');
+
+                                        const dateCell = document.createElement('td');
+                                        dateCell.textContent = new Date(item.Zeitstempel).toLocaleDateString('de-DE');
+                                        row.appendChild(dateCell);
+
+                                        const typeCell = document.createElement('td');
+                                        typeCell.textContent = item.Typ || 'Unbekannt';
+                                        row.appendChild(typeCell);
+
+                                        const fitnessLevelCell = document.createElement('td');
+                                        fitnessLevelCell.textContent = item.Ergebnis?.Fitness_Level || 'Nicht verfügbar';
+                                        row.appendChild(fitnessLevelCell);
+
+                                        const pointsCell = document.createElement('td');
+                                        pointsCell.textContent = item.Gesamt_Punktzahl || 0;
+                                        row.appendChild(pointsCell);
+
+                                        // Button-Spalte
+                                        const actionCell = document.createElement('td');
+                                        const detailsButton = document.createElement('button');
+                                        detailsButton.className = 'btn btn-primary btn-sm';
+                                        detailsButton.textContent = 'Details ansehen';
+                                        detailsButton.setAttribute('data-index', index); // Speichere den Index des Eintrags
+                                        detailsButton.setAttribute('data-bs-toggle', 'modal');
+                                        detailsButton.setAttribute('data-bs-target', '#detailsModal');
+                                        actionCell.appendChild(detailsButton);
+                                        row.appendChild(actionCell);
+
+                                        // Füge die Zeile zur Tabelle hinzu
+                                        tableBody.appendChild(row);
+
+                                        // Button-Click-Event für Modal
+                                        detailsButton.addEventListener('click', () => {
+                                            const modalBody = document.getElementById('detailsModalBody');
+                                            modalBody.innerHTML = `
+                                                <h5>Allgemeine Informationen</h5>
+                                                <ul>
+                                                    <li><strong>Zeitpunkt:</strong> ${new Date(item.Zeitstempel).toLocaleDateString('de-DE', 
+                                                        {
+                                                            day: '2-digit',
+                                                            month: '2-digit',
+                                                            year: 'numeric',
+                                                        })} um ${new Date(item.Zeitstempel).toLocaleTimeString('de-DE', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                        })} Uhr
+                                                    </li>
+                                                    <li><strong>Typ:</strong> ${item.Typ || 'Unbekannt'}</li>
+                                                    <li><strong>Fitness-Level:</strong> ${item.Ergebnis?.Fitness_Level || 'Nicht verfügbar'}</li>
+                                                    <li><strong>Gesamt-Punktzahl:</strong> ${item.Gesamt_Punktzahl || 0}</li>
+                                                </ul>
+
+                                                <h5>Persönliche Daten</h5>
+                                                <ul>
+                                                    <li><strong>Alter:</strong> ${item.Daten.Alter || 'Nicht verfügbar'}</li>
+                                                    <li><strong>Geschlecht:</strong> ${item.Daten.Geschlecht || 'Nicht verfügbar'}</li>
+                                                    <li><strong>Gewicht:</strong> ${item.Daten.Gewicht || 'Nicht verfügbar'} kg</li>
+                                                    <li><strong>Größe:</strong> ${item.Daten.Grösse || 'Nicht verfügbar'} cm</li>
+                                                </ul>
+
+                                                <h5>Messungen</h5>
+                                                <ul>
+                                                    <li><strong>Oberarm:</strong> ${item.Daten.Messungen.Oberarm || 'Nicht verfügbar'} cm</li>
+                                                    <li><strong>Taille:</strong> ${item.Daten.Messungen.Taille || 'Nicht verfügbar'} cm</li>
+                                                    <li><strong>Hüfte:</strong> ${item.Daten.Messungen.Hüfte || 'Nicht verfügbar'} cm</li>
+                                                    <li><strong>Oberschenkel:</strong> ${item.Daten.Messungen.Oberschenkel || 'Nicht verfügbar'} cm</li>
+                                                </ul>
+
+                                                <h5>Übungsdaten</h5>
+                                                <ul>
+                                                    ${Object.keys(item)
+                                                        .filter(key => key.startsWith('Uebung_'))
+                                                        .map(uebungKey => {
+                                                            const uebung = item[uebungKey];
+                                                            return `
+                                                                <li>
+                                                                    <strong>${uebung.Name}:</strong>
+                                                                    Maximale Wiederholungen: ${uebung.Maximale_Wiederholungen || 'Nicht verfügbar'}, 
+                                                                    Erreichte Punkte: ${uebung.Erreichte_Punkte || 'Nicht verfügbar'}
+                                                                </li>`;
+                                                        })
+                                                        .join('')}
+                                                </ul>
+
+                                                <h5>Weitere Informationen</h5>
+                                                <ul>
+                                                    <li><strong>ID:</strong> ${item.id || 'Nicht verfügbar'}</li>
+                                                    <li><strong>Statement:</strong> ${item.Ergebnis?.Statement || 'Nicht verfügbar'}</li>
+                                                </ul>
+                                            `;
+
+                                        });
+                                    });
+
+                                    // DataTable initialisieren
+                                    $('#example').DataTable();
+
+
+                                    // Fülle die Gewichtsdaten für das erste Chart
+                                    const gewichtDaten = evaluationData.Test_Verlauf.map(item => item.Daten.Gewicht);
+                                    const gewichtDatum = evaluationData.Test_Verlauf.map(item => new Date(item.Zeitstempel).toISOString());
+
+                                    // Gewichtschart
+                                    const gewichtOptions = {
+                                        series: [{
+                                            name: 'Gewicht (in kg)',
+                                            data: gewichtDaten
+                                        }],
+                                        chart: {
+                                            height: 400,
+                                            type: 'line',
+                                            zoom: { enabled: false },
+                                            toolbar: { show: true }
+                                        },
+                                        xaxis: { type: 'datetime', categories: gewichtDatum },
+                                        yaxis: { title: { text: 'Gewicht (kg)' } }
+                                    };
+                                    new ApexCharts(document.querySelector("#Gewichtsverlauf_STATS"), gewichtOptions).render();
+
+                                    // Fülle die Messungsdaten für das zweite Chart
+                                    const messungDaten = {
+                                        Oberarm: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Oberarm),
+                                        Taille: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Taille),
+                                        Hüfte: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Hüfte),
+                                        Oberschenkel: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Oberschenkel)
+                                    };
+
+                                    // ApexCharts: Messungschart
+                                    const messungOptions = {
+                                        series: [
+                                            { name: 'Oberarm (cm)', data: messungDaten.Oberarm },
+                                            { name: 'Taille (cm)', data: messungDaten.Taille },
+                                            { name: 'Hüfte (cm)', data: messungDaten.Hüfte },
+                                            { name: 'Oberschenkel (cm)', data: messungDaten.Oberschenkel }
+                                        ],
+                                        chart: {
+                                            type: 'bar',
+                                            height: 400,
+                                            zoom: { enabled: true },
+                                            toolbar: { show: true }
+                                        },
+                                        stroke: { width: 2, curve: 'smooth' },
+                                        xaxis: { categories: gewichtDatum },
+                                        yaxis: { title: { text: 'Umfang (cm)' } }
+                                    };
+                                    new ApexCharts(document.querySelector("#Messverlauf_STATS"), messungOptions).render();
+
+                                    
+
+                                    // Fülle die Messungsdaten für das zweite Chart
+                                    const messungDaten2 = {
+                                        Oberarm: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Oberarm),
+                                        Taille: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Taille),
+                                        Hüfte: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Hüfte),
+                                        Oberschenkel: evaluationData.Test_Verlauf.map(item => item.Daten.Messungen.Oberschenkel)
+                                    };
+
+                                    // ApexCharts: Messungschart
+                                    const messungOptions2 = {
+                                        series: [
+                                            { name: 'Oberarm (cm)', data: messungDaten2.Oberarm },
+                                            { name: 'Taille (cm)', data: messungDaten2.Taille },
+                                            { name: 'Hüfte (cm)', data: messungDaten2.Hüfte },
+                                            { name: 'Oberschenkel (cm)', data: messungDaten2.Oberschenkel }
+                                        ],
+                                        chart: {
+                                            type: 'line',
+                                            height: 400,
+                                            zoom: { enabled: true },
+                                            toolbar: { show: true }
+                                        },
+                                        stroke: { width: 2, curve: 'smooth' },
+                                        xaxis: { categories: gewichtDatum },
+                                        yaxis: { title: { text: 'Umfang (cm)' } }
+                                    };
+                                    new ApexCharts(document.querySelector("#Messverlauf_STATS2"), messungOptions2).render();
+                                }
+
+                                document.getElementById('fitness-levelTRAININGSPLAN').textContent = evaluationData.fitness_level;
+                                document.getElementById('fitness-level').textContent = evaluationData.fitness_level;
+                                document.getElementById('evaluation-statement').textContent = evaluationData.statement;
+
+                                const visualization = document.getElementById('visualization');
+                                visualization.innerHTML = `<div style="width: 100%; height: 300px; background-color: ${evaluationData.color};">
+                                    <h1 style="color: white; line-height: 300px;">${evaluationData.points} Punkte</h1>
+                                </div>`;
+
+                                initializeFlipDown()
+
+                                document.getElementById('loading-animation').style.display = 'none';
+                                document.getElementById('results-content').style.display = 'block';
+                                document.getElementById('pills-tab-ergebnis').style.display = '';
+                            } catch (error) {
+                                console.error('Fehler:', error);
+                                alert('Es gab einen Fehler bei der Berechnung der Ergebnisse.');
+                                document.getElementById('loading-animation').style.display = 'none';
+                            }
+                        }
+
+
+                    
+                        updateStep();
+                    
+                        // Update all slider values and gradients
+                        document.querySelectorAll('.difficulty-slider').forEach((slider, index) => {
+                            const sliderValue = document.getElementById(`slider-value-${index + 1}`);
+                            slider.addEventListener('input', () => {
+                                sliderValue.textContent = slider.value;
+                                const value = (slider.value / slider.max) * 100;
+                                slider.style.background = `linear-gradient(to right, green ${value}%, red ${value}%)`;
+                            });
+                        });
+
+                        document.getElementById('Fitness-Level').addEventListener('change', function () {
+                            const fitnessLevel = this.value;
+                            let repetitions = 10; // Default für Anfänger
+                            if (fitnessLevel === 'Fortgeschritten') {
+                                repetitions = 20;
+                            } else if (fitnessLevel === 'Experte') {
+                                repetitions = 30;
+                            }
+                            document.querySelectorAll('#repetitions-count').forEach((el) => {
+                                el.textContent = repetitions;
+                            });
+                        });
+
+                        // Initiales Setzen der Wiederholungsanzahl beim Laden
+                        document.getElementById('Fitness-Level').dispatchEvent(new Event('change'));
+                    </script>
+                    
+
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Registrierung</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/images/favicon-32x32.png" type="image/png" />
+	<!-- loader-->
+	<link href="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/css/app.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body class="bg-register">
+	<!-- wrapper -->
+	<div class="wrapper">
+		<div class="section-authentication-register d-flex align-items-center justify-content-center">
+			<div class="row">
+				<div class="col-12 col-lg-10 mx-auto">
+					<div class="card radius-15 overflow-hidden">
+						<div class="row g-0">
+							<div class="col-xl-6">
+								<div class="card-body p-md-5">
+									<div class="text-center">
+										<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_kurz'] }}" width="80" alt="">
+										<h3 class="mt-4 font-weight-bold">Benutzerkonto erstellen</h3>
+									</div>
+									<div class="">
+										<div class="d-grid">
+											<a class="btn my-4 shadow-sm btn-white" href="javascript:;"> <span class="d-flex justify-content-center align-items-center">
+											<img class="me-2" src="https://cdn.personalpeak360.de/syndash/assets/images/icons/search.svg" width="16" alt="Image Description">
+											<span>Mit Google anmelden</span>
+												</span>
+											</a> <a href="javascript:;" class="btn btn-facebook"><i class="bx bxl-facebook"></i>Mit Facebook anmelden</a>
+										</div>
+										<div class="login-separater text-center mb-4"> <span>ODER MIT E-MAIL BZW. BENUTZERNAME ANMELDEN</span>
+											<hr>
+										</div>
+										<div class="form-body">
+											<form class="row g-3" action="/register" method="post">
+												<div class="col-sm-6">
+													<label for="Vorname" class="form-label">Vorname</label>
+													<input type="text" class="form-control" id="Vorname" name="Vorname" placeholder="Max">
+												</div>
+												<div class="col-sm-6">
+													<label for="Nachname" class="form-label">Nachname</label>
+													<input type="text" class="form-control" id="Nachname"name="Nachname" placeholder="Mustermann">
+												</div>
+												<div class="col-12">
+													<label for="Benutzername" class="form-label">Benutzername</label>
+													<input type="text" class="form-control" id="Benutzername" name="Benutzername" placeholder="Vorname.Nachname">
+												</div>
+												<div class="col-12">
+													<label for="EMail" class="form-label">E-Mail Adresse</label>
+													<input type="email" class="form-control" id="EMail" name="EMail" placeholder="Vorname.Nachname@E-Mail.de">
+												</div>
+												<div class="col-12">
+													<label for="Passwort" class="form-label">Passwort</label>
+													<div class="input-group" id="show_hide_password">
+														<input type="password" class="form-control border-end-0" id="Passwort" name="Passwort" value="" placeholder="Gib ein sicheres Passwort ein"> <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
+													</div>
+												</div>
+                        
+												<div class="col-12 mb-3">
+                          <label for="inputSelectReferrer" class="form-label">Wurdest du von jemandem angeworben?</label>
+                          <select class="form-select mb-2" id="inputSelectReferrer" aria-label="Default select example" onchange="toggleReferrerInput()">
+                              <option {% if Referrer_Nutzer %} selected=""{% endif %}>Ja</option>
+                              <option {% if not Referrer_Nutzer %} selected=""{% endif %}>Nein</option>
+                          </select>
+                      
+                          <!-- NUR WENN JA -->
+                          <input type="text" class="form-control" id="referrer_Username" name="referrer_Username" 
+                                 {% if Referrer_Nutzer %} value="{{ Referrer_Nutzer['Benutzername'] }}"{% endif %}  
+                                 placeholder="Benutzername des Nutzers" style="display: {% if not Referrer_Nutzer %}none{% else %}block{% endif %};">
+                        </div>
+                        
+                        <script>
+                            // Funktion, die das Eingabefeld für den Benutzernamen basierend auf der Auswahl anzeigt oder verbirgt
+                            function toggleReferrerInput() {
+                                var select = document.getElementById("inputSelectReferrer");
+                                var referrerInput = document.getElementById("referrer_Username");
+                        
+                                if (select.value === "Ja") {
+                                    referrerInput.style.display = "block"; // Zeige das Eingabefeld
+                                } else {
+                                    referrerInput.style.display = "none"; // Verstecke das Eingabefeld
+                                }
+                            }
+                        
+                            // Initialisiere die Anzeige des Eingabefeldes basierend auf der aktuellen Auswahl
+                            window.onload = function() {
+                                toggleReferrerInput();
+                            }
+                        </script>
+
+												<div class="col-12">
+													<div class="form-check form-switch">
+														<input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+														<label class="form-check-label" for="flexSwitchCheckChecked">Ich habe die Bedingungen gelesen und stimme ihnen zu</label>
+													</div>
+												</div>
+
+												<div class="col-12 text-center">
+													<div class="g-recaptcha" data-sitekey="6Ldg8lMqAAAAAAd7BZ7RwS1AciayqYhm2sRLLxtn"></div>
+												</div>
+                        
+												<div class="col-12">
+													<div class="d-grid">
+														<button type="submit" class="btn btn-primary"><i class="bx bx-user me-1"></i>Benutzerkonto erstellen</button>
+													</div>
+												</div>
+												<div class="col-12 text-center">
+													<p>Sie haben bereits ein Benutzerkonto? <a href="/">Jetzt anmelden!</a></p>
+												</div>
+											</form>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-xl-6 bg-login-color d-flex align-items-center justify-content-center">
+								<img src="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/images/login-images/register-frent-img.jpg" class="img-fluid" alt="...">
+							</div>
+						</div>
+						<!--end row-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end wrapper -->
+	<!-- JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://cdn.{{ WhiteLabel['Domain'] }}/syndash/assets/js/jquery.min.js"></script>
+	<!--Password show & hide js -->
+	<script>
+		$(document).ready(function () {
+			$("#show_hide_password a").on('click', function (event) {
+				event.preventDefault();
+				if ($('#show_hide_password input').attr("type") == "text") {
+					$('#show_hide_password input').attr('type', 'password');
+					$('#show_hide_password i').addClass("bx-hide");
+					$('#show_hide_password i').removeClass("bx-show");
+				} else if ($('#show_hide_password input').attr("type") == "password") {
+					$('#show_hide_password input').attr('type', 'text');
+					$('#show_hide_password i').removeClass("bx-hide");
+					$('#show_hide_password i').addClass("bx-show");
+				}
+			});
+		});
+	</script>
+  
+  <script>
+  new Vue({
+      el: '#app',
+      data: {
+          error: "{{ error }}",
+          success: "{{ success }}"
+      },
+      methods: {
+          showMessages() {
+          if (this.isErrorVisible) {
+              this.showError();
+          }
+          if (this.isSuccessVisible) {
+              this.showSuccess();
+          }
+          },
+          showError() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.error('{{ error }}');
+          },
+          showSuccess() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.success('{{ success }}');
+          }
+      },
+      computed: {
+          isErrorVisible: function () {
+              return this.error && this.error !== '' && this.error !== 'None';
+          },
+          isSuccessVisible: function() {
+              return this.success && this.success !== '' && this.success !== 'None';
+          }
+      },
+      watch: {
+          isErrorVisible(newVal) {
+              if (!newVal) {
+                  this.closeError();
+              }
+          },
+          isSuccessVisible(newVal) {
+              if (!newVal) {
+                  this.closeSuccess();
+              }
+          }
+      },
+      created() {
+          this.$nextTick(() => {
+              this.showMessages();
+          })
+      }
+  });
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</body>
+
+</html>

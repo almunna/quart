@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Messung (#{{ Messungs_DETAILS['id'] }}) → Ernährung & Analyse</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/css/apexcharts.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+    {% if not ErnährungsAnalyse_Details['Status'] %}
+		<!-- Fake Button -->
+		<button id="fakeOpenModalButton" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modal_AktivitätsLevel_Festlegen"></button>
+    
+		<!-- Modal -->
+		<div class="modal fade" id="modal_AktivitätsLevel_Festlegen" tabindex="-1" aria-labelledby="modal_Erstellen" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog">
+				<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/aktualisieren/Level?Redirect_URL=https://dashboard.{{ WhiteLabel['Domain'] }}/Messung/Neu" method="post" id="Erstellen_FORM">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Aktivitäts-Level festlegen</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group mb-3">
+								<label for="Aktivitäts-Level">Aktivitäts-Level</label>
+								<select class="form-select" name="Aktivitäts-Level" id="Aktivitäts-Level">
+									<option value="Sitzend">Sitzend (geringe Aktivität)</option>
+									<option value="Stehend">Stehend (leichte Tätigkeit)</option>
+									<option value="Aktiv">Aktiv (regelmäßige Bewegung)</option>
+									<option value="Athlet">Athlet (intensives Training)</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Aktivitäts-Level festlegen</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<style>
+			/* Standard Body */
+			body {
+				cursor: default; /* Normaler Cursor */
+			}
+		
+			/* Wenn das Modal geöffnet ist */
+			body.modal-open {
+				overflow: hidden; /* Verhindert Scrollen */
+			}
+		
+			/* Zeige gesperrten Cursor für alle Inhalte außerhalb des Modals */
+			body.modal-open > *:not(.modal) {
+				pointer-events: none; /* Blockiert alle Klicks */
+				cursor: not-allowed; /* Zeigt gesperrten Cursor */
+			}
+		
+			/* Erlaube Interaktionen im Modal */
+			.modal {
+				pointer-events: auto; /* Aktiviert Interaktionen im Modal */
+				cursor: default; /* Normaler Cursor im Modal */
+			}
+		</style>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Zeige das Modal an
+				const fakeButton = document.getElementById('fakeOpenModalButton');
+				if (fakeButton) {
+					fakeButton.click();
+				}
+		
+				// Schließen des Modals verhindern
+				const modal = document.getElementById('modal_AktivitätsLevel_Festlegen');
+				if (modal) {
+					modal.addEventListener('hide.bs.modal', function (event) {
+						event.preventDefault(); // Verhindert das Schließen
+					});
+				}
+			});
+		</script>
+	{% endif %}
+
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="card radius-15 mb-3">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Mess-Details zu Messung #{{ Messungs_DETAILS['id'] }}</h4>
+                                <h6 class="mb-0">In der Ernährungs- und Analyse-Halle kannst Du unter anderem auf Deine Ernährungspläne zugreifen und Dein Ernährung tracken.</h6>
+                                <h6 class="mb-0">Bevor Du aber einen Ernährungsplan erhalten kannst, musst Du zu guter letzt jetzt noch diese initiale Messung durchführen, sodass Dein Trainer einen auf Dich abgestimmten Plan anfertigen kann.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Funktion, die den Countdown initialisiert
+                        function initializeFlipDown() {
+                            // Überprüfen, ob das Ziel-Element existiert
+                            const flipdownElement = document.getElementById('flipdown2');
+                            if (!flipdownElement) {
+                                console.error('FlipDown element not found!');
+                                return;
+                            }
+                
+                            // Aktuelles Datum in Sekunden
+                            var currentDate = Math.floor(new Date().getTime() / 1000);
+                
+                            // 48 Stunden in Sekunden
+                            var hours48 = 48 * 60 * 60;
+                
+                            // Ziel-Datum (heute + 48 Stunden)
+                            var targetDate = currentDate + hours48;
+                
+                            // FlipDown initialisieren
+                            var flipdown = new FlipDown(targetDate, 'flipdown2', {
+                                headings: ["Tage", "Stunden", "Minuten", "Sekunden"]
+                            })
+                
+                            // Countdown starten
+                            .start()
+                
+                            // Funktion ausführen, wenn der Countdown endet
+                            .ifEnded(() => {
+                                console.log('Der Countdown ist abgelaufen!');
+                            });
+                
+                            // Version anzeigen
+                            var ver = document.getElementById('ver');
+                            if (ver) {
+                                ver.innerHTML = flipdown.version;
+                            }
+                        }
+                    </script>
+
+
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation"> <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Bericht</a>
+                        </li>
+                        <li class="nav-item" role="presentation"> <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Körperzusammensetzung</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade active show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="row d-flex align-items-stretch">
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Grundumsatz</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['Grundumsatz_BMR'] }} kcal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Körperfettanteil</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['Korperfettanteil'] }} %</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-flex align-items-stretch">
+                                <div class="col-12 col-lg-4">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">BMI</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['BodyMassIndex_BMI'] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">FFMI</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['FettfreieMasseIndex_FFMI'] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Fettfreie Masse</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['fettfreieMasse_LBM'] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+
+
+                            <div class="row d-flex align-items-stretch">
+                                <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                    <div class="card radius-15 h-100">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <h5 class="mb-0 text-center">Fettanteil</h5>
+                                            </div>
+                                            <div id="Chart_FETTANTEIL" style="min-height: 382.7px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 h-100">
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <h5 class="mb-0 text-center">Kalorien</h5>
+                                            </div>
+                                            <div id="Chart_KALORIEN" style="min-height: 382.7px;"></div>
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingOne">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                            Erläuterung zu "Dein Grundumsatz"
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <strong>"Dein Grundumsatz" – individuell für dich entwickelt</strong> <br>
+                                                            Der Balken "Dein Grundumsatz" in unserem Diagramm basiert auf einer speziell entwickelten Formel, die auf deine persönlichen Daten und deinen Lebensstil zugeschnitten ist. 
+                                                            Unsere Formel geht über die allgemeinen Standardmethoden hinaus und berücksichtigt Faktoren wie deine Aktivitätslevel, deinen individuellen Stoffwechsel und weitere persönliche Eigenschaften. 
+                                                            Dadurch wird sichergestellt, dass die berechneten Werte deinen tatsächlichen Kalorienbedarf genauer widerspiegeln. 
+                                                            Ziel ist es, dir eine präzisere Grundlage zu geben, um dein Wohlbefinden zu fördern und deine individuellen Ziele zu erreichen.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingTwo">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                            Erläuterung zu "Grundumsatz (WHO)"
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <strong>"Grundumsatz (WHO)" – Das Minimum für lebenswichtige Funktionen</strong> <br>
+                                                            Der "Grundumsatz (WHO)" zeigt den Kalorienbedarf an, der benötigt wird, damit dein Körper grundlegende lebenswichtige Funktionen wie Atmung, Herzschlag und Gehirnaktivität aufrechterhalten kann. 
+                                                            Diese Standardformel der Weltgesundheitsorganisation (WHO) bietet einen allgemeinen Wert, der auf statistischen Durchschnittswerten basiert. 
+                                                            Sie berücksichtigt keine individuellen Faktoren wie Aktivitätslevel oder Stoffwechsel. 
+                                                            Der berechnete Wert gibt daher nur an, wie viele Kalorien dein Körper benötigt, um im Ruhezustand zu funktionieren – ohne zusätzliche Aktivitäten oder individuelle Besonderheiten zu berücksichtigen.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+                                    <div class="col-12 col-lg-4">
+                                        <div class="card radius-15 flex-fill">
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="card-title">
+                                                    <h5 class="mb-0 text-center">Hormone</h5>
+                                                </div>
+                                                <div id="Chart_HORMONE" style="min-height: 382.7px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                -->
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                            <div class="row d-flex align-items-stretch mb-4">
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center h-100">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Fettfreier Masse-Index (FFMI)</h5>
+                                            </div>
+                                            <p class="mb-0">{{ Messungs_DETAILS['FettfreieMasseIndex_FFMI'] }}</p>
+                                            <p>
+                                                Der fettfreie Masse-Index (FFMI) ist wie eine verbesserte Version des BMI. 
+                                                Während der BMI nur Gewicht und Größe berücksichtigt, nimmt der FFMI auch deinen Körperfettanteil mit in die Berechnung. 
+                                                Das macht den FFMI besonders für dich geeignet, wenn du sportlich aktiv bist, denn er stuft dich nicht als übergewichtig ein, 
+                                                nur weil du vielleicht mehr Muskeln hast. 
+                                                Dadurch gibt dir der FFMI ein genaueres Bild von deiner Körperzusammensetzung, besonders wenn du fit oder muskulös bist.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center h-100">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Bewertung der fettfreien Masse</h5>
+                                            </div>
+
+                                            <!-- Tabelle für die Bereiche -->
+                                            <div class="table-responsive mb-0">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Anmerkungen</th>
+                                                            <th scope="col">Bereich</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="ffmi-row" data-ffmi="19">
+                                                            <td>zu niedrig</td>
+                                                            <td>&lt; 19</td>
+                                                        </tr>
+                                                        <tr class="ffmi-row" data-ffmi="20">
+                                                            <td>Normal</td>
+                                                            <td>19 - 20</td>
+                                                        </tr>
+                                                        <tr class="ffmi-row" data-ffmi="22">
+                                                            <td>Gut</td>
+                                                            <td>21 - 22</td>
+                                                        </tr>
+                                                        <tr class="ffmi-row" data-ffmi="24">
+                                                            <td>Sehr gut</td>
+                                                            <td>23 - 24</td>
+                                                        </tr>
+                                                        <tr class="ffmi-row" data-ffmi="25">
+                                                            <td>Natürlich begrenzt</td>
+                                                            <td>25</td>
+                                                        </tr>
+                                                        <tr class="ffmi-row" data-ffmi="26">
+                                                            <td>Genetisch bevorzugt</td>
+                                                            <td>&gt; 25</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <style>
+                                                /* Standardstil für Zeilen */
+                                                .ffmi-row {
+                                                    background-color: white;
+                                                    transition: background-color 0.3s ease;
+                                                }
+
+                                                /* Hervorhebung */
+                                                .ffmi-row.highlight {
+                                                    background-color: #f0f8ff; /* Hellblau, anpassbar */
+                                                    font-weight: bold;
+                                                }
+
+                                                /* Kritisch - Rot */
+                                                .highlight-red {
+                                                    background-color: #ff4d4d; /* Hellrot */
+                                                    color: white;
+                                                }
+
+                                                /* Optimal - Grün */
+                                                .highlight-green {
+                                                    background-color: #28a745; /* Dunkelgrün */
+                                                    color: white;
+                                                }
+
+                                                /* Gesund - Hellgrün */
+                                                .highlight-lightgreen {
+                                                    background-color: #7bed9f; /* Hellgrün */
+                                                    color: black;
+                                                }
+
+                                                /* Durchschnitt - Gelb */
+                                                .highlight-yellow {
+                                                    background-color: #ffdf5e; /* Gelb */
+                                                    color: black;
+                                                }
+
+                                                /* Suboptimal - Orange */
+                                                .highlight-orange {
+                                                    background-color: #ff9f43; /* Orange */
+                                                    color: black;
+                                                }
+
+                                                /* Übergangsstil */
+                                                .transition {
+                                                    transition: background-color 0.3s ease;
+                                                }
+                                            </style>
+
+                                            <script>
+                                                // Wert des FFMI aus dem Server einfügen
+                                                const ffmiWert = {{ Messungs_DETAILS['FettfreieMasseIndex_FFMI'] | default(0) }};
+                                                
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    const rows = document.querySelectorAll(".ffmi-row");
+
+                                                    rows.forEach(row => {
+                                                        const rowValue = parseFloat(row.dataset.ffmi);
+
+                                                        // Logik für den Wertebereich und die Farbzuweisung
+                                                        if (ffmiWert < 19 && rowValue === 19) {
+                                                            row.classList.add("highlight-red");
+                                                        } else if (ffmiWert >= 19 && ffmiWert < 21 && rowValue === 20) {
+                                                            row.classList.add("highlight-green");
+                                                        } else if (ffmiWert >= 21 && ffmiWert < 23 && rowValue === 22) {
+                                                            row.classList.add("highlight-lightgreen");
+                                                        } else if (ffmiWert >= 23 && ffmiWert < 25 && rowValue === 24) {
+                                                            row.classList.add("highlight-yellow");
+                                                        } else if (Math.floor(ffmiWert) === 25 && rowValue === 25) {
+                                                            row.classList.add("highlight-orange");
+                                                        } else if (ffmiWert > 25 && rowValue === 26) {
+                                                            row.classList.add("highlight-red");
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card radius-15 mb-4">
+                                <div class="card-body text-center">
+                                    <div class="card-title">
+                                        <h5 class="mb-0">Fakten</h5>
+                                    </div>
+
+                                    <!-- Tabelle -->
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2">Bewertung nach ACSM<br><small>American College of Sports Medicine</small></th>
+                                                    <th colspan="2">Bewertung nach ACE<br><small>American Council on Exercise</small></th>
+                                                    <th colspan="5">Bewertung nach WHO<br><small>World Health Organisation</small></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Typus/Fettgehalt (%)</th>
+                                                    <th>Männer</th>
+                                                    <th>Typus/Fettgehalt (%)</th>
+                                                    <th>Männer</th>
+                                                    <th>Alter</th>
+                                                    <th>Niedrig</th>
+                                                    <th>Gesund</th>
+                                                    <th>Erhöht</th>
+                                                    <th>Adipös</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Athletisch</td>
+                                                    <td>&lt; 10</td>
+                                                    <td>Essentielle Fettwerte</td>
+                                                    <td>2 - 5</td>
+                                                    <td>20 - 39</td>
+                                                    <td>&lt; 8</td>
+                                                    <td>8 - 20</td>
+                                                    <td>20 - 25</td>
+                                                    <td>&gt; 25</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mager</td>
+                                                    <td>10 - 15</td>
+                                                    <td>Athletisch</td>
+                                                    <td>6 - 13</td>
+                                                    <td>40 - 59</td>
+                                                    <td>&lt; 11</td>
+                                                    <td>11 - 22</td>
+                                                    <td>22 - 28</td>
+                                                    <td>&gt; 28</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Normal</td>
+                                                    <td>15 - 18</td>
+                                                    <td>Fitness</td>
+                                                    <td>14 - 17</td>
+                                                    <td>&gt; 60</td>
+                                                    <td>&lt; 13</td>
+                                                    <td>13 - 25</td>
+                                                    <td>25 - 30</td>
+                                                    <td>&gt; 30</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Überdurchschnittlich</td>
+                                                    <td>18 - 20</td>
+                                                    <td>Akzeptabel</td>
+                                                    <td>18 - 25</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Übergewichtig</td>
+                                                    <td>20 - 25</td>
+                                                    <td>Adipös</td>
+                                                    <td>&gt; 25</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Adipös</td>
+                                                    <td>&gt; 25</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row d-flex align-items-stretch">
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Gesamtkalorienumsatz</h5>
+                                                <h6 class="mb-0"><span class="badge bg-info">Gewichtsreduktion</span></h6>
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Aktion</th>
+                                                            <th scope="col">Grundumsatz</th>
+                                                            <th scope="col">Maximales Defizit</th>
+                                                            <th scope="col">Empfohlene Kalorien</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Sitzend</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Sitzend'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Sitzend']['Max_Defizit'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Sitzend']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Stehend</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Stehend'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Stehend']['Max_Defizit'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Stehend']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Aktiv</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Aktiv'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Aktiv']['Max_Defizit'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Aktiv']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Athlet</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Athlet'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Athlet']['Max_Defizit'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gewichtsreduktion']['Athlet']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="card radius-15 d-flex justify-content-center align-items-center">
+                                        <div class="card-body text-center">
+                                            <div class="card-title">
+                                                <h5 class="mb-0">Gesamtkalorienumsatz</h5>
+                                                <h6 class="mb-0"><span class="badge bg-info">Muskelaufbau</span></h6>
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Aktion</th>
+                                                            <th scope="col">Grundumsatz</th>
+                                                            <th scope="col">Kalorien für Muskelzuwachs</th>
+                                                            <th scope="col">Empfohlene Kalorien</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Sitzend</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Sitzend'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Sitzend']['Min_Gain'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Sitzend']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Stehend</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Stehend'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Stehend']['Min_Gain'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Stehend']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Aktiv</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Aktiv'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Aktiv']['Min_Gain'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Aktiv']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Athlet</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Gesamtumsatz']['Athlet'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Athlet']['Min_Gain'] | default('---') }}</td>
+                                                            <td>{{ Messungs_DETAILS['Ergebnis_DATEN']['Muskelaufbau']['Athlet']['Min_Kalorien'] | default('---') }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+    
+    <script>
+        var options = {
+            series: [{{ 100 - Messungs_DETAILS['Korperfettanteil'] }}, {{ Messungs_DETAILS['Korperfettanteil'] }}],
+            chart: {
+                foreColor: '#9ba7b2',
+                height: 380,
+                type: 'pie',
+            },
+            colors: ["#7ae270", "#ff75a2"],
+            labels: ['Fettfrei', 'Fettanteil'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 360
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var chart = new ApexCharts(document.querySelector("#Chart_FETTANTEIL"), options);
+        chart.render();
+    </script>
+    <script>
+        var options = {
+            series: [12, 18],
+            chart: {
+                foreColor: '#9ba7b2',
+                height: 380,
+                type: 'pie',
+            },
+            colors: ["#7ae270", "#ff75a2"],
+            labels: ['Cortisol', 'Östrogen'],
+            dataLabels: {
+                enabled: true,
+                formatter: function (series, opts) {
+                    // Zugriff auf die absoluten Werte aus `series`
+                    const absoluteValue = opts.w.config.series[opts.seriesIndex];
+                    return absoluteValue.toFixed(2) + ' mm'; // Zeigt den absoluten Wert mit "mm"
+                }
+            },
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val) {
+                        return val + " mm"; // Suffix für die Tooltip-Werte
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 360
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var chart = new ApexCharts(document.querySelector("#Chart_HORMONE"), options);
+        chart.render();
+    </script>
+    <script>
+        var options = {
+            series: [{
+                name: 'Wert',
+                data: [{{ Messungs_DETAILS['Ergebnis_DATEN'][ErnährungsAnalyse_Details['Nutzer_Details']['Ernaehrungs_ZIEL']][ErnährungsAnalyse_Details['Nutzer_Details']['Aktivitaets_Level']]['Min_Kalorien'] | ceil_zero_decimal }}, {{ Messungs_DETAILS['Grundumsatz_BMR'] | ceil_zero_decimal }}] // Werte für die beiden Balken
+            }],
+            chart: {
+                foreColor: '#9ba7b2',
+                height: 360,
+                type: 'bar', // Balkendiagramm
+            },
+            colors: ["#7ae270", "#ff75a2"], // Farben für die Balken
+            fill: {
+                colors: ["#7ae270", "#ff75a2"] // Spezielle Farben für jede Bar
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false, // Vertikale Balken (für horizontale Balken auf `true` setzen)
+                    columnWidth: '50%', // Breite der Balken
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val + ' Kalorien'; // Zeigt den Wert mit "mm"
+                }
+            },
+            xaxis: {
+                categories: ['Dein Grundumsatz', 'Grundumsatz (WHO)'], // Labels für die X-Achse
+            },
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val) {
+                        return val + " Kalorien"; // Suffix für die Tooltip-Werte
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        height: 360
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        var chart = new ApexCharts(document.querySelector("#Chart_KALORIEN"), options);
+        chart.render();
+    </script>
+    
+
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+/home/personalpeak360/Webseite/.venv/bin/hypercorn --reload --bind 152.53.13.107:6004 main.py

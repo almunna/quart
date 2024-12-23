@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ergebnis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        #scrollable-content {
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fafafa;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        Ergebnisseite: Scrollbares Fenster
+    </header>
+
+    <main>
+        <h2>Angezeigte Parameter</h2>
+        <p><strong>Parameter 1:</strong> {{ param1 }}</p>
+        <p><strong>Parameter 2:</strong> {{ param2 }}</p>
+
+        <div id="scrollable-content">
+            <p>Hier könnte langer Text sein, durch den gescrollt werden kann...</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis, nisi at luctus consequat, nisi nunc ultricies elit, id feugiat est nunc eu neque. Morbi venenatis nisi ut dui pulvinar, vel facilisis turpis venenatis. Fusce commodo, elit sit amet ullamcorper iaculis, lorem turpis hendrerit mi, eget sollicitudin justo leo id nisi.</p>
+            <p>Donec mattis orci quis purus ultrices, et viverra nunc fringilla. Cras ultricies facilisis est at aliquam. Maecenas aliquet mauris orci, non malesuada leo viverra ac. Aenean sodales placerat eros, non sagittis turpis lobortis nec. Nulla sodales mi non lorem accumsan suscipit. Praesent fermentum tincidunt nisl ac venenatis.</p>
+            <p>Pellentesque dapibus arcu vitae massa varius, ut fermentum orci molestie. Mauris ac nibh vitae orci blandit laoreet id in augue. Phasellus fermentum velit nec gravida convallis. Etiam vulputate, leo ac tristique ullamcorper, magna ligula convallis neque, sed tincidunt augue nisl et ligula.</p>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 Wärner Technologie Services
+    </footer>
+
+</body>
+</html>

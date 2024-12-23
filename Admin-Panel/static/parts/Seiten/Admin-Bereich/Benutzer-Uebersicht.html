@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Benutzer-Verwaltung → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="card radius-15">
+						<div class="card-body">
+							<div class="card-title">
+								<h4 class="mb-0">Übersicht der Benutzer</h4>
+								<h6 class="mb-0">White-Label Instanz: '{{ WhiteLabel['Bezeichnung'] }}'</h6>
+							</div>
+							<hr/>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createUserModal">Nutzer erstellen</button>
+
+							<!-- Modal -->
+							<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-header">
+									<h5 class="modal-title" id="createUserModalLabel">Nutzer erstellen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<form id="multistep-form" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/erstellen" method="POST" enctype="multipart/form-data">
+											<!-- Fortschrittsbalken -->
+											<div class="progress">
+												<div id="progress-bar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										
+											<!-- Schritt-Indikator -->
+											<div class="step-indicators text-center my-4">
+												<span class="required step-number active" id="step-indicator-1">1. Nutzer-Details</span>
+												<span class="required step-number" id="step-indicator-2">2. Rechte vergeben</span>
+												<span class="step-number" id="step-indicator-3">3. White-Label</span>
+											</div>
+										
+											<!-- Schritt 1: Nutzer-Details -->
+											<div class="form-step active" id="step-1">
+												<div class="mb-3">
+													<label for="vorname" class="form-label required">Vorname</label>
+													<input type="text" class="form-control" id="vorname" name="vorname" required>
+												</div>
+												<div class="mb-3">
+													<label for="nachname" class="form-label required">Nachname</label>
+													<input type="text" class="form-control" id="nachname" name="nachname" required>
+												</div>
+												<div class="mb-3">
+													<label for="benutzername" class="form-label required">Benutzername</label>
+													<input type="text" class="form-control" id="benutzername" name="benutzername" required>
+												</div>
+												<div class="mb-3">
+													<label for="passwort" class="form-label required">Vorläufiges Passwort</label>
+													<input type="password" class="form-control" id="passwort" name="passwort" required>
+												</div>
+												<div class="mb-3">
+													<label for="avatar" class="form-label">Avatar</label>
+													<input type="file" class="form-control" id="avatar" name="avatar">
+												</div>
+												<button type="button" class="btn btn-primary" id="next-to-step-2">Weiter</button>
+											</div>
+										
+											<!-- Schritt 2: Rechte vergeben -->
+											<div class="form-step" id="step-2" style="display:none;">
+												<div class="mb-3">
+													<label for="rolle" class="form-label required">Rolle</label>
+													<select class="form-select" id="rolle" name="rolle" required>
+														<optgroup label="Allgemein">
+															<option value="1">Super-Super-Admin</option>
+															<option value="11">Lower-Super-Admin</option>
+														</optgroup>
+														<optgroup label="WhiteLabel">
+															<option value="2">Super-Admin → White-Label</option>
+															<option value="3">Lower-Admin → White-Label</option>
+														</optgroup>
+														<optgroup label="Nutzer">
+															<option value="7">Nutzer (Basic)</option>
+															<option value="8">Nutzer (Standard)</option>
+															<option value="9">Nutzer (Premium)</option>
+														</optgroup>
+														<optgroup label="Testversion">
+															<option value="10">Nutzer (Basic) → Testversion</option>
+															<option value="10">Nutzer (Standard) → Testversion</option>
+															<option value="10">Nutzer (Premium) → Testversion</option>
+														</optgroup>
+													</select>
+												</div>
+												<button type="button" class="btn btn-secondary" id="back-to-step-1">Zurück</button>
+												<button type="submit" class="btn btn-primary" id="next-to-step-3">Nutzer erstellen</button>
+											</div>
+										
+											<!-- Schritt 3: WhiteLabel Auswahl -->
+											<div class="form-step" id="step-3" style="display:none;">
+												<div class="mb-3">
+													<label for="whitelabel_create" class="form-label">Soll der Nutzer eine White-Label Instanz erhalten?</label>
+													<select class="form-select" id="whitelabel_create" name="whitelabel_create">
+														<option value="kein">(Erstmal) Kein WhiteLabel</option>
+														<option value="bestehend">Bestehendes WhiteLabel</option>
+														<option value="neu">Neues WhiteLabel erstellen</option>
+													</select>
+												</div>
+												<div id="old-whitelabel-section" style="display:none;">
+													<div class="mb-3">
+														<div class="alert alert-warning alert-dismissible fade show" role="alert">Diese Auswahl berechtigt den Nutzer lediglich dazu, das White-Label zu verwalten und anzupassen. <br>Um das Aussehen der Instanz zu ändern, muss man sich über die angegebene Domain anmelden!
+															<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+														</div>
+	
+														<label for="whitelabel-select" class="form-label required">WhiteLabel auswählen</label>
+														<select class="whitelabel-select form-select" id="whitelabel-select" name="whitelabel-select" required>
+															{% for whitelabel in whitelabels %}
+																<option value="{{ whitelabel['id'] }}">{{ whitelabel['Bezeichnung'] }} ({{ whitelabel['Domain'] }})</option>
+															{% endfor %}
+														</select>
+													</div>
+												</div>
+												<div id="new-whitelabel-section" style="display:none;">
+													<div class="alert alert-warning alert-dismissible fade show" role="alert">Diese Auswahl berechtigt den Nutzer lediglich dazu, das White-Label zu verwalten und anzupassen. <br>Um das Aussehen der Instanz zu ändern, muss man sich über die angegebene Domain anmelden!
+														<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+													</div>
+
+													<div class="mb-3">
+														<label for="whitelabel-name" class="form-label required">White-Label bzw. Projekt-Bezeichnung</label>
+														<input type="text" class="form-control" id="name" name="name">
+													</div>
+													
+													<label for="domain" class="form-label required">Sub-Domain</label>
+													<div class="input-group mb-3">
+														<input type="text" class="form-control" id="domain" name="domain" placeholder="Subdomain" aria-label="Subdomain">
+														<span class="input-group-text">.personalpeak360.de</span>
+													</div>
+													<div class="mb-3">
+														<div class="alert alert-secondary fade show" role="alert">
+															<a><b>Primärfarbe:</b> Diese könnte für die Hauptaktionen und auffällige Elemente genutzt werden, wie:</a>
+															<ul>
+																<li>Haupt-Buttons (z.B. "Speichern", "Abschicken")</li>
+																<li>Wichtige Links (z.B. in der Navigation)</li>
+																<li>Header und Akzentbereiche</li>
+															</ul>
+															<a><b>Sekundärfarbe:</b> Diese eignet sich für unterstützende Aktionen und weniger auffällige Elemente, wie:</a>
+															<ul>
+																<li>Sekundäre Buttons (z.B. "Abbrechen", "Zurück")</li>
+																<li>Passiv darstellende Links</li>
+																<li>Hintergründe von Sektionen oder Boxen</li>
+															</ul>
+															<a><b>Tertiärfarbe:</b> Diese kann als Akzentfarbe oder für weitere Details genutzt werden, wie:</a>
+															<ul>
+																<li>Hover-Effekte auf Buttons und Links</li>
+																<li>Grenzlinien (borders) und Unterstreichungen</li>
+																<li>Icons oder kleine dekorative Elemente</li>
+															</ul>
+														</div>
+
+														<label for="whitelabel-name" class="form-label required">1. Farbe (Primär)</label>
+														<input type="color" class="form-control mb-2" id="primary" name="primary">
+
+														<label for="whitelabel-name" class="form-label required">2. Farbe (Sekundär)</label>
+														<input type="color" class="form-control mb-2" id="secondary" name="secondary">
+
+														<label for="whitelabel-name" class="form-label required">3. Farbe (Tertiär)</label>
+														<input type="color" class="form-control" id="third" name="third">
+													</div>
+													<div class="mb-3">
+														<label for="whitelabel-name" class="form-label required">Logo (lange Version)</label>
+														<input type="file" class="form-control mb-2" id="logo_lang" name="logo_lang">
+														
+														<label for="whitelabel-name" class="form-label required">Logo (kurze Version)</label>
+														<input type="file" class="form-control mb-2" id="logo_kurz" name="logo_kurz">
+														
+														<label for="whitelabel-name" class="form-label required">Logo (Icon-Version)</label>
+														<input type="file" class="form-control mb-2" id="logo_icon" name="logo_icon">
+														
+														<label for="whitelabel-name" class="form-label required">Favicon</label>
+														<input type="file" class="form-control" id="favicon" name="favicon">
+													</div>
+												</div>
+												<button type="button" class="btn btn-secondary" id="back-to-step-2">Zurück</button>
+												<button type="submit" class="btn btn-primary">Nutzer & White-Label erstellen</button>
+											</div>
+										</form>
+										
+
+										<script>
+											// Create an instance of Notyf
+											var message = new nachricht({
+												duration: 5000,
+												position: {
+													x: 'right',
+													y: 'top',
+												},
+												dismissible: true
+											});
+
+											// Fortschrittsbalken aktualisieren
+											function updateStepIndicator(step) {
+												const progressBar = document.getElementById('progress-bar');
+												progressBar.style.width = (step * 33) + '%';
+												
+												const steps = document.querySelectorAll('.step-number');
+												steps.forEach((indicator, index) => {
+													if (index + 1 === step) {
+														indicator.classList.add('active');
+													} else {
+														indicator.classList.remove('active');
+													}
+												});
+											}
+
+											// Zeigt den nächsten Schritt an
+											function showStep(stepToShow, stepToHide) {
+												document.getElementById(stepToHide).style.display = 'none'; // Den aktuellen Schritt ausblenden
+												document.getElementById(stepToShow).style.display = 'block'; // Den nächsten Schritt anzeigen
+											}
+
+											// Form-Validierung
+											function validateStep1() {
+												const vorname = document.getElementById('vorname').value;
+												const nachname = document.getElementById('nachname').value;
+												const benutzername = document.getElementById('benutzername').value;
+												const passwort = document.getElementById('passwort').value;
+												
+												if (!vorname || !nachname || !benutzername || !passwort) {
+													// Display an error notification
+													message.error('Bitte füllen Sie alle Felder aus, bevor Sie fortfahren.');
+													return false;
+												}
+												return true;
+											}
+
+											function validateStep2() {
+												const whitelabel = document.getElementById('whitelabel_create').value;
+												
+												if (whitelabel === 'neu') {
+													const newWhitelabel = document.getElementById('whitelabel-name').value;
+													if (!newWhitelabel) {
+														// Display an error notification
+														message.error('Bitte geben Sie einen Namen für das neue WhiteLabel ein.');
+														return false;
+													}
+												}
+
+												if (whitelabel === 'bestehend') {
+													const newWhitelabel = document.getElementById('whitelabel-select').value;
+													if (!newWhitelabel) {
+														// Display an error notification
+														message.error('Bitte wählen Sie ein existierendes White-Label aus.');
+														return false;
+													}
+												}
+												return true;
+											}
+
+											// EventListener für Weiter- und Zurück-Buttons
+											document.getElementById('next-to-step-2').addEventListener('click', function () {
+												if (validateStep1()) {  // Nur zum nächsten Schritt, wenn die Validierung erfolgreich ist
+													showStep('step-2', 'step-1');
+													updateStepIndicator(2);
+												}
+											});
+
+											document.getElementById('back-to-step-1').addEventListener('click', function () {
+												showStep('step-1', 'step-2');
+												updateStepIndicator(1);
+											});
+
+											document.getElementById('next-to-step-3').addEventListener('click', function () {
+												const rolle = document.getElementById('rolle').value;
+												const whiteLabelRoles = ['2', '3'];
+
+												if (whiteLabelRoles.includes(rolle)) {
+													showStep('step-3', 'step-2'); // Schritt 3 anzeigen
+													updateStepIndicator(3);
+												} else {
+													// Überspringe Schritt 3 und disable den Schritt in der Progressbar
+													document.getElementById('progress-bar').style.width = '100%';
+													document.getElementById('step-indicator-3').style.color = '#ccc'; // Disable color
+													document.getElementById('step-indicator-3').style.pointerEvents = 'none'; // Disable click
+													// Formular absenden, wenn kein WhiteLabel-Schritt notwendig ist
+													document.querySelector('form').submit();
+												}
+											});
+
+
+											document.getElementById('back-to-step-2').addEventListener('click', function () {
+												showStep('step-2', 'step-3');
+												updateStepIndicator(2);
+											});
+
+											// WhiteLabel Auswahl anzeigen oder ausblenden
+											document.getElementById('whitelabel_create').addEventListener('change', function () {
+												if (this.value === 'neu') {
+													document.getElementById('new-whitelabel-section').style.display = 'block';
+												} else {
+													document.getElementById('new-whitelabel-section').style.display = 'none';
+												}
+
+												
+												if (this.value === 'bestehend') {
+													document.getElementById('old-whitelabel-section').style.display = 'block';
+												} else {
+													document.getElementById('old-whitelabel-section').style.display = 'none';
+												}
+											});
+											
+											
+											document.getElementById('rolle').addEventListener('change', function () {
+												const rolle = document.getElementById('rolle').value;
+												const whiteLabelRoles = ['2', '3'];
+
+												const nextButton = document.getElementById('next-to-step-3');
+
+												// Wenn eine WhiteLabel-Rolle gewählt wurde, setze den Button auf "Weiter"
+												if (whiteLabelRoles.includes(rolle)) {
+													nextButton.textContent = 'Weiter';
+													nextButton.type = 'button'; // Button bleibt ein normaler Button
+													nextButton.classList.remove('btn-success'); // Entferne "Nutzer erstellen" Stil
+													nextButton.classList.add('btn-primary'); // Füge "Weiter" Stil hinzu
+												} else {
+													// Wenn keine WhiteLabel-Rolle gewählt wurde, ändere den Button in "Nutzer erstellen"
+													nextButton.textContent = 'Nutzer erstellen';
+													nextButton.type = 'submit'; // Button wird ein Submit-Button
+												}
+											});
+										</script>
+										<style>
+											/* PFLICHTFELDER IM FORMULAR */
+											.required:after {
+												content: " (*)";
+												color: red;
+											}
+
+
+											/* Fortschrittsbalken */
+											.progress {
+												height: 20px;
+												background-color: #f1f1f1;
+												border-radius: 5px;
+												margin-bottom: 20px;
+											}
+											.progress-bar {
+												background-color: #007bff;
+											}
+
+											/* Schritt-Indikatoren */
+											.step-indicators {
+												display: flex;
+												justify-content: space-between;
+												font-size: 1.2rem;
+												font-weight: bold;
+											}
+											.step-number {
+												color: #ccc;
+												transition: color 0.3s;
+											}
+											.step-number.active {
+												color: #007bff;
+											}
+
+											/* Visuelle Verbesserungen für die Form-Schritte */
+											.form-step {
+												display: none;
+											}
+											.form-step.active {
+												display: block;
+											}
+										</style>
+									</div>
+								</div>
+								</div>
+							</div>
+  
+
+							<div class="table-responsive">
+								<table id="example" class="table table-striped table-bordered" style="width:100%">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Profilbild</th>
+											<th>Rolle</th>
+											<th>Level</th>
+											<th>Aktionen</th>
+										</tr>
+									</thead>
+									<tbody>
+                                        {% for nutzer in nutzer_liste %}
+                                            <tr>
+                                                <td>{{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}</td>
+                                                <td><img src="https://cdn.{{ WhiteLabel['Domain'] }}/avatar/{{ nutzer['Avatar'] }}" alt="Profilbild von {{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}" class="img-thumbnail" width="50"></td>
+                                                <td>
+													<p class="designattion mb-0">
+														{% for rolle in rollen_liste %}
+															{% if rolle['id'] == nutzer['Rolle_RECHTE']['key'] %}
+																{% if rolle['Bezeichnung'] == "Super-Admin" %}
+																	<span class="badge bg-danger">{{ rolle['Bezeichnung'] }}</span>
+																{% elif rolle['Bezeichnung'] == "Lower-Admin" %}
+																	<span class="badge bg-warning">{{ rolle['Bezeichnung'] }}</span>
+																{% else %}
+																	<span class="badge bg-secondary">{{ rolle['Bezeichnung'] }}</span>
+																{% endif %}
+																
+																{% if rolle['Bezeichnung_Zusatz'] == "White-Label" %}
+																	<span class="badge bg-secondary">{{ rolle['Bezeichnung_Zusatz'] }}</span>
+																{% elif rolle['Bezeichnung_Zusatz'] == "Basic" %}
+																	<span class="badge bg-secondary">{{ rolle['Bezeichnung_Zusatz'] }}</span>
+																{% elif rolle['Bezeichnung_Zusatz'] == "Standard" %}
+																	<span class="badge bg-secondary">{{ rolle['Bezeichnung_Zusatz'] }}</span>
+																{% elif rolle['Bezeichnung_Zusatz'] == "Premium" %}
+																	<span class="badge bg-secondary">{{ rolle['Bezeichnung_Zusatz'] }}</span>
+																{% endif %}
+															{% endif %}
+														{% endfor %}
+													</p>
+												</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">{{ nutzer['Nutzer_Level'] }}</span>
+													<img src="https://cdn.{{ WhiteLabel['Domain'] }}/white-label/{{ WhiteLabel['Badge_' + nutzer['Nutzer_Level']] }}" 
+														alt="Badge von {{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}" 
+														class="badge-img" width="50"
+													>
+                                                </td>
+                                                <td>
+                                                    <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/details/{{ nutzer['id'] }}" class="btn btn-info btn-sm">Details ansehen / Bearbeiten</a>
+                                                    <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/delete/{{ nutzer['id'] }}" class="btn btn-danger btn-sm">Löschen</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+									</tbody>
+									<tfoot>
+                                        <!-- GLEICH WIE <THEAD> -->
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | White-Label Einstellungen → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+                    
+                    {% for produkt in Ecommerce_Produkte %}
+                        <div class="modal fade" id="modalDetails-{{ produkt['id'] }}" tabindex="-1" aria-labelledby="modalDetails-{{ produkt['id'] }}Label" style="display: none;" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalDetails-{{ produkt['id'] }}Label">Details zu Produkt '{{ produkt.Bezeichnung }}'</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+                                        <a>Produkt-Details:</a>
+                                        <ul>
+                                            <li><b>Preis</b>: {{ produkt.Preis }} €</li>
+                                            <li><b>Preis (mit Rabatt)</b>: {{ produkt.Preis_RABATT }} €</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="createProduct" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="createUserModalLabel">Nutzer erstellen</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="multistep-form" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?neu=ecommerce_shop" method="POST" enctype="multipart/form-data">
+                                    <!-- Fortschrittsbalken -->
+                                    <div class="progress">
+                                        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                
+                                    <!-- Schritt-Indikator -->
+                                    <div class="step-indicators text-center my-4">
+                                        <span class="required step-number active" id="step-indicator-1">1. Produkt-Details</span>
+                                        <span class="required step-number" id="step-indicator-2">2. Benefits</span>
+                                    </div>
+                                
+                                    <!-- Schritt 1: Nutzer-Details -->
+                                    <div class="form-step active" id="step-1">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label required">Name</label>
+                                            <input type="text" class="form-control" id="name" name="name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="beschreibung" class="form-label required">Beschreibung</label>
+                                            <textarea class="form-control" name="beschreibung" id="beschreibung" required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="preis" class="form-label required">Preis</label>
+                                            <textarea class="form-control" name="preis" id="preis" required></textarea>
+                                            
+                                            <label for="preis_rabatt" class="form-label">Preis (Rabatt)</label>
+                                            <textarea class="form-control" name="preis_rabatt" id="preis_rabatt"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" id="next-to-step-2">Weiter</button>
+                                    </div>
+                                
+                                    <!-- Schritt 2: Rechte vergeben -->
+                                    <div class="form-step" id="step-2" style="display:none;">
+                                        <div class="mb-3">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent1" name="parent1" class="parent"> Admin-Bereich
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Benutzer" name="ADMIN_Benutzer" class="child parent1"> Benutzerverwaltung
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Buchhaltung" name="ADMIN_Buchhaltung" class="child parent1"> Buchhaltung
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Einstellungen" name="ADMIN_Einstellungen" class="child parent1"> Einstellungen
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Live-Chat" name="ADMIN_Live-Chat" class="child parent1"> Live Chat
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Kanban-Board" name="ADMIN_Kanban-Board" class="child parent1"> Kanban-Board
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent2" name="parent2" class="parent"> Trainingshalle
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child4" name="child4" class="child parent2"> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child5" name="child5" class="child parent2"> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent3" name="parent3" class="parent"> Ernährungsanalyse
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child6" name="child6" class="child parent3"> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child7" name="child7" class="child parent3"> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            
+                                            <script>
+                                                document.querySelectorAll('.parent').forEach(parent => {
+                                                    parent.addEventListener('change', function () {
+                                                        let childrenClass = this.id;
+                                                        let children = document.querySelectorAll(`.child.${childrenClass}`);
+                                                        children.forEach(child => child.checked = this.checked);
+                                                    });
+                                                });
+                                                
+                                                document.querySelectorAll('.child').forEach(child => {
+                                                    child.addEventListener('change', function () {
+                                                        let parentClass = this.classList[1];
+                                                        let parent = document.getElementById(parentClass);
+                                                        let children = document.querySelectorAll(`.child.${parentClass}`);
+                                                        let allChecked = Array.from(children).every(ch => ch.checked);
+                                                        let noneChecked = Array.from(children).every(ch => !ch.checked);
+                                                        
+                                                        // If all children are selected, check the parent
+                                                        parent.checked = allChecked;
+                                                        
+                                                        // If no child is checked, uncheck the parent
+                                                        if (!allChecked && !noneChecked) {
+                                                            parent.indeterminate = true;
+                                                        } else {
+                                                            parent.indeterminate = false;
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+
+
+                                        <!-- Verstecktes Feld für die ausgewählten Rechte -->
+                                        <input type="hidden" id="selectedPermissions" name="rechte" value="">
+
+
+                                        <button type="button" class="btn btn-secondary" id="back-to-step-1">Zurück</button>
+                                        <button type="submit" class="btn btn-primary">Produkt erstellen</button>
+                                    </div>
+                                </form>
+                                
+
+                                <script>
+                                    // Create an instance of Notyf
+                                    var nachrichtObject = new nachricht({
+                                        duration: 5000,
+                                        position: {
+                                            x: 'right',
+                                            y: 'top',
+                                        },
+                                        dismissible: true
+                                    });
+
+                                    // Fortschrittsbalken aktualisieren
+                                    function updateStepIndicator(step) {
+                                        const progressBar = document.getElementById('progress-bar');
+                                        progressBar.style.width = (step * 33) + '%';
+                                        
+                                        const steps = document.querySelectorAll('.step-number');
+                                        steps.forEach((indicator, index) => {
+                                            if (index + 1 === step) {
+                                                indicator.classList.add('active');
+                                            } else {
+                                                indicator.classList.remove('active');
+                                            }
+                                        });
+                                    }
+
+                                    // Zeigt den nächsten Schritt an
+                                    function showStep(stepToShow, stepToHide) {
+                                        document.getElementById(stepToHide).style.display = 'none'; // Den aktuellen Schritt ausblenden
+                                        document.getElementById(stepToShow).style.display = 'block'; // Den nächsten Schritt anzeigen
+                                    }
+
+                                    // Form-Validierung
+                                    function validateStep1() {
+                                        const name = document.getElementById('name').value;
+                                        const beschreibung = document.getElementById('beschreibung').value;
+                                        
+                                        if (!name || !beschreibung) {
+                                            // Display an error notification
+                                            nachrichtObject.error('Bitte füllen Sie alle Felder aus, bevor Sie fortfahren.');
+                                            return false;
+                                        }
+                                        return true;
+                                    }
+
+                                    function validateStep2() {
+                                        const whitelabel = document.getElementById('whitelabel_create').value;
+                                        
+                                        if (whitelabel === 'neu') {
+                                            const newWhitelabel = document.getElementById('whitelabel-name').value;
+                                            if (!newWhitelabel) {
+                                                // Display an error notification
+                                                nachrichtObject.error('Bitte geben Sie einen Namen für das neue WhiteLabel ein.');
+                                                return false;
+                                            }
+                                        }
+
+                                        if (whitelabel === 'bestehend') {
+                                            const newWhitelabel = document.getElementById('whitelabel-select').value;
+                                            if (!newWhitelabel) {
+                                                // Display an error notification
+                                                nachrichtObject.error('Bitte wählen Sie ein existierendes White-Label aus.');
+                                                return false;
+                                            }
+                                        }
+                                        return true;
+                                    }
+
+                                    // EventListener für Weiter- und Zurück-Buttons
+                                    document.getElementById('next-to-step-2').addEventListener('click', function () {
+                                        if (validateStep1()) {  // Nur zum nächsten Schritt, wenn die Validierung erfolgreich ist
+                                            showStep('step-2', 'step-1');
+                                            updateStepIndicator(2);
+                                        }
+                                    });
+
+                                    document.getElementById('back-to-step-1').addEventListener('click', function () {
+                                        showStep('step-1', 'step-2');
+                                        updateStepIndicator(1);
+                                    });
+
+                                    document.getElementById('next-to-step-3').addEventListener('click', function () {
+                                        const rolle = document.getElementById('rolle').value;
+                                        const whiteLabelRoles = ['2', '3'];
+
+                                        if (whiteLabelRoles.includes(rolle)) {
+                                            showStep('step-3', 'step-2'); // Schritt 3 anzeigen
+                                            updateStepIndicator(3);
+                                        } else {
+                                            // Überspringe Schritt 3 und disable den Schritt in der Progressbar
+                                            document.getElementById('progress-bar').style.width = '100%';
+                                            document.getElementById('step-indicator-3').style.color = '#ccc'; // Disable color
+                                            document.getElementById('step-indicator-3').style.pointerEvents = 'none'; // Disable click
+                                            // Formular absenden, wenn kein WhiteLabel-Schritt notwendig ist
+                                            document.querySelector('form').submit();
+                                        }
+                                    });
+
+
+                                    document.getElementById('back-to-step-2').addEventListener('click', function () {
+                                        showStep('step-2', 'step-3');
+                                        updateStepIndicator(2);
+                                    });
+
+                                    // WhiteLabel Auswahl anzeigen oder ausblenden
+                                    document.getElementById('whitelabel_create').addEventListener('change', function () {
+                                        if (this.value === 'neu') {
+                                            document.getElementById('new-whitelabel-section').style.display = 'block';
+                                        } else {
+                                            document.getElementById('new-whitelabel-section').style.display = 'none';
+                                        }
+
+                                        
+                                        if (this.value === 'bestehend') {
+                                            document.getElementById('old-whitelabel-section').style.display = 'block';
+                                        } else {
+                                            document.getElementById('old-whitelabel-section').style.display = 'none';
+                                        }
+                                    });
+                                    
+                                    
+                                    document.getElementById('rolle').addEventListener('change', function () {
+                                        const rolle = document.getElementById('rolle').value;
+                                        const whiteLabelRoles = ['2', '3'];
+
+                                        const nextButton = document.getElementById('next-to-step-3');
+
+                                        // Wenn eine WhiteLabel-Rolle gewählt wurde, setze den Button auf "Weiter"
+                                        if (whiteLabelRoles.includes(rolle)) {
+                                            nextButton.textContent = 'Weiter';
+                                            nextButton.type = 'button'; // Button bleibt ein normaler Button
+                                            nextButton.classList.remove('btn-success'); // Entferne "Nutzer erstellen" Stil
+                                            nextButton.classList.add('btn-primary'); // Füge "Weiter" Stil hinzu
+                                        } else {
+                                            // Wenn keine WhiteLabel-Rolle gewählt wurde, ändere den Button in "Nutzer erstellen"
+                                            nextButton.textContent = 'Nutzer erstellen';
+                                            nextButton.type = 'submit'; // Button wird ein Submit-Button
+                                        }
+                                    });
+                                </script>
+                                <style>
+                                    /* PFLICHTFELDER IM FORMULAR */
+                                    .required:after {
+                                        content: " (*)";
+                                        color: red;
+                                    }
+
+
+                                    /* Fortschrittsbalken */
+                                    .progress {
+                                        height: 20px;
+                                        background-color: #f1f1f1;
+                                        border-radius: 5px;
+                                        margin-bottom: 20px;
+                                    }
+                                    .progress-bar {
+                                        background-color: #007bff;
+                                    }
+
+                                    /* Schritt-Indikatoren */
+                                    .step-indicators {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        font-size: 1.2rem;
+                                        font-weight: bold;
+                                    }
+                                    .step-number {
+                                        color: #ccc;
+                                        transition: color 0.3s;
+                                    }
+                                    .step-number.active {
+                                        color: #007bff;
+                                    }
+
+                                    /* Visuelle Verbesserungen für die Form-Schritte */
+                                    .form-step {
+                                        display: none;
+                                    }
+                                    .form-step.active {
+                                        display: block;
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+					<div class="row row-cols-1">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <!-- Tabs für Einstellungen -->
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        {% if quickStart_TAB == none %}
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="pills-allgemein-tab" data-bs-toggle="pill" href="#pills-allgemein" role="tab" aria-controls="pills-allgemein" aria-selected="true">Allgemein</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-rechtliches-tab" data-bs-toggle="pill" href="#pills-rechtliches" role="tab" aria-controls="pills-rechtliches" aria-selected="true">Rechtliches</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-willkommenSeite-tab" data-bs-toggle="pill" href="#pills-willkommenSeite" role="tab" aria-controls="pills-willkommenSeite" aria-selected="false">Willkommens-Seite</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-auszeichnungen-tab" data-bs-toggle="pill" href="#pills-auszeichnungen" role="tab" aria-controls="pills-auszeichnungen" aria-selected="false">Auszeichnungen / Badges</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-buchhaltung-tab" data-bs-toggle="pill" href="#pills-buchhaltung" role="tab" aria-controls="pills-buchhaltung" aria-selected="false">Buchhaltung</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-ecommerce-tab" data-bs-toggle="pill" href="#pills-ecommerce" role="tab" aria-controls="pills-ecommerce" aria-selected="false">ECommerce-Shop</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'allgemein' %} active{% endif %}" id="pills-allgemein-tab" data-bs-toggle="pill" href="#pills-allgemein" role="tab" aria-controls="pills-allgemein" aria-selected="true">Allgemein</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'rechtliches' %} active{% endif %}" id="pills-rechtliches-tab" data-bs-toggle="pill" href="#pills-rechtliches" role="tab" aria-controls="pills-rechtliches" aria-selected="true">Rechtliches</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'willkommenSeite' %} active{% endif %}" id="pills-willkommenSeite-tab" data-bs-toggle="pill" href="#pills-willkommenSeite" role="tab" aria-controls="pills-willkommenSeite" aria-selected="false">Willkommens-Seite</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'auszeichnungen' %} active{% endif %}" id="pills-auszeichnungen-tab" data-bs-toggle="pill" href="#pills-auszeichnungen" role="tab" aria-controls="pills-auszeichnungen" aria-selected="false">Auszeichnungen / Badges</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'buchhaltung' %} active{% endif %}" id="pills-buchhaltung-tab" data-bs-toggle="pill" href="#pills-buchhaltung" role="tab" aria-controls="pills-buchhaltung" aria-selected="false">Buchhaltung</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link {% if quickStart_TAB == 'ecommerce' %} active{% endif %}" id="pills-ecommerce-tab" data-bs-toggle="pill" href="#pills-ecommerce" role="tab" aria-controls="pills-ecommerce" aria-selected="false">ECommerce-Shop</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'allgemein' or quickStart_TAB == none %} active show{% endif %}" id="pills-allgemein" role="tabpanel" aria-labelledby="pills-allgemein-tab">
+                                            <form class="row g-3" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?update=allgemein" method="post" enctype="multipart/form-data">
+                                                <div class="col-12">
+                                                    <label for="logo_lang" class="form-label">Projekt-Bezeichnung</label>
+                                                    <input class="form-control" type="text" id="bezeichnung" name="bezeichnung" value="{{ WhiteLabel['Bezeichnung'] }}" placeholder="{{ WhiteLabel['Bezeichnung'] }}">
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="logo_lang" class="form-label">Domain</label>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        <h4 class="alert-heading">Achtung!</h4>
+                                                        <p>Diese Domain sollte erst geändert werden, wenn Du deine Domain mit A-Einträgen im DNS deines Domain-Anbieters auf unsere IP versehen hast.</p>
+                                                        <hr>
+                                                        <p class="mb-0">Folgender Eintrag: <br>
+                                                            <ul>
+                                                                <li><b>Wert bzw. Subdomain:</b> * (Oder anderer Wert, wenn Du es auf eine Subdomain legen möchtest.) </li>
+                                                                <li><b>Typ:</b> A </li>
+                                                                <li><b>Ziel:</b> 152.53.13.107 </li>
+                                                            </ul>
+                                                        </p>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mehrInfosDomainName">Mehr Informationen</button>
+                                                    </div>
+                                                    <input class="form-control" type="text" id="domain" name="domain" value="{{ WhiteLabel['Domain'] }}" placeholder="{{ WhiteLabel['Domain'] }}">
+                                                </div>
+                                            
+
+                                                <div class="col-12">
+                                                    <div class="alert alert-secondary" role="alert">
+                                                        <a><b>Primärfarbe:</b> Diese könnte für die Hauptaktionen und auffällige Elemente genutzt werden, wie:</a>
+                                                        <ul>
+                                                            <li>Haupt-Buttons (z.B. "Speichern", "Abschicken")</li>
+                                                            <li>Wichtige Links (z.B. in der Navigation)</li>
+                                                            <li>Header und Akzentbereiche</li>
+                                                        </ul>
+                                                        <a><b>Sekundärfarbe:</b> Diese eignet sich für unterstützende Aktionen und weniger auffällige Elemente, wie:</a>
+                                                        <ul>
+                                                            <li>Sekundäre Buttons (z.B. "Abbrechen", "Zurück")</li>
+                                                            <li>Passiv darstellende Links</li>
+                                                            <li>Hintergründe von Sektionen oder Boxen</li>
+                                                        </ul>
+                                                        <a><b>Tertiärfarbe:</b> Diese kann als Akzentfarbe oder für weitere Details genutzt werden, wie:</a>
+                                                        <ul>
+                                                            <li>Hover-Effekte auf Buttons und Links</li>
+                                                            <li>Grenzlinien (borders) und Unterstreichungen</li>
+                                                            <li>Icons oder kleine dekorative Elemente</li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <label for="primary_color" class="form-label">Farbe 1 (Primär)</label>
+                                                    <input class="form-control mb-2" type="color" id="primary_color" name="primary_color" value="{{ WhiteLabel['Primary'] }}">
+
+                                                    <label for="secondary_color" class="form-label">Farbe 2 (Sekundär)</label>
+                                                    <input class="form-control mb-2" type="color" id="secondary_color" name="secondary_color" value="{{ WhiteLabel['Secondary'] }}">
+                                                    
+                                                    <label for="third_color" class="form-label">Farbe 3 (Tertiär)</label>
+                                                    <input class="form-control mb-2" type="color" id="third_color" name="third_color" value="{{ WhiteLabel['Third'] }}">
+                                                </div>
+
+
+                                                <div class="col-12">
+                                                    <label for="logo_lang" class="form-label">Logo (Lange Version)</label>
+                                                    <input class="form-control mb-2" type="file" id="logo_lang" name="logo_lang" onchange="previewFile('logo_lang', 'logo_lang_old', 'logo_lang_new', 'arrow_lang', 'overlay_lang', 'logoLang_old_ID', '{{ WhiteLabel['Logo_lang'] }}')">
+                                                    <input type="hidden" id="logoLang_old_ID" name="logoLang_old_ID">
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                <div style="position: relative;">
+                                                                    <img id="logo_lang_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                         src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_lang'] }}" 
+                                                                         alt="Langes Logo">
+                                                                    <div id="overlay_lang" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                </div>
+                                                                <div id="arrow_lang" class="mt-2" style="display: none;">
+                                                                    <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                </div>
+                                                                <img id="logo_lang_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                     alt="Neues Langes Logo">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12">
+                                                    <label for="logo_kurz" class="form-label">Logo (Kurze Version)</label>
+                                                    <input class="form-control mb-2" type="file" id="logo_kurz" name="logo_kurz" onchange="previewFile('logo_kurz', 'logo_kurz_old', 'logo_kurz_new', 'arrow_kurz', 'overlay_kurz', 'logoKurz_old_ID', '{{ WhiteLabel['Logo_kurz'] }}')">
+                                                    <input type="hidden" id="logoKurz_old_ID" name="logoKurz_old_ID">
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                <div style="position: relative;">
+                                                                    <img id="logo_kurz_old" class="img-fluid" style="max-width: 200px; height: auto;" 
+                                                                         src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_kurz'] }}" 
+                                                                         alt="Kurzes Logo">
+                                                                    <div id="overlay_kurz" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                </div>
+                                                                <div id="arrow_kurz" class="mt-2" style="display: none;">
+                                                                    <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                </div>
+                                                                <img id="logo_kurz_new" class="img-fluid mt-2" style="max-width: 200px; height: auto; display: none;" 
+                                                                     alt="Neues Kurzes Logo">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12">
+                                                    <label for="logo_icon" class="form-label">Logo (Icon Version)</label>
+                                                    <input class="form-control mb-2" type="file" id="logo_icon" name="logo_icon" onchange="previewFile('logo_icon', 'logo_icon_old', 'logo_icon_new', 'arrow_icon', 'overlay_icon', 'logoIcon_old_ID', '{{ WhiteLabel['Logo_Icon'] }}')">
+                                                    <input type="hidden" id="logoIcon_old_ID" name="logoIcon_old_ID">
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                <div style="position: relative;">
+                                                                    <img id="logo_icon_old" class="img-fluid" style="max-width: 100px; height: auto;" 
+                                                                         src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_Icon'] }}" 
+                                                                         alt="Icon-Logo">
+                                                                    <div id="overlay_icon" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                </div>
+                                                                <div id="arrow_icon" class="mt-2" style="display: none;">
+                                                                    <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                </div>
+                                                                <img id="logo_icon_new" class="img-fluid mt-2" style="max-width: 100px; height: auto; display: none;" 
+                                                                     alt="Neues Icon-Logo">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12">
+                                                    <label for="favicon" class="form-label">Favicon</label>
+                                                    <input class="form-control mb-2" type="file" id="favicon" name="favicon" onchange="previewFile('favicon', 'favicon_old', 'favicon_new', 'arrow_favicon', 'overlay_favicon', 'favicon_old_ID', '{{ WhiteLabel['Favicon'] }}')">
+                                                    <input type="hidden" id="favicon_old_ID" name="favicon_old_ID">
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                <div style="position: relative;">
+                                                                    <img id="favicon_old" class="img-fluid" style="max-width: 50px; height: auto;" 
+                                                                         src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" 
+                                                                         alt="Favicon">
+                                                                    <div id="overlay_favicon" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                </div>
+                                                                <div id="arrow_favicon" class="mt-2" style="display: none;">
+                                                                    <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                </div>
+                                                                <img id="favicon_new" class="img-fluid mt-2" style="max-width: 50px; height: auto; display: none;" 
+                                                                     alt="Neues Favicon">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <script>
+                                                    function previewFile(inputId, oldImgId, newImgId, arrowId, overlayId, hiddenInputId, oldValue) {
+                                                        const input = document.getElementById(inputId);
+                                                        const oldImg = document.getElementById(oldImgId);
+                                                        const newImg = document.getElementById(newImgId);
+                                                        const arrow = document.getElementById(arrowId);
+                                                        const overlay = document.getElementById(overlayId);
+                                                        const hiddenInput = document.getElementById(hiddenInputId);
+                                                        
+                                                        // Überprüfen, ob eine Datei hochgeladen wurde
+                                                        if (input.files && input.files[0]) {
+                                                            const reader = new FileReader();
+                                                            reader.onload = function(e) {
+                                                                // Altes Logo leicht transparent machen
+                                                                oldImg.style.opacity = '0.5';
+                                                                // Rote Überlagerung anzeigen
+                                                                overlay.style.display = 'block';
+                                                                // Pfeil anzeigen
+                                                                arrow.style.display = 'block';
+                                                                // Neues Logo anzeigen
+                                                                newImg.src = e.target.result;
+                                                                newImg.style.display = 'block';
+                                                                // Das versteckte Eingabefeld aktualisieren
+                                                                hiddenInput.value = oldValue; // den alten Wert einfügen, falls du ihn benötigst
+                                                            }
+                                                            reader.readAsDataURL(input.files[0]); // Datei als DataURL lesen und als Bildvorschau laden
+                                                        }
+                                                    }
+                                                </script>
+
+
+
+                                                <div class="col-12">
+                                                    <div class="alert alert-secondary" role="alert">
+                                                        <a><b>API-Tokens:</b> Diese Tokens werden für folgende Dinge genutzt:</a>
+                                                        <ul class="mb-0">
+                                                            <li>Übersetzung der Übungen (Texte und Audios) ➤ Deepl und ElevenLabs</li>
+                                                            <li>Abwicklungen von Zahlungen ➤ Mollie</li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <label for="API_TOKEN_Deepl" class="form-label">API-Token #1 (Deepl-Pro)</label>
+                                                    <div class="input-group" id="show_hide_password_deepl">
+                                                        <input class="form-control mb-2 border-end-0" type="text" id="API_TOKEN_Deepl" name="API_TOKEN_Deepl" value="{{ WhiteLabel['API_TOKEN_Deepl'] }}">
+                                                        <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
+                                                    </div>
+
+                                                    <label for="API_TOKEN_ElevenLabs" class="form-label">API-Token #2 (ElevenLabs)</label>
+                                                    <div class="input-group" id="show_hide_password_elevenlabs">
+                                                        <input class="form-control mb-2 border-end-0" type="text" id="API_TOKEN_ElevenLabs" name="API_TOKEN_ElevenLabs" value="{{ WhiteLabel['API_TOKEN_ElevenLabs'] }}">
+                                                        <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
+                                                    </div>
+
+                                                    <label for="API_TOKEN_Mollie" class="form-label">API-Token #3 (Mollie)</label>
+                                                    <div class="input-group" id="show_hide_password_mollie">
+                                                        <input class="form-control mb-2 border-end-0" type="text" id="API_TOKEN_Mollie" name="API_TOKEN_Mollie" value="{{ WhiteLabel['API_TOKEN_Mollie'] }}">
+                                                        <a href="javascript:;" class="input-group-text bg-transparent"><i class="bx bx-hide"></i></a>
+                                                    </div>
+                                                </div>
+                                                
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="mehrInfosDomainName" tabindex="-1" style="display: none;" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Weitere Information zur Angabe einer Domain</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                                    <div class="accordion-item">
+                                                                       <h2 class="accordion-header" id="flush-headingOne">
+                                                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                                            Wie kann bzw. muss ich meine Domain verbinden?
+                                                                          </button>
+                                                                       </h2>
+                                                                       <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                                                          <div class="accordion-body">Du musst uns bei der Einrichtung erstmals eine Domain mitteilen. <br>Bei Domain-Änderungen kannst du dies <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen">hier</a> selbstständig ändern.</div>
+                                                                       </div>
+                                                                    </div>
+                                                                    <div class="accordion-item">
+                                                                       <h2 class="accordion-header" id="flush-headingTwo">
+                                                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                                          Bekomme ich Unterstützung bei der Verknüpfung einer neuen Domain?
+                                                                          </button>
+                                                                       </h2>
+                                                                       <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="">
+                                                                          <div class="accordion-body">Ja. Dazu kannst du uns gerne per E-Mail kontaktieren: <br> <a href="mailto:info@personal-peak-360.de">info@personal-peak-360.de</a></div>
+                                                                       </div>
+                                                                    </div>
+                                                                    <div class="accordion-item">
+                                                                       <h2 class="accordion-header" id="flush-headingThree">
+                                                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                                          Kann ich mehrere (Sub-)Domains mit meiner WhiteLabel-Instanz verknüpfen?
+                                                                          </button>
+                                                                       </h2>
+                                                                       <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample" style="">
+                                                                          <div class="accordion-body">Nein. Dies geht derzeit leider noch nicht. <br>Somit wäre derzeit für jede Domain eine eigene WhiteLabel-Instanz von Nöten.</div>
+                                                                       </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                                                                <button type="button" class="btn btn-primary">Übernehmen</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'rechtliches' %} active show{% endif %}" id="pills-rechtliches" role="tabpanel" aria-labelledby="pills-rechtliches-tab">
+                                            <form class="row g-3" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?update=rechtliches" onsubmit="getEditorData(event)" method="post" enctype="multipart/form-data">
+                                                <div class="col-12">
+                                                    <label for="bezeichnung" class="form-label">Projekt-Bezeichnung</label>
+                                                    <input class="form-control" type="text" id="bezeichnung" name="bezeichnung" value="{{ WhiteLabel['Bezeichnung'] }}" placeholder="{{ WhiteLabel['Bezeichnung'] }}">
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-8">
+                                                            <label for="vorname" class="form-label">Firma (wenn vorhanden)</label>
+                                                            <input class="form-control" type="text" id="betreiber_firma" name="betreiber_firma" placeholder="Firmenname">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="vorname" class="form-label">UST-IdNr (wenn vorhanden)</label>
+                                                            <input class="form-control" type="text" id="betreiber_ustid" name="betreiber_ustid" placeholder="DE124356789">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="vorname" class="form-label">Vorname</label>
+                                                            <input class="form-control" type="text" id="betreiber_vorname" name="betreiber_vorname" placeholder="Vorname" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="nachname" class="form-label">Nachname</label>
+                                                            <input class="form-control" type="text" id="betreiber_nachname" name="betreiber_nachname" placeholder="Nachname" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="strasse" class="form-label">Straße</label>
+                                                            <input class="form-control" type="text" id="betreiber_strasse" name="betreiber_strasse" placeholder="Straße" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="hausnummer" class="form-label">Hausnummer</label>
+                                                            <input class="form-control" type="text" id="betreiber_hausnummer" name="betreiber_hausnummer" placeholder="Hausnummer" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="postleitzahl" class="form-label">Postleitzahl</label>
+                                                            <input class="form-control" type="text" id="betreiber_postleitzahl" name="betreiber_postleitzahl" placeholder="Postleitzahl" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="ort" class="form-label">Ort</label>
+                                                            <input class="form-control" type="text" id="ort" name="ort" placeholder="Ort" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'willkommenSeite' %} active show{% endif %}" id="pills-willkommenSeite" role="tabpanel" aria-labelledby="pills-willkommenSeite-tab">
+                                            <h4 class="mt-3">Inhalte der <a href="https://auth.{{ WhiteLabel['Domain'] }}/willkommen" target="_blank">Willkommens-Seite</a> ändern</h4>
+                                            <p>Hier können alle Inhalte der Willkommens-Seite geändert werden, auf welche die Nutzer bzw. Kunden direkt nach dem Login weitergeleitet werden.</p>
+
+                                            <hr />
+                                            
+                                            <form id="landingPageForm" class="row g-3" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?update=landingpage" method="post" enctype="multipart/form-data">
+                                                <div class="col-12">
+                                                    <label for="titel" class="form-label">Titel</label>
+                                                    <input class="form-control" type="text" id="titel" name="titel" value="{{ WhiteLabel['STARTSEITE_Titel'] }}" placeholder="{{ WhiteLabel['STARTSEITE_Titel'] }}">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="beschreibung" class="form-label">Beschreibung</label>
+                                                    <textarea class="form-control" id="beschreibung" name="beschreibung" placeholder="{{ WhiteLabel['STARTSEITE_Beschreibungstext'] }}">{{ WhiteLabel['STARTSEITE_Beschreibungstext'] }}</textarea>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="video" class="form-label">Video (in der Mitte)</label>
+                                                    <input class="form-control" type="file" id="video" name="video" onchange="previewVideo('video', 'video_old', 'video_new', 'arrow_video', 'overlay_video', 'video_old_ID', '{{ WhiteLabel['STARTSEITE_Video'] }}')">
+                                                    <input type="hidden" id="video_old_ID" name="video_old_ID">
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                {% if WhiteLabel['STARTSEITE_Video'] %}
+                                                                    <div style="position: relative;">
+                                                                        <!-- Altes Video -->
+                                                                        <video id="video_old" class="img-fluid" style="max-width: 400px; height: auto; width: 100%; border-radius: 15px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" controls>
+                                                                            <source src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['STARTSEITE_Video'] }}" type="video/mp4">
+                                                                            Dein Browser unterstützt dieses Video-Format nicht.
+                                                                        </video>
+                                                                        <!-- Rote Überlagerung -->
+                                                                        <div id="overlay_video" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none; border-radius: 15px;"></div>
+                                                                    </div>
+                                                                    <!-- Pfeil-Icon zwischen den Videos -->
+                                                                    <div id="arrow_video" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                {% endif %}
+                                                                <!-- Neues Video als Vorschau -->
+                                                                <video id="video_new" class="img-fluid mt-2" class="img-fluid" style="max-width: 400px; height: auto; width: 100%; border-radius: 15px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: none;" controls>
+                                                                    <source src="" id="video_new_source" type="video/mp4">
+                                                                    Dein Browser unterstützt dieses Video-Format nicht.
+                                                                </video>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    function previewVideo(inputId, oldFileId, newFileId, arrowId, overlayId, oldFileHiddenInputId, oldFileValue) {
+                                                        const fileInput = document.getElementById(inputId);
+                                                        const oldFile = document.getElementById(oldFileId);
+                                                        const newFile = document.getElementById(newFileId);
+                                                        const arrow = document.getElementById(arrowId);
+                                                        const overlay = document.getElementById(overlayId);
+                                                        const oldFileHiddenInput = document.getElementById(oldFileHiddenInputId);
+
+                                                        if (fileInput.files && fileInput.files[0]) {
+                                                            const reader = new FileReader();
+                                                            reader.onload = function (e) {
+                                                                // Unterscheidung zwischen Bildern und Videos
+                                                                if (newFile.tagName === 'IMG') {
+                                                                    newFile.src = e.target.result; // Setze Bildquelle
+                                                                } else if (newFile.tagName === 'VIDEO') {
+                                                                    const source = document.getElementById(newFileId + '_source');
+                                                                    source.src = e.target.result; // Setze Videoquelle
+                                                                    newFile.load(); // Lade das neue Video neu
+                                                                }
+                                                                // Zeige neue Datei
+                                                                newFile.style.display = 'block';
+                                                                arrow.style.display = 'block';
+                                                                overlay.style.display = 'block';
+                                                                oldFile.style.opacity = '0.5'; // Altes Video transparent
+                                                                oldFileHiddenInput.value = oldFileValue; // Setze altes Datei-ID
+                                                            };
+                                                            reader.readAsDataURL(fileInput.files[0]); // Lese die hochgeladene Datei
+                                                        }
+                                                    }
+                                                </script>
+
+
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+                                                    <button type="button" class="btn btn-secondary px-5" onclick="showPreview_LandingPage()">Vorschau anzeigen (nur Änderungen)</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'auszeichnungen' %} active show{% endif %}" id="pills-auszeichnungen" role="tabpanel" aria-labelledby="pills-auszeichnungen-tab">
+                                            {% if not WhiteLabel['Badges_Status'] %}
+                                                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?aktivieren=auszeichnungen" class="btn btn-success">Auszeichnungen bzw. Badges aktivieren</a>
+                                            {% else %}
+                                                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?deaktivieren=auszeichnungen" class="btn btn-danger">Auszeichnungen bzw. Badges deaktivieren</a>
+
+                                                <hr>
+
+                                                <form class="row g-3" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?update=auszeichnungen" method="post" enctype="multipart/form-data">
+                                                    <div class="col-12">
+                                                        <label for="Badge_Willkommen" class="form-label">Badge (Stufe 1 - Willkommen)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=Willkommen&old={{ WhiteLabel['Badge_Willkommen'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_Willkommen" name="Badge_Willkommen" onchange="previewFile('Badge_Willkommen', 'Badge_Willkommen_old', 'Badge_Willkommen_new', 'arrow_Badge_Willkommen', 'overlay_Badge_Willkommen', 'Badge_Willkommen_OLD_ID', '{{ WhiteLabel['Badge_Willkommen'] }}')">
+                                                        <input type="hidden" id="Badge_Willkommen_OLD_ID" name="Badge_Willkommen_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_Willkommen_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_Willkommen'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_Willkommen" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_Willkommen" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_Willkommen_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_Willkommen_Text" name="Badge_Willkommen_Text" type="text" value="{{ WhiteLabel['Badge_Willkommen_Text'] }}" placeholder="{{ WhiteLabel['Badge_Willkommen_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_Willkommen_Punkte" name="Badge_Willkommen_Punkte" type="number" value="{{ WhiteLabel['Badge_Willkommen_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_Willkommen_Punkte'] }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="logo_lang" class="form-label">Badge (Stufe 2)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=2&old={{ WhiteLabel['Badge_2'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_2" name="Badge_2" onchange="previewFile('Badge_2', 'Badge_2_old', 'Badge_2_new', 'arrow_Badge_2', 'overlay_Badge_2', 'Badge_2_OLD_ID', '{{ WhiteLabel['Badge_2'] }}')">
+                                                        <input type="hidden" id="Badge_2_OLD_ID" name="Badge_2_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_2_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_2'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_2" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_2" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_2_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_2_Text" name="Badge_2_Text" type="text" value="{{ WhiteLabel['Badge_2_Text'] }}" placeholder="{{ WhiteLabel['Badge_2_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_2_Punkte" name="Badge_2_Punkte" type="number" value="{{ WhiteLabel['Badge_2_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_2_Punkte'] }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="Badge_3" class="form-label">Badge (Stufe 3)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=3&old={{ WhiteLabel['Badge_3'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_3" name="Badge_3" onchange="previewFile('Badge_3', 'Badge_3_old', 'Badge_3_new', 'arrow_Badge_3', 'overlay_Badge_3', 'Badge_3_OLD_ID', '{{ WhiteLabel['Badge_3'] }}')">
+                                                        <input type="hidden" id="Badge_3_OLD_ID" name="Badge_3_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_3_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_3'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_3" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_3" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_3_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_3_Text" name="Badge_3_Text" type="text" value="{{ WhiteLabel['Badge_3_Text'] }}" placeholder="{{ WhiteLabel['Badge_3_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_3_Punkte" name="Badge_3_Punkte" type="number" value="{{ WhiteLabel['Badge_3_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_3_Punkte'] }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="logo_lang" class="form-label">Badge (Stufe 4)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=4&old={{ WhiteLabel['Badge_4'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_4" name="Badge_4" onchange="previewFile('Badge_4', 'Badge_4_old', 'Badge_4_new', 'arrow_Badge_4', 'overlay_Badge_4', 'Badge_4_OLD_ID', '{{ WhiteLabel['Badge_4'] }}')">
+                                                        <input type="hidden" id="Badge_4_OLD_ID" name="Badge_4_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_4_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_4'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_4" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_4" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_4_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_4_Text" name="Badge_4_Text" type="text" value="{{ WhiteLabel['Badge_4_Text'] }}" placeholder="{{ WhiteLabel['Badge_4_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_4_Punkte" name="Badge_4_Punkte" type="number" value="{{ WhiteLabel['Badge_4_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_4_Punkte'] }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="Badge_5" class="form-label">Badge (Stufe 5)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=5&old={{ WhiteLabel['Badge_5'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_5" name="Badge_5" onchange="previewFile('Badge_5', 'Badge_5_old', 'Badge_5_new', 'arrow_Badge_5', 'overlay_Badge_5', 'Badge_5_OLD_ID', '{{ WhiteLabel['Badge_5'] }}')">
+                                                        <input type="hidden" id="Badge_5_OLD_ID" name="Badge_5_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_5_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_5'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_5" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_5" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_5_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_5_Text" name="Badge_5_Text" type="text" value="{{ WhiteLabel['Badge_5_Text'] }}" placeholder="{{ WhiteLabel['Badge_5_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_5_Punkte" name="Badge_5_Punkte" type="number" value="{{ WhiteLabel['Badge_5_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_5_Punkte'] }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label for="logo_lang" class="form-label">Badge (Stufe 6)</label>
+                                                        <br>
+                                                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?Standard_Badge=6&old={{ WhiteLabel['Badge_6'] }}" class="btn btn-sm btn-secondary px-5">Standard wiederherstellen</a>
+                                                        <br>
+                                                        <br>
+                                                        <input class="form-control mb-2" type="file" id="Badge_6" name="Badge_6" onchange="previewFile('Badge_6', 'Badge_6_old', 'Badge_6_new', 'arrow_Badge_6', 'overlay_Badge_6', 'Badge_6_OLD_ID', '{{ WhiteLabel['Badge_6'] }}')">
+                                                        <input type="hidden" id="Badge_6_OLD_ID" name="Badge_6_OLD_ID">
+                                                        <div class="card">
+                                                            <div class="card-body text-center">
+                                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                                    <div style="position: relative;">
+                                                                        <img id="Badge_6_old" class="img-fluid" style="max-width: 300px; height: auto;" 
+                                                                            src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_6'] }}" 
+                                                                            alt="Langes Logo">
+                                                                        <div id="overlay_Badge_6" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 0, 0, 0.5); display: none;"></div>
+                                                                    </div>
+                                                                    <div id="arrow_Badge_6" class="mt-2" style="display: none;">
+                                                                        <i class="bx bx-chevron-down" style="font-size: 24px; color: #000;"></i>
+                                                                    </div>
+                                                                    <img id="Badge_6_new" class="img-fluid mt-2" style="max-width: 300px; height: auto; display: none;" 
+                                                                        alt="Neues Langes Logo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control mb-2" id="Badge_6_Text" name="Badge_6_Text" type="text" value="{{ WhiteLabel['Badge_6_Text'] }}" placeholder="{{ WhiteLabel['Badge_6_Text'] }}">
+                                                        <input class="form-control mb-2" id="Badge_6_Punkte" name="Badge_6_Punkte" type="number" value="{{ WhiteLabel['Badge_6_Punkte'] }}" placeholder="{{ WhiteLabel['Badge_6_Punkte'] }}">
+                                                    </div>
+                                                    
+                                                    <script>
+                                                        function previewFile(inputId, oldImgId, newImgId, arrowId, overlayId, hiddenInputId, oldValue) {
+                                                            const input = document.getElementById(inputId);
+                                                            const oldImg = document.getElementById(oldImgId);
+                                                            const newImg = document.getElementById(newImgId);
+                                                            const arrow = document.getElementById(arrowId);
+                                                            const overlay = document.getElementById(overlayId);
+                                                            const hiddenInput = document.getElementById(hiddenInputId);
+                                                            
+                                                            // Überprüfen, ob eine Datei hochgeladen wurde
+                                                            if (input.files && input.files[0]) {
+                                                                const reader = new FileReader();
+                                                                reader.onload = function(e) {
+                                                                    // Altes Logo leicht transparent machen
+                                                                    oldImg.style.opacity = '0.5';
+                                                                    // Rote Überlagerung anzeigen
+                                                                    overlay.style.display = 'block';
+                                                                    // Pfeil anzeigen
+                                                                    arrow.style.display = 'block';
+                                                                    // Neues Logo anzeigen
+                                                                    newImg.src = e.target.result;
+                                                                    newImg.style.display = 'block';
+                                                                    // Das versteckte Eingabefeld aktualisieren
+                                                                    hiddenInput.value = oldValue; // den alten Wert einfügen, falls du ihn benötigst
+                                                                }
+                                                                reader.readAsDataURL(input.files[0]); // Datei als DataURL lesen und als Bildvorschau laden
+                                                            }
+                                                        }
+                                                    </script>
+                                                    
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="mehrInfosDomainName" tabindex="-1" style="display: none;" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-scrollable">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Weitere Information zur Angabe einer Domain</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                                        <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingOne">
+                                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                                                Wie kann bzw. muss ich meine Domain verbinden?
+                                                                            </button>
+                                                                        </h2>
+                                                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                                                            <div class="accordion-body">Du musst uns bei der Einrichtung erstmals eine Domain mitteilen. <br>Bei Domain-Änderungen kannst du dies <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen">hier</a> selbstständig ändern.</div>
+                                                                        </div>
+                                                                        </div>
+                                                                        <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingTwo">
+                                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                                            Bekomme ich Unterstützung bei der Verknüpfung einer neuen Domain?
+                                                                            </button>
+                                                                        </h2>
+                                                                        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="">
+                                                                            <div class="accordion-body">Ja. Dazu kannst du uns gerne per E-Mail kontaktieren: <br> <a href="mailto:info@personal-peak-360.de">info@personal-peak-360.de</a></div>
+                                                                        </div>
+                                                                        </div>
+                                                                        <div class="accordion-item">
+                                                                        <h2 class="accordion-header" id="flush-headingThree">
+                                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                                            Kann ich mehrere (Sub-)Domains mit meiner WhiteLabel-Instanz verknüpfen?
+                                                                            </button>
+                                                                        </h2>
+                                                                        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample" style="">
+                                                                            <div class="accordion-body">Nein. Dies geht derzeit leider noch nicht. <br>Somit wäre derzeit für jede Domain eine eigene WhiteLabel-Instanz von Nöten.</div>
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                                                                    <button type="button" class="btn btn-primary">Übernehmen</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+                                                    </div>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+
+                                        <script>
+                                            function updateStep(step) {
+                                                const stepList = ['step-1', 'step-2', 'step-3', 'step-4'];
+                                        
+                                                // Aktualisiere alle Schritte
+                                                stepList.forEach((stepId, index) => {
+                                                    const stepElement = document.getElementById(stepId);
+                                        
+                                                    if (index < step) {
+                                                        // Vorherige Schritte (abgehakt und durchgestrichen)
+                                                        stepElement.classList.add('completed-step', 'completed-icon');
+                                                        stepElement.classList.remove('active-step', 'future-step');
+                                                    } else if (index === step) {
+                                                        // Aktueller Schritt (hervorgehoben)
+                                                        stepElement.classList.add('active-step');
+                                                        stepElement.classList.remove('completed-step', 'future-step', 'completed-icon');
+                                                    } else {
+                                                        // Zukünftige Schritte
+                                                        stepElement.classList.add('future-step');
+                                                        stepElement.classList.remove('completed-step', 'active-step', 'completed-icon');
+                                                    }
+                                                });
+                                            }
+                                        
+                                            function showPreview_LandingPage() {
+                                                const form = document.getElementById('landingPageForm');
+                                                const formData = new FormData(form);
+                                        
+                                                const previewDiv = document.getElementById('col_vorschau');
+                                                const loadingAnimation = document.getElementById('loadingAnimation');
+                                                const progressBar = document.getElementById('progressBar');
+                                        
+                                                previewDiv.style.display = 'none'; // Vorschau-Bereich ausblenden
+                                                loadingAnimation.style.display = 'block'; // Ladeanimation einblenden
+                                        
+                                                // Initialisiere den ersten Schritt
+                                                updateStep(0);
+                                        
+                                                const xhr = new XMLHttpRequest();
+                                                xhr.open("POST", "https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?preview=landingpage", true);
+                                        
+                                                // Fortschritt des Uploads verfolgen
+                                                xhr.upload.onprogress = function(event) {
+                                                    if (event.lengthComputable) {
+                                                        const uploadPercentage = (event.loaded / event.total) * 50; // Maximal 50% für Upload
+                                                        progressBar.style.width = `${uploadPercentage}%`;
+                                                        progressBar.innerText = `${Math.floor(uploadPercentage)}%`;
+                                                        updateStep(0); // Zeige "Video wird hochgeladen"
+                                                    }
+                                                };
+                                        
+                                                // Fortschritt des Verarbeitungsprozesses nach dem Upload
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState === 2) {
+                                                        updateStep(1); // Zeige "Datei wird verarbeitet"
+                                                    }
+                                                    if (xhr.readyState === 3) {
+                                                        updateStep(2); // Zeige "Template wird geladen"
+                                                    }
+                                                    if (xhr.readyState === 4 && xhr.status === 200) {
+                                                        updateStep(3); // Zeige "Vorschau wird erstellt"
+                                                        const iframe = document.getElementById('vorschau-iframe');
+                                                        const doc = iframe.contentDocument || iframe.contentWindow.document;
+                                                        doc.open();
+                                                        doc.write(xhr.responseText); // Die HTML-Antwort wird in das IFrame geschrieben
+                                                        doc.close();
+                                        
+                                                        previewDiv.style.display = 'block'; // Vorschau-Bereich einblenden
+                                                        loadingAnimation.style.display = 'none'; // Ladeanimation ausblenden
+                                                    }
+                                                };
+                                        
+                                                xhr.onerror = function() {
+                                                    var message = new nachricht({
+                                                        duration: 5000,
+                                                        position: {
+                                                            x: 'right',
+                                                            y: 'top',
+                                                        },
+                                                        dismissible: true
+                                                    });
+                                                    message.error('Es gab ein Problem mit der Anfrage und der Anzeige der Vorschau.');
+                                                    loadingAnimation.style.display = 'none'; // Ladeanimation ausblenden
+                                                };
+                                        
+                                                xhr.send(formData); // Daten senden
+                                            }
+                                        </script>
+                                        
+
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'buchhaltung' %} active show{% endif %}" id="pills-buchhaltung" role="tabpanel" aria-labelledby="pills-buchhaltung-tab">
+                                            <h4 class="mt-3">Informationen zur Buchhaltung verwalten</h4>
+                                            <p>Hier können alle Informationen zur Buchhaltung verwaltet werden - darunter das Format der Rechnungsnummern, die Informationen zum Rechnungssteller etc.</p>
+
+                                            <hr />
+                                            
+                                            <form class="row g-3" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?update=buchhaltung" method="post" enctype="multipart/form-data">
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label for="vorname" class="form-label">Format für Rechnungs- und Angebotsnummern</label>
+                                                            <select class="form-select" name="rechnung_format" id="rechnung_format">
+                                                                <option {% if WhiteLabel['Rechnungsformat'] == "id" %} selected{% endif %} value="id">Aktuelle White-Label Nummer (z.B. "1" ODER "1000")</option>
+                                                                <option {% if WhiteLabel['Rechnungsformat'] == "date-id" %} selected{% endif %} value="date-id">Datum + Aktuelle White-Label Nummer (z.B. "DDMMYYYY-1" ODER "DDMMYYYY-1000")</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-12">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <label for="vorname" class="form-label">Anwendung der Kleinunternehmer-Regelung (nach §19 Abs. 1 UStG)</label>
+                                                            <select class="form-select" name="kleinunternehmer_regelung" id="kleinunternehmer_regelung">
+                                                                <option {% if WhiteLabel['KleinunternehmerRegelung'] == True %} selected{% endif %} value="0Prozent">Ja (0 % MwSt - Mehrwertsteuer)</option>
+                                                                <option {% if WhiteLabel['KleinunternehmerRegelung'] == False %} selected{% endif %} value="19Prozent">Nein (19 % MwSt - Mehrwertsteuer)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-12">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-8">
+                                                            <label for="vorname" class="form-label">Firma (wenn vorhanden - inklusive Rechtsform)</label>
+                                                            <input class="form-control" type="text" id="betreiber_firma" name="betreiber_firma" {% if WhiteLabel['Firmenname'] %} value="{{ WhiteLabel['Firmenname'] }}" placeholder="{{ WhiteLabel['Firmenname'] }}" {% endif %}>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="vorname" class="form-label">UST-IdNr (wenn vorhanden)</label>
+                                                            <input class="form-control" type="text" id="betreiber_ustid" name="betreiber_ustid" {% if WhiteLabel['UmsatzsteuerID'] %} value="{{ WhiteLabel['UmsatzsteuerID'] }}" placeholder="{{ WhiteLabel['UmsatzsteuerID'] }}" {% endif %}>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="vorname" class="form-label">Vorname</label>
+                                                            <input class="form-control" type="text" id="betreiber_vorname" name="betreiber_vorname" {% if WhiteLabel['Vorname'] %} value="{{ WhiteLabel['Vorname'] }}" placeholder="{{ WhiteLabel['Vorname'] }}" {% endif %}>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="nachname" class="form-label">Nachname</label>
+                                                            <input class="form-control" type="text" id="betreiber_nachname" name="betreiber_nachname" {% if WhiteLabel['Nachname'] %} value="{{ WhiteLabel['Nachname'] }}" placeholder="{{ WhiteLabel['Nachname'] }}" {% endif %}>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="strasse" class="form-label">Straße</label>
+                                                            <input class="form-control" type="text" id="betreiber_strasse" name="betreiber_strasse" {% if WhiteLabel['Strasse'] %} value="{{ WhiteLabel['Strasse'] }}" placeholder="{{ WhiteLabel['Strasse'] }}" {% endif %} required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="hausnummer" class="form-label">Hausnummer</label>
+                                                            <input class="form-control" type="text" id="betreiber_hausnummer" name="betreiber_hausnummer" {% if WhiteLabel['Hausnummer'] %} value="{{ WhiteLabel['Hausnummer'] }}" placeholder="{{ WhiteLabel['Hausnummer'] }}" {% endif %} required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="postleitzahl" class="form-label">Postleitzahl</label>
+                                                            <input class="form-control" type="text" id="betreiber_postleitzahl" name="betreiber_postleitzahl" {% if WhiteLabel['PLZ'] %} value="{{ WhiteLabel['PLZ'] }}" placeholder="{{ WhiteLabel['PLZ'] }}" {% endif %} required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="ort" class="form-label">Ort</label>
+                                                            <input class="form-control" type="text" id="betreiber_ort" name="betreiber_ort" {% if WhiteLabel['Ort'] %} value="{{ WhiteLabel['Ort'] }}" placeholder="{{ WhiteLabel['Ort'] }}" {% endif %} required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label for="email" class="form-label">E-Mail Adresse</label>
+                                                            <input class="form-control" type="text" id="betreiber_email" name="betreiber_email" {% if WhiteLabel['EMail'] %} value="{{ WhiteLabel['EMail'] }}" placeholder="{{ WhiteLabel['EMail'] }}" {% endif %} required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade {% if quickStart_TAB == 'ecommerce' %} active show{% endif %}" id="pills-ecommerce" role="tabpanel" aria-labelledby="pills-ecommerce-tab">
+                                            {% if Ecommerce_Produkte == [] %}
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">Für Ihre WhiteLabel-Instanz existieren derzeit leider noch keine (aktiven) Produkte für den ECommerce-Shop.</div> 
+                                            {% else %}
+                                            <div class="col-md-4 mb-4">
+                                                {% for produkt in Ecommerce_Produkte %}
+                                                    <div class="card h-100">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{ produkt.Bezeichnung }}</h5>
+                                                            <p class="card-text">{{ produkt.Beschreibung }}</p>
+                                                            {% if produkt.Preis_RABATT %}
+                                                                <p class="card-text">
+                                                                    <span class="text-muted" style="text-decoration: line-through;">
+                                                                        {{ produkt.Preis }} €
+                                                                    </span>
+                                                                    <br>
+                                                                    <span class="text-danger">
+                                                                        {{ produkt.Preis_RABATT }} € (Rabatt)
+                                                                    </span>
+                                                                </p>
+                                                            {% else %}
+                                                                <p class="card-text"><strong>Preis: {{ produkt.Preis }} €</strong></p>
+                                                            {% endif %}
+                                                            <div class="d-flex justify-content-between">
+                                                                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?delete=ecommerce_shop&id={{ produkt.id }}" class="btn btn-danger">Löschen</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            {% endif %}
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-primary px-5" data-bs-toggle="modal" data-bs-target="#createProduct">Neues "Produkt" erstellen</button>
+                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row-->
+                    
+
+
+                    <style>
+                        .completed-step {
+                            text-decoration: line-through;
+                            color: gray;
+                        }
+
+                        .active-step {
+                            font-weight: bold;
+                            color: #007bff; /* Blau für den aktiven Schritt */
+                        }
+
+                        .future-step {
+                            color: #6c757d; /* Grau für zukünftige Schritte */
+                        }
+
+                        .completed-icon::before {
+                            content: '✔'; /* Häkchen-Symbol */
+                            color: green;
+                            margin-right: 8px;
+                        }
+                    </style>
+
+                    <div id="loadingAnimation" class="row row-cols-1" style="display: none;">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <div class="card-title d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Vorschau</h5>
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Lädt...</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <p>Bitte warten, die Vorschau wird geladen...</p>
+                    
+                                    <ul id="stepList" class="list-unstyled">
+                                        <li id="step-1">1. Video wird hochgeladen</li>
+                                        <li id="step-2">2. Datei wird verarbeitet</li>
+                                        <li id="step-3">3. Template wird geladen</li>
+                                        <li id="step-4">4. Vorschau wird erstellt</li>
+                                    </ul>
+                    
+                                    <div id="uploadDuration" class="mt-2"></div>
+                                    <div class="progress mt-3">
+                                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    <div id="col_vorschau" class="row row-cols-1" style="display: none;">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <div class="card-title d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Vorschau</h5>
+                                        <button id="close-preview" class="btn-close" aria-label="Close" onclick="hidePreview()"></button>
+                                    </div>
+                                    <hr />
+                                    <!-- IFrame für die Vorschau der Änderungen -->
+                                    <iframe id="vorschau-iframe" name="vorschau-iframe" style="width:100%; height:1000px;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function hidePreview() {
+                            const previewDiv = document.getElementById('col_vorschau');
+                            previewDiv.style.display = 'none'; // Setze display auf none, um den Vorschau-Bereich auszublenden
+                        }
+                    </script>
+                    <!--end row-->                    
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+
+		{{ footer | safe }}
+		
+	</div>
+	<!-- end wrapper -->
+	
+	{{ theme_customizer | safe }}
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/index.js"></script>
+
+
+    
+    <script>
+        $(document).ready(function () {
+            // Zeigt und verbirgt das Passwort für jedes Input-Feld individuell
+            $("#show_hide_password_deepl a").on('click', function (event) {
+                event.preventDefault();
+                togglePasswordVisibility('#show_hide_password_deepl');
+            });
+
+            $("#show_hide_password_elevenlabs a").on('click', function (event) {
+                event.preventDefault();
+                togglePasswordVisibility('#show_hide_password_elevenlabs');
+            });
+
+            $("#show_hide_password_mollie a").on('click', function (event) {
+                event.preventDefault();
+                togglePasswordVisibility('#show_hide_password_mollie');
+            });
+
+            // Funktion zum Umschalten der Sichtbarkeit von Passwörtern
+            function togglePasswordVisibility(passwordFieldId) {
+                const inputField = $(passwordFieldId).find('input');
+                const icon = $(passwordFieldId).find('i');
+
+                if (inputField.attr("type") == "text") {
+                    inputField.attr('type', 'password');
+                    icon.removeClass("bx-show").addClass("bx-hide");
+                } else {
+                    inputField.attr('type', 'text');
+                    icon.removeClass("bx-hide").addClass("bx-show");
+                }
+            }
+        });
+    </script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+
+	
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            error: "{{ error }}",
+            success: "{{ success }}",
+            punkte: "{{ punkte_nachricht }}"
+        },
+        methods: {
+            showMessages() {
+                if (this.isErrorVisible) {
+                    this.showError();
+                }
+                if (this.isSuccessVisible) {
+                    this.showSuccess();
+                }
+                if (this.isPunkteVisible) {
+                    this.showPunkte();
+                }
+            },
+            showError() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display an error notification
+                message.error('{{ error }}');
+            },
+            showSuccess() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display a success notification
+                message.success('{{ success }}');
+            },
+            showPunkte() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display points notification
+                message.success('{{ punkte }}'); // or use message.error() if it should be an error
+            }
+        },
+        computed: {
+            isErrorVisible: function () {
+                return this.error && this.error !== '' && this.error !== 'None';
+            },
+            isSuccessVisible: function() {
+                return this.success && this.success !== '' && this.success !== 'None';
+            },
+            isPunkteVisible: function() {
+                return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+            }
+        },
+        watch: {
+            isErrorVisible(newVal) {
+                if (!newVal) {
+                    this.closeError();
+                }
+            },
+            isSuccessVisible(newVal) {
+                if (!newVal) {
+                    this.closeSuccess();
+                }
+            },
+            isPunkteVisible(newVal) {
+                if (!newVal) {
+                    this.closePunkte(); // You can implement this method if needed
+                }
+            }
+        },
+        created() {
+            this.$nextTick(() => {
+                this.showMessages();
+            })
+        }
+    });
+</script>	
+</body>
+
+</html>

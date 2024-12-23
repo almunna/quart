@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Buchhaltung (Rechnungen) → Cockpit</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="row row-cols-1">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <!-- Tabs für Einstellungen -->
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" id="pills-rechnung-tab" data-bs-toggle="pill" href="javascript:;" role="tab" aria-controls="pills-rechnung" aria-selected="true">Rechnungen</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-angebot-tab" href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/übersicht/angebote" role="tab" aria-controls="pills-angebot" aria-selected="true">Angebote</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade active show" id="pills-rechnung" role="tabpanel" aria-labelledby="pills-rechnung-tab">
+                                            <div class="card radius-15">
+                                                <div class="card-body">
+                                                    <div class="card-title">
+                                                        <h4 class="mb-0">Übersicht der Rechnungen</h4>
+                                                    </div>
+                                                    
+                                                    <hr/>
+
+                                                    <div class="table-responsive">
+                                                        <table id="rechnungen" class="table table-striped table-bordered" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Rechnungsnummer</th>
+                                                                    <th>Erstellungsdatum</th>
+                                                                    <th>Fälligkeitsdatum</th>
+                                                                    <th>Betrag</th>
+                                                                    <th>Status</th>
+                                                                    <th>Aktionen</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for rechnung in rechnungs_liste %}
+                                                                    <tr>
+                                                                        <td>#{{ rechnung['WhiteLabel_RechnungsID'] }}</td>
+                                                                        <td>{{ rechnung['Rechnungsdatum'] | format_datetime('%Y-%m-%d', '%d.%m.%Y') }}</td>
+                                                                        <td>{{ rechnung['Faelligkeitsdatum'] | format_datetime('%Y-%m-%d', '%d.%m.%Y') }}</td>
+                                                                        <td>{{ '{:.2f}'.format(rechnung['Preise']['Gesamt']).replace('.', ',') }} €</td>
+                                                                        <td>
+                                                                            {% if rechnung['Status'] == "Offen" %}
+                                                                                <span class="badge bg-warning">OFFEN</span>
+                                                                            {% elif rechnung['Status'] == "Bezahlt" %}
+                                                                                <span class="badge bg-success">BEZAHLT</span>
+                                                                            {% elif rechnung['Status'] == "Überfällig" %}
+                                                                                <span class="badge bg-danger">IM VERZUG</span>
+                                                                            {% else %}
+                                                                                <span class="badge bg-secondary">UNBEKANNT</span>
+                                                                            {% endif %}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/rechnung/details/{{ rechnung['WhiteLabel_RechnungsID'] }}" class="btn btn-primary btn-sm">Details ansehen / Bearbeiten</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <!-- GLEICH WIE <THEAD> -->
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end row-->
+                    
+
+
+                    <style>
+                        .completed-step {
+                            text-decoration: line-through;
+                            color: gray;
+                        }
+
+                        .active-step {
+                            font-weight: bold;
+                            color: #007bff; /* Blau für den aktiven Schritt */
+                        }
+
+                        .future-step {
+                            color: #6c757d; /* Grau für zukünftige Schritte */
+                        }
+
+                        .completed-icon::before {
+                            content: '✔'; /* Häkchen-Symbol */
+                            color: green;
+                            margin-right: 8px;
+                        }
+                    </style>
+
+                    <div id="loadingAnimation" class="row row-cols-1" style="display: none;">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <div class="card-title d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Vorschau</h5>
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Lädt...</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <p>Bitte warten, die Vorschau wird geladen...</p>
+                    
+                                    <ul id="stepList" class="list-unstyled">
+                                        <li id="step-1">1. Video wird hochgeladen</li>
+                                        <li id="step-2">2. Datei wird verarbeitet</li>
+                                        <li id="step-3">3. Template wird geladen</li>
+                                        <li id="step-4">4. Vorschau wird erstellt</li>
+                                    </ul>
+                    
+                                    <div id="uploadDuration" class="mt-2"></div>
+                                    <div class="progress mt-3">
+                                        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    <div id="col_vorschau" class="row row-cols-1" style="display: none;">
+                        <div class="col-12">
+                            <div class="card radius-15">
+                                <div class="card-body">
+                                    <div class="card-title d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Vorschau</h5>
+                                        <button id="close-preview" class="btn-close" aria-label="Close" onclick="hidePreview()"></button>
+                                    </div>
+                                    <hr />
+                                    <!-- IFrame für die Vorschau der Änderungen -->
+                                    <iframe id="vorschau-iframe" name="vorschau-iframe" style="width:100%; height:1000px;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function hidePreview() {
+                            const previewDiv = document.getElementById('col_vorschau');
+                            previewDiv.style.display = 'none'; // Setze display auf none, um den Vorschau-Bereich auszublenden
+                        }
+                    </script>
+                    <!--end row-->                    
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+
+		{{ footer | safe }}
+		
+	</div>
+	<!-- end wrapper -->
+	
+	{{ theme_customizer | safe }}
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/index.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+    
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#rechnungen').DataTable();
+			var table = $('#rechnungen2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#rechnungen_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#angebote').DataTable();
+			var table = $('#angebote2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#angebote_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+
+	
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			error: "{{ error }}",
+			success: "{{ success }}",
+			punkte: "{{ punkte_nachricht }}"
+		},
+		methods: {
+			showMessages() {
+				if (this.isErrorVisible) {
+					this.showError();
+				}
+				if (this.isSuccessVisible) {
+					this.showSuccess();
+				}
+				if (this.isPunkteVisible) {
+					this.showPunkte();
+				}
+			},
+			showError() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+
+				// Display an error notification
+				message.error('{{ error }}');
+			},
+			showSuccess() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+
+				// Display a success notification
+				message.success('{{ success }}');
+			},
+			showPunkte() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+
+				// Display points notification
+				message.success('{{ punkte }}'); // or use message.error() if it should be an error
+			}
+		},
+		computed: {
+			isErrorVisible: function () {
+				return this.error && this.error !== '' && this.error !== 'None';
+			},
+			isSuccessVisible: function() {
+				return this.success && this.success !== '' && this.success !== 'None';
+			},
+			isPunkteVisible: function() {
+				return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+			}
+		},
+		watch: {
+			isErrorVisible(newVal) {
+				if (!newVal) {
+					this.closeError();
+				}
+			},
+			isSuccessVisible(newVal) {
+				if (!newVal) {
+					this.closeSuccess();
+				}
+			},
+			isPunkteVisible(newVal) {
+				if (!newVal) {
+					this.closePunkte(); // You can implement this method if needed
+				}
+			}
+		},
+		created() {
+			this.$nextTick(() => {
+				this.showMessages();
+			})
+		}
+	});
+</script>	
+</body>
+
+</html>

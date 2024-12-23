@@ -1,0 +1,584 @@
+<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet">
+
+
+<div class="sidebar-wrapper" data-simplebar="true">
+    <div class="sidebar-header">
+        <div class="sidebar-header">
+            <div class="d-none d-lg-flex">
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/">
+                    <img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_lang'] }}" height="80px" alt="">
+                </a>
+            </div>
+        </div>
+        <a href="javascript:;" class="toggle-btn ms-auto"> <i class="wl-primary-icon bx bx-menu"></i>
+        </a>
+    </div>
+    <!--navigation-->
+    <ul class="metismenu" id="menu">
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}">
+                <div class="parent-icon icon-color-5"><i class="wl-primary-icon bx bx-home"></i>
+                </div>
+                <div class="menu-title">Startseite</div>
+            </a>
+        </li>
+
+        
+        {% if selected_NUTZER %}
+            <li class="mm-active">
+                <a href="javascript:;" aria-expanded="true" class="has-arrow menu-toggle">
+                    <div class="parent-icon icon-color-7" id="arrow-icon">
+                        <i class="wl-primary-icon bx bxs-user-detail"></i>
+                    </div>
+                    <div class="menu-title">Benutzer-Aktionen</div>
+                </a>
+                <ul class="mm-collapse mm-show" style=""> <!-- Ändern Sie die Höhe auf auto -->
+                    <li>
+                        <a href="https://dashboard.personalpeak360.de/admin/benutzer/delete/{{ selected_NUTZER['id'] }}" data-bs-toggle="tooltip" title="" data-bs-original-title="Das Konto für '{{ selected_NUTZER['Benutzername'] }}' wird im Anschluss unwiederruflich gelöscht!"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Benutzerkonto löschen</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-bs-toggle="tooltip" title="" data-bs-original-title="Neue Messung für den Nutzer '{{ selected_NUTZER['Benutzername'] }}'"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Neue Messung</a>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+
+        <li class="menu-label" style="cursor: pointer;" onclick="window.location.href='https://dashboard.{{ WhiteLabel['Domain'] }}/kachel/Admin-Bereich'">Admin-Bereich</li>
+
+        {% if "Voranmeldungen" in rolle['Rechte'] %}
+            <li>
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/voranmeldungen">
+                    <div class="parent-icon icon-color-5"><i class="wl-primary-icon bx bx-user-check"></i>
+                    </div>
+                    <div class="menu-title">Voranmeldungen</div>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="javascript:;" style="cursor: not-allowed;" class="bg-light-warning d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" title="Leider fehlen Dir diese Berechtigungen">
+                    <div class="d-flex align-items-center">
+                        <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bxs-user-check"></i></div>
+                        <div class="menu-title ms-2">Voranmeldungen</div>
+                    </div>
+                    <div class="widgets-icons bg-light-warning text-warning rounded-circle">
+                        <i class="wl-primary-icon bx bx-lock"></i>
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+
+
+        {% if "Benutzer" in rolle['Rechte'] %}
+            <li>
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/übersicht">
+                    <div class="parent-icon icon-color-5"><i class="wl-primary-icon bx bx-group"></i>
+                    </div>
+                    <div class="menu-title">Benutzer</div>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="javascript:;" style="cursor: not-allowed;" class="bg-light-warning d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" title="Leider fehlen Dir diese Berechtigungen">
+                    <div class="d-flex align-items-center">
+                        <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bxs-group"></i></div>
+                        <div class="menu-title ms-2">Benutzer</div>
+                    </div>
+                    <div class="widgets-icons bg-light-warning text-warning rounded-circle">
+                        <i class="wl-primary-icon bx bx-lock"></i>
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+
+
+        <li>
+            <a href="https://dashboard.personalpeak360.de/admin/live-chat">
+                <div class="parent-icon icon-color-9"><i class="wl-primary-icon bx bx-conversation"></i>
+                </div>
+                <div class="menu-title">Live-Chats</div>
+            </a>
+        </li>
+
+
+        {% if "Buchhaltung" in rolle['Rechte'] %}
+            <li class="">
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/übersicht/rechnungen" aria-expanded="false" class="has-arrow menu-toggle" id="settings-link-buchhaltung_admin">
+                    <div class="parent-icon icon-color-7" id="arrow-icon">
+                        <i class="wl-primary-icon bx bx-file"></i>
+                    </div>
+                    <div class="menu-title menu-title_buchhaltung" id="menu-title_buchhaltung">Buchhaltung</div>
+                </a>
+                <ul class="mm-collapse" style="height: 0;">
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/übersicht/rechnungen"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Rechnungen</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/übersicht/angebote"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Angebote</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <style>
+                .mm-collapse {
+                    overflow: hidden;
+                    transition: height 0.3s ease;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Hol den aktuellen Pfad
+                    const currentUrl = window.location.href;
+                    const settingsLink = document.getElementById('settings-link-buchhaltung_admin');
+                    const submenu = settingsLink.closest('li').querySelector('.mm-collapse');
+                    
+                    // Wenn der aktuelle URL mit dem Buchhaltung-Link übereinstimmt, Menü öffnen
+                    if (currentUrl.includes('/admin/buchhaltung/')) {
+                        settingsLink.setAttribute('aria-expanded', 'true');
+                        submenu.style.height = 'auto';  // Menü öffnen
+                    } else {
+                        settingsLink.setAttribute('aria-expanded', 'false');
+                        submenu.style.height = '0px';  // Menü geschlossen lassen
+                    }
+                });
+
+                document.getElementById('arrow-icon').addEventListener('click', function(e) {
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const expanded = submenu.style.height === 'auto';
+
+                    // Toggle submenu height
+                    submenu.style.height = expanded ? '0px' : 'auto';
+
+                    // Prevent default action of the link
+                    e.stopPropagation();
+                });
+
+                document.querySelectorAll('.menu-title_buchhaltung').forEach(function(title) {
+                    title.addEventListener('click', function() {
+                        // Führe die Aktion bei einem Klick auf den Text aus
+                        window.location.href = 'https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/übersicht/rechnungen';  // Link zu einer Seite deiner Wahl
+                    });
+                });
+
+                document.getElementById('settings-link-buchhaltung_admin').addEventListener('click', function(e) {
+                    // Prevent default link behavior (no redirection)
+                    e.preventDefault();
+
+                    // Close the dropdown if it's open
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                    // Set the dropdown to closed and update aria-expanded attribute
+                    submenu.style.height = '0px';
+                    this.setAttribute('aria-expanded', 'false');
+                });
+            </script>
+        {% else %}
+            <li>
+                <a href="javascript:;" style="cursor: not-allowed;" class="bg-light-warning d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" title="Leider fehlen Dir diese Berechtigungen">
+                    <div class="d-flex align-items-center">
+                        <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bx-file"></i></div>
+                        <div class="menu-title ms-2">Buchhaltung</div>
+                    </div>
+                    <div class="widgets-icons bg-light-warning text-warning rounded-circle">
+                        <i class="wl-primary-icon bx bx-lock"></i>
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+
+
+
+        {% if "Einstellungen" in rolle['Rechte'] %}
+            <li class="">
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/übungen" aria-expanded="false" class="has-arrow menu-toggle" id="trainingshalle-link">
+                    <div class="parent-icon icon-color-11" id="arrow-icon">
+                        <i class="wl-primary-icon bx bx-run"></i>
+                    </div>
+                    <div class="menu-title menu-title_trainingshalle" id="menu-title_settings">Trainingshalle</div>
+                </a>
+                <ul class="mm-collapse" style="height: 0;">
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/übungen"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Übungen</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/pläne"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Trainingspläne</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/Upload-Analyse"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Upload & Analyse</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Fitness-Test</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <style>
+                .mm-collapse {
+                    overflow: hidden;
+                    transition: height 0.3s ease;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Hol den aktuellen Pfad
+                    const currentUrl = window.location.href;
+                    const settingsLink = document.getElementById('trainingshalle-link');
+                    const submenu = settingsLink.closest('li').querySelector('.mm-collapse');
+                    
+                    // Wenn der aktuelle URL mit dem Einstellungen-Link übereinstimmt, Menü öffnen
+                    if (currentUrl.includes('/admin/trainingshalle/')) {
+                        settingsLink.setAttribute('aria-expanded', 'true');
+                        submenu.style.height = 'auto';  // Menü öffnen
+                    } else {
+                        settingsLink.setAttribute('aria-expanded', 'false');
+                        submenu.style.height = '0px';  // Menü geschlossen lassen
+                    }
+                });
+
+                document.getElementById('arrow-icon').addEventListener('click', function(e) {
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const expanded = submenu.style.height === 'auto';
+
+                    // Toggle submenu height
+                    submenu.style.height = expanded ? '0px' : 'auto';
+
+                    // Prevent default action of the link
+                    e.stopPropagation();
+                });
+
+                document.querySelectorAll('.menu-title_trainingshalle').forEach(function(title) {
+                    title.addEventListener('click', function() {
+                        // Führe die Aktion bei einem Klick auf den Text aus
+                        window.location.href = 'https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/übungen';  // Link zu einer Seite deiner Wahl
+                    });
+                });
+
+                document.getElementById('trainingshalle-link').addEventListener('click', function(e) {
+                    // Prevent default link behavior (no redirection)
+                    e.preventDefault();
+
+                    // Close the dropdown if it's open
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                    // Set the dropdown to closed and update aria-expanded attribute
+                    submenu.style.height = '0px';
+                    this.setAttribute('aria-expanded', 'false');
+                });
+            </script>
+        {% else %}
+            <li>
+                <a href="javascript:;" style="cursor: not-allowed;" class="bg-light-warning d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" title="Leider fehlen Dir diese Berechtigungen">
+                    <div class="d-flex align-items-center">
+                        <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bx-cog"></i></div>
+                        <div class="menu-title ms-2">Einstellungen</div>
+                    </div>
+                    <div class="widgets-icons bg-light-warning text-warning rounded-circle">
+                        <i class="wl-primary-icon bx bx-lock"></i>
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+
+
+        
+        {% if "Einstellungen" in rolle['Rechte'] %}
+            <li class="">
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen" aria-expanded="false" class="has-arrow menu-toggle" id="settings-link">
+                    <div class="parent-icon icon-color-11" id="arrow-icon">
+                        <i class="wl-primary-icon bx bx-cog"></i>
+                    </div>
+                    <div class="menu-title menu-title_settings" id="menu-title_settings">Einstellungen</div>
+                </a>
+                <ul class="mm-collapse" style="height: 0;">
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=allgemein"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Allgemein</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=rechtliches"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Rechtliches</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=willkommenSeite"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Willkommens-Seite</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=auszeichnungen"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Auszeichnungen / Badges</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=buchhaltung"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Buchhaltung</a>
+                    </li>
+                    <li>
+                        <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=ecommerce"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>ECommerce-Shop</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <style>
+                .mm-collapse {
+                    overflow: hidden;
+                    transition: height 0.3s ease;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Hol den aktuellen Pfad
+                    const currentUrl = window.location.href;
+                    const settingsLink = document.getElementById('settings-link');
+                    const submenu = settingsLink.closest('li').querySelector('.mm-collapse');
+                    
+                    // Wenn der aktuelle URL mit dem Einstellungen-Link übereinstimmt, Menü öffnen
+                    if (currentUrl.includes('/admin/white-label/einstellungen')) {
+                        settingsLink.setAttribute('aria-expanded', 'true');
+                        submenu.style.height = 'auto';  // Menü öffnen
+                    } else {
+                        settingsLink.setAttribute('aria-expanded', 'false');
+                        submenu.style.height = '0px';  // Menü geschlossen lassen
+                    }
+                });
+
+                document.getElementById('arrow-icon').addEventListener('click', function(e) {
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const expanded = submenu.style.height === 'auto';
+
+                    // Toggle submenu height
+                    submenu.style.height = expanded ? '0px' : 'auto';
+
+                    // Prevent default action of the link
+                    e.stopPropagation();
+                });
+
+                document.querySelectorAll('.menu-title_settings').forEach(function(title) {
+                    title.addEventListener('click', function() {
+                        // Führe die Aktion bei einem Klick auf den Text aus
+                        window.location.href = 'https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen';  // Link zu einer Seite deiner Wahl
+                    });
+                });
+
+                document.getElementById('settings-link').addEventListener('click', function(e) {
+                    // Prevent default link behavior (no redirection)
+                    e.preventDefault();
+
+                    // Close the dropdown if it's open
+                    const submenu = this.closest('li').querySelector('.mm-collapse');
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                    // Set the dropdown to closed and update aria-expanded attribute
+                    submenu.style.height = '0px';
+                    this.setAttribute('aria-expanded', 'false');
+                });
+            </script>
+        {% else %}
+            <li>
+                <a href="javascript:;" style="cursor: not-allowed;" class="bg-light-warning d-flex justify-content-between align-items-center" data-bs-toggle="tooltip" title="Leider fehlen Dir diese Berechtigungen">
+                    <div class="d-flex align-items-center">
+                        <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bx-cog"></i></div>
+                        <div class="menu-title ms-2">Einstellungen</div>
+                    </div>
+                    <div class="widgets-icons bg-light-warning text-warning rounded-circle">
+                        <i class="wl-primary-icon bx bx-lock"></i>
+                    </div>
+                </a>
+            </li>
+        {% endif %}
+        
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban">
+                <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bxs-dashboard"></i>
+                </div>
+                <div class="menu-title">Kanban-Board</div>
+            </a>
+        </li>
+
+        
+
+        <li class="menu-label" style="cursor: pointer;" onclick="window.location.href='https://dashboard.{{ WhiteLabel['Domain'] }}/kachel/Cockpit'">Cockpit</li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/profil">
+                <div class="parent-icon icon-color-4"><i class="wl-primary-icon bx bx-user"></i>
+                </div>
+                <div class="menu-title">Mein Profil</div>
+            </a>
+        </li>
+        <li class="">
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/übersicht/rechnungen" aria-expanded="false" class="has-arrow menu-toggle" id="settings-link-buchhaltung">
+                <div class="parent-icon icon-color-7" id="arrow-icon">
+                    <i class="wl-primary-icon bx bx-file"></i>
+                </div>
+                <div class="menu-title menu-title_buchhaltung" id="menu-title_buchhaltung">Buchhaltung</div>
+            </a>
+            <ul class="mm-collapse" style="height: 0;">
+                <li>
+                    <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/übersicht/rechnungen"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Rechnungen</a>
+                </li>
+                <li>
+                    <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/übersicht/angebote"><i class="wl-primary-icon bx bx-right-arrow-alt"></i>Angebote</a>
+                </li>
+            </ul>
+        </li>
+        
+        <style>
+            .mm-collapse {
+                overflow: hidden;
+                transition: height 0.3s ease;
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Hol den aktuellen Pfad
+                const currentUrl = window.location.href;
+                const settingsLink = document.getElementById('settings-link-buchhaltung');
+                const submenu = settingsLink.closest('li').querySelector('.mm-collapse');
+                
+                // Wenn der aktuelle URL mit dem Buchhaltung-Link übereinstimmt, Menü öffnen
+                if (currentUrl.includes('/cockpit/buchhaltung/')) {
+                    settingsLink.setAttribute('aria-expanded', 'true');
+                    submenu.style.height = 'auto';  // Menü öffnen
+                } else {
+                    settingsLink.setAttribute('aria-expanded', 'false');
+                    submenu.style.height = '0px';  // Menü geschlossen lassen
+                }
+            });
+
+            document.getElementById('arrow-icon').addEventListener('click', function(e) {
+                const submenu = this.closest('li').querySelector('.mm-collapse');
+                const expanded = submenu.style.height === 'auto';
+
+                // Toggle submenu height
+                submenu.style.height = expanded ? '0px' : 'auto';
+
+                // Prevent default action of the link
+                e.stopPropagation();
+            });
+
+            document.querySelectorAll('.menu-title_buchhaltung').forEach(function(title) {
+                title.addEventListener('click', function() {
+                    // Führe die Aktion bei einem Klick auf den Text aus
+                    window.location.href = 'https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/buchhaltung/übersicht/rechnungen';  // Link zu einer Seite deiner Wahl
+                });
+            });
+
+            document.getElementById('settings-link-buchhaltung').addEventListener('click', function(e) {
+                // Prevent default link behavior (no redirection)
+                e.preventDefault();
+
+                // Close the dropdown if it's open
+                const submenu = this.closest('li').querySelector('.mm-collapse');
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                // Set the dropdown to closed and update aria-expanded attribute
+                submenu.style.height = '0px';
+                this.setAttribute('aria-expanded', 'false');
+            });
+        </script>
+
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/ECommerce_Shop">
+                <div class="parent-icon icon-color-7"><i class="wl-primary-icon bx bx-diamond"></i>
+                </div>
+                <div class="menu-title">ECommerce Shop</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/live-chat">
+                <div class="parent-icon icon-color-3"> <i class="wl-primary-icon bx bx-conversation"></i>
+                </div>
+                <div class="menu-title">Live Chat</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/kalender">
+                <div class="parent-icon icon-color-8"> <i class="wl-primary-icon bx bx-calendar-check"></i>
+                </div>
+                <div class="menu-title">Kalender</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/tagebuch">
+                <div class="parent-icon icon-color-6"><i class="wl-primary-icon bx bx-task"></i>
+                </div>
+                <div class="menu-title">Tagebuch</div>
+            </a>
+        </li>
+
+
+
+        
+        <li class="menu-label" style="cursor: pointer;" onclick="window.location.href='https://dashboard.{{ WhiteLabel['Domain'] }}/kachel/Ernährungshalle'">Ernährung & Analyse</li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Tracking">
+                <div class="wl-primary-icon parent-icon icon-color-5">
+                    <svg class="wl-primary-icon" width="32px" height="32px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
+                        <path d="M11.1514 4.49326C11.2593 4.19709 11.5408 4 11.856 4H14.2655C14.6798 4 15.0155 3.66421 15.0155 3.25C15.0155 2.83579 14.6798 2.5 14.2655 2.5H11.856C10.9104 2.5 10.0657 3.09128 9.74198 3.97979L8.9832 6.0625H4C3.78832 6.0625 3.58649 6.15196 3.44432 6.30879C3.30215 6.46563 3.23288 6.67525 3.25361 6.88592L4.4178 18.7219C4.53109 19.8737 5.49966 20.7517 6.657 20.7517H9.29844C9.21459 20.5159 9.16895 20.2621 9.16895 19.9976V19.2517H6.657C6.27122 19.2517 5.94836 18.959 5.9106 18.5751L4.82739 7.5625H14.1996L13.8431 11.1875H15.3503L15.7734 6.88592C15.7941 6.67525 15.7249 6.46563 15.5827 6.30879C15.4405 6.15196 15.2387 6.0625 15.027 6.0625H10.5796L11.1514 4.49326Z"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9189 12.6887C11.6763 12.6887 10.6689 13.6961 10.6689 14.9387V15.9723C10.2929 16.0128 10 16.3312 10 16.718C10 17.1048 10.2929 17.4233 10.6689 17.4637V19.9988C10.6689 20.413 11.0047 20.7488 11.4189 20.7488H19.3291C19.7433 20.7488 20.0791 20.413 20.0791 19.9988V17.4639C20.4561 17.4244 20.75 17.1055 20.75 16.718C20.75 16.3305 20.4561 16.0117 20.0791 15.9721V14.9387C20.0791 13.6961 19.0717 12.6887 17.8291 12.6887H12.9189ZM18.5791 15.968V14.9387C18.5791 14.5245 18.2433 14.1887 17.8291 14.1887H12.9189C12.5047 14.1887 12.1689 14.5245 12.1689 14.9387V15.968H18.5791ZM12.1689 17.468V19.2488H18.5791V17.468H15.9801L15.1998 18.2483C14.9071 18.5411 14.4324 18.5412 14.1395 18.2486L13.358 17.468H12.1689Z"/>
+                    </svg>
+                </div>
+                <div class="menu-title">Ernährungs-Tracking</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Messungen">
+                <div class="parent-icon icon-color-7"><i class="wl-primary-icon bx bx-calculator"></i>
+                </div>
+                <div class="menu-title">Messungen / Ergebnisse</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Tagebuch">
+                <div class="parent-icon icon-color-6"><i class="wl-primary-icon bx bx-task"></i>
+                </div>
+                <div class="menu-title">Tagebuch</div>
+            </a>
+        </li>
+
+
+        
+        <li class="menu-label" style="cursor: pointer;" onclick="window.location.href='https://dashboard.{{ WhiteLabel['Domain'] }}/kachel/Trainingshalle'">Trainingshalle</li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/übungen">
+                <div class="parent-icon icon-color-5"><i class="wl-primary-icon bx bx-run"></i>
+                </div>
+                <div class="menu-title">Übungen</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/Trainingspläne">
+                <div class="parent-icon icon-color-7"><i class="wl-primary-icon bx bx-dumbbell"></i>
+                </div>
+                <div class="menu-title">Trainingspläne</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/Upload-Analyse">
+                <div class="parent-icon icon-color-7"><i class="wl-primary-icon bx bx-analyse"></i>
+                </div>
+                <div class="menu-title">Upload und Analyse</div>
+            </a>
+        </li>
+        <li>
+            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/trainingshalle/tagebuch">
+                <div class="parent-icon icon-color-6"><i class="wl-primary-icon bx bx-task"></i>
+                </div>
+                <div class="menu-title">Tagebuch</div>
+            </a>
+        </li>
+    </ul>
+    <!--end navigation-->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    placement: 'right' // Tooltip wird rechts angezeigt
+                });
+            });
+        });
+    </script>    
+</div>
+
+
+<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Dashboard</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.lineicons.com/3.0/lineicons.css">
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+
+                    <h4>Admin-Bereich</h4>
+					
+					<div class="row">
+						<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+								var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+									return new bootstrap.Tooltip(tooltipTriggerEl)
+								})
+							});
+						</script>
+
+
+
+						{% if "Voranmeldungen" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/voranmeldungen" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-user-check"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Voranmeldungen</h4>
+										<p class="mb-0">Hier können Super-Super-Admins die Voranmeldungen für die Personal-Peak-360 Version 2.0 sehen.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Voranmeldungen</h4>
+										<p class="mb-0">Hier können Super-Super-Admins die Voranmeldungen für die Personal-Peak-360 Version 2.0 sehen.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Benutzer" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/übersicht" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-group"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Benutzer</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) ihre Benutzer verwalten.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex mt-3" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Benutzer</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) ihre Benutzer verwalten.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Analyse" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/übersicht" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-chart"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Analyse</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) Analysen einsehen und verwalten.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex mt-3" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Analyse</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) Analysen einsehen und verwalten.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Buchhaltung" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/benutzer/übersicht" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-file"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Buchhaltung</h4>
+										<p class="mb-0">Hier können Admins ihre Buchhaltung einsehen und verwalten - dazu geht zum Beispiel das Anlegen von Mitgliedschaften und Rechnungen.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex mt-3" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Buchhaltung</h4>
+										<p class="mb-0">Hier können Admins ihre Buchhaltung einsehen und verwalten - dazu geht zum Beispiel das Anlegen von Mitgliedschaften und Rechnungen.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Einstellungen" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=allgemein" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-cog"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">(WhiteLabel-) Einstellungen</h4>
+										<p class="mb-0">Hier können Admins von White-Label Instanzen ihre Instanz verwalten - dazu gehört die Anpassung von Farben und Texten sowie der Logos und Grafiken.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex mt-3" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">(WhiteLabel-) Einstellungen</h4>
+										<p class="mb-0">Hier können Admins von White-Label Instanzen ihre Instanz verwalten - dazu gehört die Anpassung von Farben und Texten sowie der Logos und Grafiken.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+						{% if "Pläne" in rolle['Rechte'] %}
+							<div class="col-12 col-lg-3 d-flex mt-3">
+								<a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/white-label/einstellungen?quickstart=allgemein" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+									<div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+										<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+											<i class="bx bx-list-ol"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Pläne</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) Trainings- sowie Ernährungspläne erstellen, verwalten und ihren Nutzern zur Verfügung stellen.</p>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% else %}
+							<div class="col-12 col-lg-3 d-flex mt-3" style="cursor: not-allowed;">
+								<div class="card radius-15 w-100 h-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen. Sie können diese Funktion allerdings im Ecommerce-Shop freischalten!">
+									<div class="card-body text-center">
+										<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+										<i class="bx bx-lock"></i>
+										</div>
+										<h4 class="mb-0 font-weight-bold mt-3">Pläne</h4>
+										<p class="mb-0">Hier können Admins (und z.B. Trainer) Trainings- sowie Ernährungspläne erstellen, verwalten und ihren Nutzern zur Verfügung stellen.</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+
+                        <div class="col-12 col-lg-3 d-flex mt-3">
+                            <a href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban" class="w-100 h-100" style="text-decoration: none; color: inherit;">
+                                <div class="card radius-15 w-100 h-100" style="cursor: pointer;">
+                                    <div class="card-body text-center">
+                                    <div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+                                        <i class="bx bxs-dashboard"></i>
+                                    </div>
+                                    <h4 class="mb-0 font-weight-bold mt-3">Kanban-Board</h4>
+                                    <p class="mb-0">Hier können Admins (und z.B. Trainer) eigene Kanban-Boards anlegen und mit Nutzern teilen, um somit bspw. Projekte zu planen.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+					</div>									
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+
+		{{ footer | safe }}
+		
+	</div>
+	<!-- end wrapper -->
+	
+	{{ theme_customizer | safe }}
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/index.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}"
+			},
+			methods: {
+				showMessages() {
+				if (this.isErrorVisible) {
+					this.showError();
+				}
+				if (this.isSuccessVisible) {
+					this.showSuccess();
+				}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.success('{{ success }}');
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>
+</body>
+
+</html>

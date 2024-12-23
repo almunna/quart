@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Einstiegs-Fragebogen → Ernährung & Analyse</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/css/apexcharts.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+    {% if not ErnährungsAnalyse_Details['Status'] %}
+		<!-- Fake Button -->
+		<button id="fakeOpenModalButton" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modal_AktivitätsLevel_Festlegen"></button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="modal_AktivitätsLevel_Festlegen" tabindex="-1" aria-labelledby="modal_Erstellen" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog">
+				<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/aktualisieren/Level?Redirect_URL=https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Einstiegs-Fragebogen" method="post" id="Erstellen_FORM">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Aktivitäts-Level festlegen</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group mb-3">
+								<label for="Aktivitäts-Level">Aktivitäts-Level</label>
+								<select class="form-select" name="Aktivitäts-Level" id="Aktivitäts-Level">
+									<option value="Sitzend">Sitzend (geringe Aktivität)</option>
+									<option value="Stehend">Stehend (leichte Tätigkeit)</option>
+									<option value="Aktiv">Aktiv (regelmäßige Bewegung)</option>
+									<option value="Athlet">Athlet (intensives Training)</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Aktivitäts-Level festlegen</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<style>
+			/* Standard Body */
+			body {
+				cursor: default; /* Normaler Cursor */
+			}
+		
+			/* Wenn das Modal geöffnet ist */
+			body.modal-open {
+				overflow: hidden; /* Verhindert Scrollen */
+			}
+		
+			/* Zeige gesperrten Cursor für alle Inhalte außerhalb des Modals */
+			body.modal-open > *:not(.modal) {
+				pointer-events: none; /* Blockiert alle Klicks */
+				cursor: not-allowed; /* Zeigt gesperrten Cursor */
+			}
+		
+			/* Erlaube Interaktionen im Modal */
+			.modal {
+				pointer-events: auto; /* Aktiviert Interaktionen im Modal */
+				cursor: default; /* Normaler Cursor im Modal */
+			}
+		</style>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Zeige das Modal an
+				const fakeButton = document.getElementById('fakeOpenModalButton');
+				if (fakeButton) {
+					fakeButton.click();
+				}
+		
+				// Schließen des Modals verhindern
+				const modal = document.getElementById('modal_AktivitätsLevel_Festlegen');
+				if (modal) {
+					modal.addEventListener('hide.bs.modal', function (event) {
+						event.preventDefault(); // Verhindert das Schließen
+					});
+				}
+			});
+		</script>
+	{% endif %}
+
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="card radius-15 mb-3">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Einstiegs-Fragebogen</h4>
+                                <h6 class="mb-0">In der Ernährungs- und Analyse-Halle kannst Du unter anderem auf Deine Ernährungspläne zugreifen und Dein Ernährung tracken.</h6>
+                                <h6 class="mb-0">Bevor Du aber einen Ernährungsplan erhalten kannst, musst Du diesen Einstiegs-Fragebogen ausfüllen, sodass Dein Trainer einen auf Dich abgestimmten Plan anfertigen kann.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <script>
+                        // Funktion, die den Countdown initialisiert
+                        function initializeFlipDown() {
+                            // Überprüfen, ob das Ziel-Element existiert
+                            const flipdownElement = document.getElementById('flipdown2');
+                            if (!flipdownElement) {
+                                console.error('FlipDown element not found!');
+                                return;
+                            }
+                
+                            // Aktuelles Datum in Sekunden
+                            var currentDate = Math.floor(new Date().getTime() / 1000);
+                
+                            // 48 Stunden in Sekunden
+                            var hours48 = 48 * 60 * 60;
+                
+                            // Ziel-Datum (heute + 48 Stunden)
+                            var targetDate = currentDate + hours48;
+                
+                            // FlipDown initialisieren
+                            var flipdown = new FlipDown(targetDate, 'flipdown2', {
+                                headings: ["Tage", "Stunden", "Minuten", "Sekunden"]
+                            })
+                
+                            // Countdown starten
+                            .start()
+                
+                            // Funktion ausführen, wenn der Countdown endet
+                            .ifEnded(() => {
+                                console.log('Der Countdown ist abgelaufen!');
+                            });
+                
+                            // Version anzeigen
+                            var ver = document.getElementById('ver');
+                            if (ver) {
+                                ver.innerHTML = flipdown.version;
+                            }
+                        }
+                    </script>
+
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <!-- Content Container -->
+                            <div class="content-container">
+                                <div class="step" id="step-1">
+                                    <form id="personal-details-form" action="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Einstiegs-Fragebogen" method="post">
+                                        <div class="form-group mb-3">
+                                            <label for="Ernährungsgewohnheiten">Bitte beschreibe Deine aktuellen Ernährungsgewohnheiten:</label>
+                                            <textarea class="form-control" name="Ernährungsgewohnheiten" id="Ernährungsgewohnheiten" rows="5" placeholder="z.B. Drei Mahlzeiten am Tag, Snacks zwischendurch, keine festen Essenszeiten"></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+
+                                        <div class="form-group mb-3">
+                                            <label for="Diäten">Gibt es bestimmte Diäten, denen Du folgst?</label>
+                                            <textarea class="form-control" name="Diäten" id="Diäten" rows="5" placeholder="z.B. Keto, vegetarisch, vegan, Paleo-Diät, intermittierendes Fasten"></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="Lebensmittel_Meiden">Gibt es Lebensmittel, die Du meidest oder auf die Du allergisch reagierst?</label>
+                                            <textarea class="form-control" name="Lebensmittel_Meiden" id="Lebensmittel_Meiden" rows="5" placeholder="z.B. Laktose, Gluten, Nüsse"></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="Stresslevel">Wie hoch ist Dein aktuelles Stresslevel?</label>
+                                            <select class="form-select" name="Stresslevel" id="Stresslevel">
+                                                <option value="Niedrig">Niedrig</option>
+                                                <option value="Mittel">Mittel</option>
+                                                <option value="Hoch">Hoch</option>
+                                            </select>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="Gesundheit">Gibt es weitere gesundheitliche Aspekte, die wir berücksichtigen sollten?</label>
+                                            <textarea class="form-control" name="Gesundheit" id="Gesundheit" rows="5" placeholder="z.B. Chronische Krankheiten, Verletzungen, Medikamente"></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="Motivation">Was motiviert Sie, Ihre Ziele zu erreichen?</label>
+                                            <textarea class="form-control" name="Motivation" id="Motivation" rows="3" placeholder="z.B. Gesundheit verbessern, Ästhetik, Leistungssteigerung"></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+                                        
+                                        <div class="form-group mb-3">
+                                            <label for="Kommentar">Hast Du zusätzliche Hinweise an uns?</label>
+                                            <textarea class="form-control" name="Kommentar" id="Kommentar" rows="5" placeholder="Schreibe hier Feedback, Vorschläge oder Bewertungen."></textarea>
+                                            <div class="invalid-feedback">Dieses Feld kann leer bleiben, wenn Du keine Angaben machen möchtest.</div>
+                                        </div>
+
+                                        <button class="btn btn-primary" type="submit">Absenden</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

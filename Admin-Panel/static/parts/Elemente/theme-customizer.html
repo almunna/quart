@@ -1,0 +1,245 @@
+<!--start switcher-->
+<div class="switcher-body">
+    <button class="wl-primary-button btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="bx bx-cog bx-spin"></i></button>
+    <div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Design-Anpassungen</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body">
+        <h6 class="mb-0">Farbmodus</h6>
+        <hr>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lightmode" value="option1" checked>
+          <label class="form-check-label" for="lightmode">Hell</label>
+        </div>
+        <hr>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="darkmode" value="option2">
+          <label class="form-check-label" for="darkmode">Dunkel</label>
+        </div>
+      </div>
+    </div>
+</div>
+<!--end switcher-->
+
+
+
+
+
+
+<!--  STYLE FÜR WHITE-LABEL  -->
+<!--  Primär: {{ WhiteLabel['Primary'] }} (HEX)  -->
+<!--  Sekundär: {{ WhiteLabel['Secondary'] }} (HEX)  -->
+<!--  Tertiär: {{ WhiteLabel['Third'] }} (HEX)  -->
+<style>
+  /*
+      ANLEITUNG ZUR NUTZUNG DER WHITE-LABEL-STYLES
+      ============================================
+      
+      Verwende die folgenden Klassen, um die Farben in deinem Layout dynamisch anzupassen. 
+      Die Farben basieren auf den HEX-Werten, die im WhiteLabel-Dictionary definiert sind 
+      (Primär, Sekundär und Tertiär). Diese Klassen setzen die Farben als !important, 
+      um sicherzustellen, dass sie Priorität haben.
+
+      --- BUTTONS ---
+          - .wl-primary-button:
+              Verwende diese Klasse für Buttons, die die Primärfarbe nutzen sollen.
+              Beispiel: <button class="wl-primary-button">Primärer Button</button>
+          
+          - .wl-secondary-button:
+              Verwende diese Klasse für Buttons, die die Sekundärfarbe nutzen sollen.
+              Beispiel: <button class="wl-secondary-button">Sekundärer Button</button>
+      
+      --- LINKS ---
+          - .wl-primary-link:
+              Nutze diese Klasse für Links, die in der Primärfarbe erscheinen sollen.
+              Beispiel: <a href="#" class="wl-primary-link">Primärer Link</a>
+      
+      --- HINTERGRUND ---
+          - .wl-primary-bg:
+              Setze diese Klasse, um einen Hintergrund in der Primärfarbe zu haben.
+              Beispiel: <div class="wl-primary-bg">Primärer Hintergrund</div>
+          
+          - .wl-secondary-bg:
+              Setze diese Klasse, um einen Hintergrund in der Sekundärfarbe zu haben.
+              Beispiel: <div class="wl-secondary-bg">Sekundärer Hintergrund</div>
+          
+          - .wl-tertiary-bg:
+              Setze diese Klasse, um einen Hintergrund in der Tertiärfarbe zu haben.
+              Beispiel: <div class="wl-tertiary-bg">Tertiärer Hintergrund</div>
+      
+      --- RAHMEN ---
+          - .wl-primary-border:
+              Diese Klasse definiert einen Rahmen in der Primärfarbe.
+              Beispiel: <div class="wl-primary-border">Primärer Rahmen</div>
+          
+          - .wl-secondary-border:
+              Diese Klasse definiert einen Rahmen in der Sekundärfarbe.
+              Beispiel: <div class="wl-secondary-border">Sekundärer Rahmen</div>
+      
+      --- TEXTFARBEN ---
+          - .wl-primary-text:
+              Nutze diese Klasse, um Text in der Primärfarbe darzustellen.
+              Beispiel: <p class="wl-primary-text">Text in Primärfarbe</p>
+          
+          - .wl-secondary-text:
+              Nutze diese Klasse, um Text in der Sekundärfarbe darzustellen.
+              Beispiel: <p class="wl-secondary-text">Text in Sekundärfarbe</p>
+          
+          - .wl-tertiary-text:
+              Nutze diese Klasse, um Text in der Tertiärfarbe darzustellen.
+              Beispiel: <p class="wl-tertiary-text">Text in Tertiärfarbe</p>
+      
+      --- ICONS ---
+          - .wl-primary-icon:
+              Verwende diese Klasse, um Icons in der Primärfarbe zu färben.
+              Beispiel für SVG: <svg class="wl-primary-icon" width="24" height="24"><use xlink:href="#icon-id"></use></svg>
+              Beispiel für Font-Icon: <i class="wl-primary-icon fas fa-check"></i>
+          
+          - .wl-secondary-icon:
+              Verwende diese Klasse, um Icons in der Sekundärfarbe zu färben.
+              Beispiel: <svg class="wl-secondary-icon" width="24" height="24"><circle cx="12" cy="12" r="10"></circle></svg>
+          
+          - .wl-tertiary-icon:
+              Verwende diese Klasse, um Icons in der Tertiärfarbe zu färben.
+              Beispiel: <i class="wl-tertiary-icon fas fa-star"></i>
+      
+      ============================================
+  */
+
+
+  /* Farben aus dem WhiteLabel-Dictionary */
+  :root {
+      --primary-color: {{ WhiteLabel['Primary'] }};
+      --secondary-color: {{ WhiteLabel['Secondary'] }};
+      --tertiary-color: {{ WhiteLabel['Third'] }};
+  }
+
+  /* Buttons */
+  .wl-primary-button {
+      background-color: var(--primary-color) !important;
+      color: #ffffff !important;
+      border: 1px solid var(--primary-color) !important;
+  }
+
+  .wl-primary-button:hover {
+      background-color: #ffffff !important;
+      color: var(--primary-color) !important;
+  }
+
+  .wl-secondary-button {
+      background-color: var(--secondary-color) !important;
+      color: #ffffff !important;
+      border: 1px solid var(--secondary-color) !important;
+  }
+
+  .wl-secondary-button:hover {
+      background-color: #ffffff !important;
+      color: var(--secondary-color) !important;
+  }
+
+  /* Links */
+  .wl-primary-link {
+      color: var(--primary-color) !important;
+      text-decoration: none !important;
+  }
+
+  .wl-primary-link:hover {
+      color: var(--secondary-color) !important;
+  }
+
+  /* Hintergrundfarben */
+  .wl-primary-bg {
+      background-color: var(--primary-color) !important;
+      color: #ffffff !important;
+  }
+
+  .wl-secondary-bg {
+      background-color: var(--secondary-color) !important;
+      color: #ffffff !important;
+  }
+
+  .wl-tertiary-bg {
+      background-color: var(--tertiary-color) !important;
+      color: #ffffff !important;
+  }
+
+  /* Rahmen */
+  .wl-primary-border {
+      border: 2px solid var(--primary-color) !important;
+  }
+
+  .wl-secondary-border {
+      border: 2px solid var(--secondary-color) !important;
+  }
+
+  /* Textfarben */
+  .wl-primary-text {
+      color: var(--primary-color) !important;
+  }
+
+  .wl-secondary-text {
+      color: var(--secondary-color) !important;
+  }
+
+  .wl-tertiary-text {
+      color: var(--tertiary-color) !important;
+  }
+
+  /* Icons */
+  .wl-primary-icon {
+      fill: var(--primary-color) !important;
+      color: var(--primary-color) !important;
+  }
+
+  .wl-secondary-icon {
+      fill: var(--secondary-color) !important;
+      color: var(--secondary-color) !important;
+  }
+
+  .wl-tertiary-icon {
+      fill: var(--tertiary-color) !important;
+      color: var(--tertiary-color) !important;
+  }
+</style>
+
+<style>
+  /* ÄNDERUNG DER OIGINALEN STYLES */
+
+  .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+      background-color: var(--primary-color) !important;
+  }
+
+  .msg-count {
+      background-color: var(--primary-color) !important;
+  }
+
+  .dropdown-lg .msg-header {
+      background: var(--primary-color) !important;
+  }
+
+  .btn-primary {
+      color: #fff;
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+  }
+
+  .form-check-input:checked {
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+  }
+  
+  .sidebar-wrapper {
+    background: var(--secondary-color) !important;
+  }
+
+  .page-item.active .page-link {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+
+  .sidebar-header {
+    border-right: 0px solid #e4e4e4 !important;
+  }
+</style>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Upload & Analyse - Traingingshalle → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+
+    <!-- Füge das CSS für Select2 hinzu -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Füge das JavaScript für Select2 hinzu -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					
+					{% for anfrage in Anfragen %}
+						{% if anfrage['WhiteLabel'] == {'key': WhiteLabel['id'], 'collection': 'WhiteLabel' } %}
+							<!-- Modal -->
+							<div class="modal fade" id="modalDetails-{{ anfrage['id'] }}" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Anfrage vom {{ anfrage['date_created']|format_datetime("%Y-%m-%dT%H:%M:%S.%fZ", "%d.%m.%Y um %H:%M Uhr") }}</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+											<div class="form-group mb-3">
+												<label for="Nutzer">Nutzer</label>
+												<input type="text" class="form-control" name="Nutzer" id="Nutzer" value="{{ anfrage['Kunden_Details']['Vorname'] }} {{ anfrage['Kunden_Details']['Nachname'] }}" readonly>
+											</div>
+
+											<div class="form-group mb-3">
+												<label for="Video">Video</label>
+												<div class="exercise-video">
+													<video src="https://cdn.{{ WhiteLabel['Domain'] }}/trainingshalle/{{ anfrage['Video'] }}" class="w-100" controls>
+														<source type="video/mp4">
+														Dein Browser unterstützt das Video-Element nicht.
+													</video>
+												</div>
+											</div>
+
+											<div class="form-group mb-3">
+												<label for="Nachricht">Nachricht</label>
+												<textarea class="form-control" name="Nachricht" id="Nachricht" rows="8" readonly>
+													{{ anfrage['Nachricht'] | safe }}
+												</textarea>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					{% endfor %}
+
+
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Analyse-Anfragen</h4>
+								<h6 class="mb-0">White-Label Instanz: '{{ WhiteLabel['Bezeichnung'] }}'</h6>
+								<hr/>
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary mb-0" data-bs-toggle="modal" data-bs-target="#createÜbung">Video an Nutzer schicken</button>
+	
+								<!-- Modal -->
+								<div class="modal fade" id="createÜbung" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/Upload-Analyse" method="post" id="Erstellen_FORM" enctype="multipart/form-data">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">Video an Nutzer schicken</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+													<div class="form-group mb-3">
+														<label for="Nutzer">Nutzer</label>
+														<select class="form-select" name="Nutzer" id="Nutzer">
+															<option value="Keine">Ich beziehe mich auf keinen speziellen Nutzer</option>
+															{% for Nutzer in Nutzer_Liste %}
+																<option value="{{ Nutzer['id'] }}">{{ Nutzer['Vorname'] }} {{ Nutzer['Nachname'] }} ({{ Nutzer['Benutzername'] }})</option>
+															{% endfor %}
+														</select>
+													</div>
+													
+													<div class="form-group mb-3" id="anfrage-group">
+														<label for="Anfrage">Antwort auf Anfrage:</label>
+														<select class="form-select" name="Anfrage" id="Anfrage">
+															<option value="Keine">Ich beziehe mich auf keine spezielle Anfrage</option>
+															{% for anfrage in Anfragen %}
+																{% if anfrage['Typ'] == "Kunde" and anfrage['WhiteLabel'] == {'key': WhiteLabel['id'], 'collection': 'WhiteLabel' } %}
+																	<option 
+																		data-nutzer-id="{{ anfrage['Kunden_Details']['id'] }}" 
+																		value="{{ anfrage['id'] }}">
+																		Anfrage vom {{ anfrage['date_created']|format_datetime("%Y-%m-%dT%H:%M:%S.%fZ", "%d.%m.%Y um %H:%M Uhr") }} ({{ anfrage['Kunden_Details']['Benutzername'] }})
+																	</option>
+																{% endif %}
+															{% endfor %}
+														</select>
+													</div>
+
+													<script>
+														document.addEventListener('DOMContentLoaded', function () {
+															const nutzerDropdown = document.getElementById('Nutzer');
+															const anfrageDropdown = document.getElementById('Anfrage');
+													
+															// Event-Listener für das Nutzer-Dropdown
+															nutzerDropdown.addEventListener('change', function () {
+																if (this.value !== "Keine") {
+																	// Setze die Anfrage-Dropdown-Auswahl zurück
+																	anfrageDropdown.value = "Keine";
+																}
+															});
+													
+															// Event-Listener für das Anfrage-Dropdown
+															anfrageDropdown.addEventListener('change', function () {
+																if (this.value !== "Keine") {
+																	// Setze die Nutzer-Dropdown-Auswahl zurück
+																	nutzerDropdown.value = "Keine";
+																}
+															});
+														});
+													</script>
+
+													<div class="form-group mb-3">
+														<label for="Video">Video</label>
+														<input type="file" class="form-control" name="Video" id="Video" accept="video/mp4, video/avi, video/mov, video/x-matroska, video/*">
+													</div>
+	
+													<div class="form-group mb-3">
+														<label for="Nachricht">Nachricht</label>
+														<textarea class="form-control" name="Nachricht" id="Nachricht" placeholder="Anbei findest Du die richtige Ausführung für die Übung 'Liegestütze'"></textarea>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+													<button type="submit" class="btn btn-primary">Video schicken</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+
+					<div class="card radius-15">
+						<div class="card-body">
+							<ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+								<li class="nav-item" role="presentation"> <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Videos von Kunden</a>
+								</li>
+								<li class="nav-item" role="presentation"> <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Videos von uns</a>
+								</li>
+							</ul>
+							<div class="tab-content" id="pills-tabContent">
+								<div class="tab-pane fade active show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+									<div class="card-title">
+										<h4 class="mb-0">Übersicht der Kunden-Anfragen</h4>
+									</div>
+									
+									<style>
+										/* Setze den z-index für das Select2-Dropdown höher als den z-index des Modals */
+										.select2-container--open {
+											z-index: 1050 !important; /* Normalerweise ist der Modal z-index 1050 */
+										}
+		
+										.select2-container {
+											z-index: 3000 !important; /* Ein höherer Wert als der Modal */
+										}
+									</style>
+		
+									<div class="table-responsive">
+										<table id="example" class="table table-striped table-bordered" style="width:100%">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Kunde</th>
+													<th>Status</th>
+													<th>Aktionen</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for anfrage in Anfragen %}
+													{% if anfrage['Typ'] == "Kunde" and anfrage['WhiteLabel'] == {'key': WhiteLabel['id'], 'collection': 'WhiteLabel' } %}
+														<tr>
+															<td>Anfrage vom {{ anfrage['date_created']|format_datetime("%Y-%m-%dT%H:%M:%S.%fZ", "%d.%m.%Y um %H:%M Uhr") }}</td>
+															<td>{{ anfrage['Kunden_Details']['Vorname'] }} {{ anfrage['Kunden_Details']['Nachname'] }}</td>
+															<td>{{ anfrage['Status'] }}</td>
+															<td>
+																<button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetails-{{ anfrage['id'] }}">Details ansehen / Bearbeiten</button>
+															</td>
+														</tr>
+													{% endif %}
+												{% endfor %}
+											</tbody>
+											<tfoot>
+												<th>Name</th>
+												<th>Kunde</th>
+												<th>Status</th>
+												<th>Aktionen</th>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+									<div class="card-title">
+										<h4 class="mb-0">Übersicht Eurer Videos</h4>
+									</div>
+									
+									<style>
+										/* Setze den z-index für das Select2-Dropdown höher als den z-index des Modals */
+										.select2-container--open {
+											z-index: 1050 !important; /* Normalerweise ist der Modal z-index 1050 */
+										}
+		
+										.select2-container {
+											z-index: 3000 !important; /* Ein höherer Wert als der Modal */
+										}
+									</style>
+		
+									<div class="table-responsive">
+										<table id="example" class="table table-striped table-bordered" style="width:100%">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Muskelgruppen</th>
+													<th>Typ</th>
+													<th>Aktionen</th>
+												</tr>
+											</thead>
+											<tbody>
+												<!-- HIER DANN DIE EINTRÄGE FÜR DIE TABELLE -->
+											</tbody>
+											<tfoot>
+												<th>Name</th>
+												<th>Muskelgruppen</th>
+												<th>Typ</th>
+												<th>Aktionen</th>
+											</tfoot>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.multiple-select').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: "Muskelgruppen auswählen...",
+                allowClear: true // Ermöglicht das Entfernen der Auswahl
+            });
+
+
+            $('#suchbegriffe').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: "Füge Suchbegriffe hinzu",
+                tags: true,  // Ermöglicht die Eingabe eigener Tags
+                tokenSeparators: [',', ' '],  // Trennzeichen für die Eingabe von Suchbegriffen
+                allowClear: true,  // Ermöglicht das Löschen von Suchbegriffen
+                maximumInputLength: 50  // Maximale Länge der Suchbegriffe (optional)
+            });
+        });
+    </script>
+
+	
+
+	{% for übung in Übungen %}
+		<script>
+			$(document).ready(function() {
+				$('#multiple-select_DETAILS_{{ übung["id"] }}').select2({
+					theme: 'bootstrap4',
+					width: '100%',
+					placeholder: "Muskelgruppen auswählen...",
+					allowClear: true // Ermöglicht das Entfernen der Auswahl
+				});
+
+
+				$('#suchbegriffe_DETAILS_{{ übung["id"] }}').select2({
+					theme: 'bootstrap4',
+					width: '100%',
+					placeholder: "Füge Suchbegriffe hinzu",
+					tags: true,  // Ermöglicht die Eingabe eigener Tags
+					tokenSeparators: [',', ' '],  // Trennzeichen für die Eingabe von Suchbegriffen
+					allowClear: true,  // Ermöglicht das Löschen von Suchbegriffen
+					maximumInputLength: 50  // Maximale Länge der Suchbegriffe (optional)
+				});
+			});
+		</script>
+	{% endfor %}
+
+    
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

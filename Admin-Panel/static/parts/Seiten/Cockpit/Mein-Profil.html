@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Mein Profil → Cockpit</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		
+        {{ sidebar | safe }}
+
+        {{ header | safe }}
+		
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+
+                    <div class="modal fade" id="badgeDetails" tabindex="-1" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog modal-xl">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Badge-Übersicht für {{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}</h5>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == 'Willkommen' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="Willkommen" {% if nutzer['Nutzer_Level'] == "Willkommen" %}disabled{% endif %} style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_Willkommen'] }}" 
+																alt="Badge Willkommen" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Willkommen</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_Willkommen_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "Willkommen" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == '2' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="2" {% if nutzer['Nutzer_Level'] == "2" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_2'] }}" 
+																alt="Badge 2" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 1</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_2_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "2" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer['Nutzer_Level'] == "Willkommen" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == '3' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="3" {% if nutzer['Nutzer_Level'] == "3" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_3'] }}" 
+																alt="Badge 3" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 2</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_3_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "3" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer['Nutzer_Level'] == "2" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == '4' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="4" {% if nutzer['Nutzer_Level'] == "4" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_4'] }}" 
+																alt="Badge 4" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 3</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_4_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "4" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer['Nutzer_Level'] == "3" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == '5' %}selected{% endif %}">
+												<div class="card-body">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="5" {% if nutzer['Nutzer_Level'] == "5" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_5'] }}" 
+																alt="Badge 5" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 4</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_5_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "5" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer['Nutzer_Level'] == "4" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2 mb-3">
+											<div class="card badge-card radius-15 text-center {% if nutzer['Nutzer_Level'] == '6' %}selected{% endif %}">
+												<div class="card-body" style="cursor: pointer;">
+													<label>
+														<input type="checkbox" name="badge" id="badge" value="6" {% if nutzer['Nutzer_Level'] == "6" %}disabled{% endif %}  style="display: none;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_6'] }}" 
+																alt="Badge 6" class="img-fluid" style="height: 100px; width: auto;">
+														<h6 class="mt-2">Stufe 5</h6>
+														<p><b>Benötigte Punkte:</b> {{ WhiteLabel['Badge_6_Punkte'] }}</p>
+														{% if nutzer['Nutzer_Level'] == "6" %}
+															<span class="badge rounded-pill bg-dark">Aktuell erreichtes Level</span>
+														{% endif %}
+														{% if nutzer['Nutzer_Level'] == "5" %}
+															<span class="badge rounded-pill bg-warning">Nächstes Level</span>
+														{% endif %}
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<script>
+									function selectBadge(radio) {
+										// Entferne die 'selected'-Klasse von allen Karten
+										const cards = document.querySelectorAll('.badge-card');
+										cards.forEach(card => card.classList.remove('selected'));
+										
+										// Füge die 'selected'-Klasse zur ausgewählten Karte hinzu
+										const selectedCard = radio.closest('.badge-card');
+										selectedCard.classList.add('selected');
+									}
+								</script>
+
+								<style>
+									.badge-card {
+										height: 100%; /* Setzt die Höhe der Card auf 100% */
+										border: 2px solid transparent; /* Standard Rahmen */
+										border-radius: 8px; /* Abrundung der Ecken */
+										transition: border-color 0.3s; /* Sanfte Übergänge */
+										cursor: pointer; /* Zeiger ändern, um anzuzeigen, dass die Karte klickbar ist */
+									}
+								
+									.badge-card.selected {
+										border-color: #007bff; /* Rahmenfarbe für die ausgewählte Karte */
+										background-color: rgba(0, 123, 255, 0.1); /* Helle Hintergrundfarbe für bessere Sichtbarkeit */
+									}
+								</style>
+
+								<div class="modal-footer">
+									<a class="btn btn-secondary" 
+										data-bs-dismiss="modal" 
+										data-bs-toggle="tooltip" 
+										data-bs-placement="bottom">
+										Übersicht schließen
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<!--end breadcrumb-->
+					<div class="user-profile-page">
+						<div class="card radius-15">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12 col-lg-7 border-right">
+										<div class="d-md-flex align-items-center">
+											<div class="mb-md-0 mb-3">
+												<img src="https://cdn.{{ WhiteLabel['Domain'] }}/avatar/{{ nutzer['Avatar'] }}" class="rounded-circle shadow" width="130" height="130" alt="" />
+											</div>
+											<div class="ms-md-4 flex-grow-1">
+												<div class="d-flex align-items-center mb-1">
+													<h4 class="mb-0">{{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}</h4>
+											        <img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Badge_' + nutzer['Nutzer_Level']] }}" data-bs-toggle="modal" data-bs-target="#badgeDetails" style="height: 75px; width: auto; cursor: pointer;" alt="Badge" class="mb-0">
+												</div>
+                                                {% if nutzer['Rolle'] == "Super-Admin" %}
+                                                    <p class="designattion mb-0"><span class="badge bg-danger">{{nutzer['Rolle']}}</span></p>
+                                                {% elif nutzer['Rolle'] == "Lower-Admin" %}
+                                                    <p class="designattion mb-0"><span class="badge bg-warning">{{nutzer['Rolle']}}</span></p>
+                                                {% else %}
+                                                    <p class="designattion mb-0"><span class="badge bg-secondary">Nutzer</span></p>
+                                                {% endif %}
+
+                                                {% if referrer %}
+                                                    <br>
+												    <a class="text-primary"><i class='bx bx-user'></i> <b>Erstellt von: </b> {{ referrer['Vorname'] }} {{ referrer['Nachname'] }} ({{ referrer['Rolle'] }})</a>
+                                                {% endif %}
+                                                <br>
+												<a class="text-primary"><i class='bx bx-timer'></i> <b>Erstellt am: </b> {{ nutzer['Erstellung'] }}</a>
+											</div>
+										</div>
+									</div>
+									<div class="col-12 col-lg-5">
+
+                                        {% if nutzer['Vorname'] and nutzer['Vorname'] and nutzer['Geburtsdatum'] and nutzer['Groesse'] and nutzer['Strasse'] and nutzer['Hausnummer'] and nutzer['PLZ'] and nutzer['Ort'] and nutzer['EMail'] and nutzer['Telefon'] %}
+                                            <div class="alert alert-info" role="alert">
+                                                <table class="table table-sm table-borderless mt-md-0 mt-3">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Vor- und Nachname:</th>
+                                                            <td>{{nutzer['Vorname']}} and {{nutzer['Vorname']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Geburtsdatum:</th>
+                                                            <td>{{nutzer['Geburtsdatum']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Größe (cm):</th>
+                                                            <td>{{nutzer['Groesse']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Adresse:</th>
+                                                            <td>{{nutzer['Strasse']}} {{nutzer['Hausnummer']}}, {{nutzer['PLZ']}} {{nutzer['Ort']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>E-Mal Adresse:</th>
+                                                            <td>{{nutzer['EMail']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Telefon:</th>
+                                                            <td>{{nutzer['Telefon']}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-warning" role="alert">
+                                                <h4 class="alert-heading">Profil wurde nicht vervollständigt</h4>
+                                                <p>{{ nutzer['Vorname'] }}, Du hast leider Dein Profil noch nicht vervollständigt.</p>
+                                                <hr>
+                                                <p class="mb-0">Bitte vervollständige es jetzt, um den vollen Funktionsumfang zu nutzen:</p>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDatenVervollstaendigen">Daten vervollständigen</button>
+                                            </div>
+                                        {% endif %}
+											<!-- Modal -->
+											<div class="modal fade" id="modalDatenVervollstaendigen" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog" style="display: none;">
+												<div class="modal-dialog">
+                                                    <form id="personalInfoForm">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Daten-Vervollständigung für '{{ nutzer['Benutzername'] }}'</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <!-- Vorname -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="firstName">Vorname</label>
+                                                                    <input type="text" class="form-control" id="firstName" name="firstName" 
+                                                                           value="{{ nutzer['Vorname'] if nutzer['Vorname'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- Nachname -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="lastName">Nachname</label>
+                                                                    <input type="text" class="form-control" id="lastName" name="lastName" 
+                                                                           value="{{ nutzer['Nachname'] if nutzer['Nachname'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- Geburtsdatum -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="birthDate">Geburtsdatum</label>
+                                                                    <input type="text" class="form-control" id="birthDate" name="birthDate" placeholder="dd.mm.yyyy" 
+                                                                           value="{{ nutzer['Geburtsdatum'] if nutzer['Geburtsdatum'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- Größe -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="height">Größe (in cm)</label>
+                                                                    <input type="number" class="form-control" id="height" name="height" min="1" 
+                                                                           value="{{ nutzer['Groesse'] if nutzer['Groesse'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- Adresse (Straße, Hausnummer, PLZ, Ort) -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="street">Straße und Hausnummer</label>
+                                                                    <input type="text" class="form-control" id="street" name="street" 
+                                                                           value="{{ nutzer['Strasse'] if nutzer['Strasse'] is not none else '' }} {{ nutzer['Hausnummer'] if nutzer['Hausnummer'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <div class="form-group">
+                                                                    <label class="required" for="postalCode">PLZ</label>
+                                                                    <input type="text" class="form-control" id="postalCode" name="postalCode" 
+                                                                           value="{{ nutzer['PLZ'] if nutzer['PLZ'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <div class="form-group">
+                                                                    <label class="required" for="city">Ort</label>
+                                                                    <input type="text" class="form-control" id="city" name="city" 
+                                                                           value="{{ nutzer['Ort'] if nutzer['Ort'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- E-Mail -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="email">E-Mail</label>
+                                                                    <input type="email" class="form-control" id="email" name="email" 
+                                                                           value="{{ nutzer['EMail'] if nutzer['EMail'] is not none else '' }}" required>
+                                                                </div>
+                                                            
+                                                                <!-- Telefonnummer (mit Länderflaggen und Vorwahl) -->
+                                                                <div class="form-group">
+                                                                    <label class="required" for="phoneNumber">Telefonnummer</label>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-prepend">
+                                                                            <select class="form-control" id="countryCode" name="countryCode" required>
+                                                                                <option value="+49" {% if nutzer['Landesvorwahl'] == '+49' %} selected {% endif %}>🇩🇪 +49</option>
+                                                                                <option value="+1" {% if nutzer['Landesvorwahl'] == '+1' %} selected {% endif %}>🇺🇸 +1</option>
+                                                                                <option value="+44" {% if nutzer['Landesvorwahl'] == '+44' %} selected {% endif %}>🇬🇧 +44</option>
+                                                                                <!-- Weitere Länder hinzufügen -->
+                                                                            </select>
+                                                                        </div>
+                                                                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="123 456789" 
+                                                                               value="{{ nutzer['Telefon'] if nutzer['Telefon'] is not none else '' }}" required>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                                                                <button type="submit" class="btn btn-primary">Vervollständigung übernehmen</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+												</div>
+											</div>
+									</div>
+								</div>
+								<!--end row-->
+
+                                <style>
+                                    /* PFLICHTFELDER IM FORMULAR */
+                                    .required:after {
+                                        content: " (*)";
+                                        color: red;
+                                    }
+                                </style>
+
+                                <br>
+                                <br>
+								<ul class="nav nav-pills nav-fill">
+									<li class="nav-item"> 
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#Statistik">
+                                            <span class="p-tab-name">Nutzungs-Statistik</span>
+                                            <i class='bx bx-stats font-24 d-sm-none'></i>
+                                        </a>
+									</li>
+									<li class="nav-item"> 
+                                        <a class="nav-link" data-bs-toggle="tab" href="#Rechte">
+                                            <span class="p-tab-name">Zugangs-Berechtigungen</span>
+                                            <i class='bx bx-key font-24 d-sm-none'></i>
+                                        </a>
+									</li>
+									<li class="nav-item"> 
+                                        <a class="nav-link" data-bs-toggle="tab" href="#ErnährungUndAnalyse">
+                                            <span class="p-tab-name">Ernährung & Analyse</span>
+                                            <i class='bx bx-question-mark font-24 d-sm-none'></i>
+                                        </a>
+									</li>
+									<li class="nav-item"> 
+                                        <a class="nav-link" data-bs-toggle="tab" href="#Trainingshalle">
+                                            <span class="p-tab-name">Trainingshalle</span>
+                                            <i class='bx bx-question-mark font-24 d-sm-none'></i>
+                                        </a>
+									</li>
+								</ul>
+								<div class="tab-content mt-3">
+									<div class="tab-pane fade show active" id="Statistik">
+                                        <div class="row">
+                                            <div class="col-12 col-lg-3 d-flex">
+                                                <div class="card radius-15 w-100 bg-light-info">
+                                                    <div class="card-body text-center">
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            {{ online_Statistik['heute online']['value'] | to_float }}
+                                                        </h3>
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            <span class="badge bg-secondary">{{ online_Statistik['heute online']['unit'] }}</span>
+                                                        </h3>
+                                                        <h6 class="mb-0 mt-2">heute online</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-3 d-flex">
+                                                <div class="card radius-15 w-100 bg-light-info">
+                                                    <div class="card-body text-center">
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            {{ online_Statistik['gestern online']['value'] | to_float }}
+                                                        </h3>
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            <span class="badge bg-secondary">{{ online_Statistik['gestern online']['unit'] }}</span>
+                                                        </h3>
+                                                        <h6 class="mb-0 mt-2">gestern online</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-3 d-flex">
+                                                <div class="card radius-15 w-100 bg-light-info">
+                                                    <div class="card-body text-center">
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            {{ online_Statistik['letzten 7 Tagen online']['value'] | to_float }}
+                                                        </h3>
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            <span class="badge bg-secondary">{{ online_Statistik['letzten 7 Tagen online']['unit'] }}</span>
+                                                        </h3>
+                                                        <h6 class="mb-0 mt-2">in den letzten 7 Tagen online</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-3 d-flex">
+                                                <div class="card radius-15 w-100 bg-light-info">
+                                                    <div class="card-body text-center">
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            {{ online_Statistik['diesen Monat online']['value'] | to_float }}
+                                                        </h3>
+                                                        <h3 class="mb-0 font-weight-bold">
+                                                            <span class="badge bg-secondary">{{ online_Statistik['diesen Monat online']['unit'] }}</span>
+                                                        </h3>
+                                                        <h6 class="mb-0 mt-2">in den letzten 30 Tagen online</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                        
+                                        
+                                                            
+                                        <div class="card radius-15">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h4 class="mb-0">Aufgerufene Inhalte bzw. Seiten</h4>
+                                                    
+                                                    <label for="date_filter" class="mt-2">Filter nach Datum:</label>
+                                                    <select id="date_filter" class="form-control">
+                                                        <!-- Die Optionen werden dynamisch gefüllt -->
+                                                    </select>
+                                                </div>
+                                                <hr/>
+                                                <div class="table-responsive">
+                                                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Datum</th>
+                                                                <th>Uhrzeit</th>
+                                                                <th>Path</th>
+                                                                <th>URL</th>
+                                                                <th>Dauer</th>
+                                                                <th>Aktionen</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for data in statistik_data %}
+                                                                <tr>
+                                                                    <td>{{ data['Daten']['Datum'] | format_date }}</td>
+                                                                    <td>{{ data['Daten']['Uhrzeit'] }} Uhr</td>
+                                                                    <td>{{ data['Daten']['Path'] }}</td>
+                                                                    <td><a href="{{ data['Daten']['URL'] | replace('http://','https://') }}">{{ data['Daten']['URL'] | replace('http://','https://') }}</a></td>
+                                                                    <td>{{ data['Verweil_Dauer'] | format_time_VerweilDauer }}</td>
+                                                                    <td><button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetails-{{ data['id'] }}">Details ansehen</button></td>
+                                                                </tr>
+
+                                                                <div class="modal fade" id="modalDetails-{{ data['id'] }}" tabindex="-1" aria-labelledby="modalDetails-{{ data['id'] }}Label" style="display: none;" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="modalDetails-{{ data['id'] }}Label">Details zu Seitenaufruf #{{ data['id'] }}</h5>
+                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+                                                                                <a >Der Aufruf hat am {{ data['Daten']['Datum'] | format_date }} um {{ data['Daten']['Uhrzeit'] }} Uhr stattgefunden{% if data['Verweil_Dauer'] | format_time_VerweilDauer != "Nicht bekannt"%} und hat {{ data['Verweil_Dauer'] | format_time_VerweilDauer }} gedauert{% endif %}.</a>
+                                                                                <br>
+                                                                                <a target="_blank" href="https://www.infobyip.com/ip-{{ data['Daten']['IP'] }}.html"> <i class='bx bx-link-external'></i> Der Aufruf fand über die IP-Adresse {{ data['Daten']['IP'] }} statt.</a>
+                                                                                
+                                                                                {% if data['Daten']['Gerät'] %}
+                                                                                    <br>
+                                                                                    <br>
+                                                                                    <a>Der Aufruf fand wie folgt statt:</a>
+                                                                                    <ul>
+                                                                                        <li><b>Browser</b>: {{ data['Daten']['Gerät']['Browser'] }}</li>
+                                                                                        <li><b>Betriebssystem</b>: {{ data['Daten']['Gerät']['Betriebssystem'] }}</li>
+                                                                                        <li><b>Geräte-Art</b>: {{ data['Daten']['Gerät']['Gerät'] }}</li>
+                                                                                        <li><b>Plattform</b>: {{ data['Daten']['Gerät']['Plattform'] }}</li>
+                                                                                    </ul>
+                                                                                {% endif %}
+
+                                                                                
+                                                                                <br>
+                                                                                {% set instanz = data['Daten']['Instanz'] %}
+                                                                                <a>
+                                                                                    Der Aufruf fand über die WhiteLabel-Instanz 
+                                                                                    {% for item in WhiteLabel_Liste %}
+                                                                                        {% if instanz in item %}
+                                                                                            '{{ item[instanz]['Bezeichnung'] }}'
+                                                                                        {% endif %}
+                                                                                    {% endfor %} 
+                                                                                    statt.
+                                                                                </a>
+
+                                                                                
+                                                                                <ul>
+                                                                                    <li><b>Registrierte Domain</b>: {{ instanz }}</li>
+                                                                                </ul>
+
+
+                                                                                <br>
+                                                                                {% if data['Daten']['Fehlermeldung'] %}
+                                                                                    <br>
+                                                                                    <br>
+                                                                                    <a>
+                                                                                        Bei dem Aufruf gab es folgende Fehlermeldung: <br>
+                                                                                        <div class="alert alert-danger m-1" style="word-wrap: break-word; white-space: normal;" role="alert">
+                                                                                            {{ data['Daten']['Fehlermeldung'] }}
+                                                                                        </div>
+                                                                                    </a>
+                                                                                {% endif %}
+                                                                                {% if data['Daten']['Erfolgsmeldung'] %}
+                                                                                    <br>
+                                                                                    <br>
+                                                                                    <a>
+                                                                                        Bei dem Aufruf gab es folgende Erfolgsmeldung: <br>
+                                                                                        <div class="alert alert-success m-1" style="word-wrap: break-word; white-space: normal;" role="alert">
+                                                                                            {{ data['Daten']['Erfolgsmeldung'] }}
+                                                                                        </div>
+                                                                                    </a>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Datum</th>
+                                                                <th>Uhrzeit</th>
+                                                                <th>Path</th>
+                                                                <th>URL</th>
+                                                                <th>Dauer</th>
+                                                                <th>Aktionen</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+									<div class="tab-pane fade" id="Rechte">
+                                        <ul class="list-group">
+                                            {% if "Admin-Bereich" in Rollen_Info['Rechte'] %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent1" name="parent1" class="parent" checked disabled> Admin-Bereich
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Benutzer" name="ADMIN_Benutzer" class="child parent1" checked disabled> Benutzer
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Analyse" name="ADMIN_Analyse" class="child parent1" checked disabled> Analyse
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Buchhaltung" name="ADMIN_Buchhaltung" class="child parent1" checked disabled> Buchhaltung
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_ECommerce-Shop" name="ADMIN_ECommerce-Shop" class="child parent1" checked disabled> ECommerce Shop
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Einstellungen" name="ADMIN_Einstellungen" class="child parent1" checked disabled> Einstellungen
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Nachrichten" name="ADMIN_Nachrichten" class="child parent1" checked disabled> Nachrichten
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Kalender" name="ADMIN_Kalender" class="child parent1" checked disabled> Kalender
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Tagebuch" name="ADMIN_Tagebuch" class="child parent1" checked disabled> Tagebuch
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Pläne" name="ADMIN_Pläne" class="child parent1" checked disabled> Pläne
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Live-Chat" name="ADMIN_Live-Chat" class="child parent1" checked disabled> Live Chat
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Kanban-Board" name="ADMIN_Kanban-Board" class="child parent1" checked disabled> Kanban-Board
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent1" name="parent1" class="parent" disabled> Admin-Bereich
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Benutzer" name="ADMIN_Benutzer" class="child parent1" disabled> Benutzer
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Analyse" name="ADMIN_Analyse" class="child parent1" disabled> Analyse
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Buchhaltung" name="ADMIN_Buchhaltung" class="child parent1" disabled> Buchhaltung
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_ECommerce-Shop" name="ADMIN_ECommerce-Shop" class="child parent1" disabled> ECommerce Shop
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Einstellungen" name="ADMIN_Einstellungen" class="child parent1" disabled> Einstellungen
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Nachrichten" name="ADMIN_Nachrichten" class="child parent1" disabled> Nachrichten
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Kalender" name="ADMIN_Kalender" class="child parent1" disabled> Kalender
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Tagebuch" name="ADMIN_Tagebuch" class="child parent1" disabled> Tagebuch
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Pläne" name="ADMIN_Pläne" class="child parent1" disabled> Pläne
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Live-Chat" name="ADMIN_Live-Chat" class="child parent1" disabled> Live Chat
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="ADMIN_Kanban-Board" name="ADMIN_Kanban-Board" class="child parent1" disabled> Kanban-Board
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+
+                                            {% if "Trainingshalle" in Rollen_Info['Rechte'] %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent2" name="parent2" class="parent" checked disabled> Trainingshalle
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child4" name="child4" class="child parent2" checked disabled> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child5" name="child5" class="child parent2" checked disabled> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent2" name="parent2" class="parent" disabled> Trainingshalle
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child4" name="child4" class="child parent2" disabled> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child5" name="child5" class="child parent2" disabled> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+
+                                            {% if "Ernährungsanalyse" in Rollen_Info['Rechte'] %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent3" name="parent3" class="parent" checked disabled> Ernährungsanalyse
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child6" name="child6" class="child parent3" checked disabled> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child7" name="child7" class="child parent3" checked disabled> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" id="parent3" name="parent3" class="parent" disabled> Ernährungsanalyse
+                                                    <ul class="list-group mt-2">
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child6" name="child6" class="child parent3" disabled> Child 1
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <input type="checkbox" id="child7" name="child7" class="child parent3" disabled> Child 2
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+
+									<div class="tab-pane fade" id="ErnährungUndAnalyse">
+                                        {% if not nutzer['Einstiegs_Fragebogen_STATUS'] %}
+                                            <div class="alert alert-warning" role="alert">
+                                                <h4 class="alert-heading">Fragebogen wurde nicht ausgefüllt</h4>
+                                                <p>{{ nutzer['Vorname'] }}, leider hast Du den Einstiegs-Fragebogen für die Ernährungshalle noch nicht ausgefüllt.</p>
+                                                <hr>
+                                                <p class="mb-0">Du kannst diesen hier ausfüllen:
+                                                    <br>
+                                                    <button type="button" class="btn btn-primary">Einstiegsfragebogen ausfüllen</button>
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+									<div class="tab-pane fade" id="Trainingshalle">
+                                        <div class="card radius-15">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h4 class="mb-0">Aufgerufene Inhalte bzw. Seiten</h4>
+                                                    
+                                                    <label for="date_filter" class="mt-2">Filter nach Datum:</label>
+                                                    <select id="date_filter" class="form-control">
+                                                        <!-- Die Optionen werden dynamisch gefüllt -->
+                                                    </select>
+                                                </div>
+                                                <hr/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+        
+        {{ footer | safe }}
+	</div>
+	<!-- end wrapper -->
+    
+    {{ theme_customizer | safe }}
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+    
+	<!--Data Tables js-->
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // DataTable initialisieren und Datumsspalte standardmäßig absteigend sortieren
+            var table = $('#example').DataTable({
+                // order: [[1, 'desc']] // Sortiere die erste Spalte (Index 0) absteigend
+            });
+
+            // Funktion zum Formatieren des Datums im Format dd.mm.yyyy
+            function formatDate(dateString) {
+                var parts = dateString.split("-");
+                return parts[2] + '.' + parts[1] + '.' + parts[0]; // dd.mm.yyyy
+            }
+
+            // Alle verfügbaren Datums aus der Tabelle extrahieren und formatieren
+            var availableDates = [];
+            table.rows().every(function () {
+                var date = this.data()[0]; // Index 0 ist die Datumsspalte
+                if (!availableDates.includes(date)) {
+                    availableDates.push(date); // Füge das originale Datum hinzu (yyyy-mm-dd)
+                }
+            });
+
+            // Sortiere die Datums und fülle das Dropdown mit formatierten Werten
+            availableDates.sort((a, b) => new Date(b) - new Date(a)); // Sortieren (neueste zuerst)
+            var dateFilter = $('#date_filter');
+            
+            availableDates.forEach(function (date) {
+                var formattedDate = formatDate(date); // Datum formatieren
+                dateFilter.append('<option value="' + date + '">' + date + '</option>');
+            });
+
+            // Heute als Standardwert setzen im dd.mm.yyyy Format
+            var today = new Date();
+
+            // Datum in der Zeitzone Europe/Berlin
+            var options = { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit' };
+            var todayFormatted = today.toLocaleDateString('de-DE', options).split('.').join('.'); // Format: dd.mm.yyyy
+
+            dateFilter.val(todayFormatted); // Setze den Dropdown auf das heutige Datum
+            console.log(todayFormatted)
+
+            // Standardmäßige Filterung auf das heutige Datum anwenden
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var selectedDate = dateFilter.find('option:selected').val(); // Ausgewähltes Datum (originales Format)
+                    var dateInTable = data[0]; // Datum aus der Tabelle im Format yyyy-mm-dd
+
+                    // Überprüfe, ob das Datum in der Tabelle mit dem ausgewählten Datum übereinstimmt
+                    return dateInTable === selectedDate;
+                }
+            );
+
+            // Tabelle neu laden, um den Standardfilter anzuwenden
+            table.draw();
+
+            // Funktion, um den Filter nach einem ausgewählten Datum zu aktualisieren
+            dateFilter.on('change', function () {
+                table.draw(); // Filterung neu anwenden
+            });
+        });
+    </script>
+
+	
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            error: "{{ error }}",
+            success: "{{ success }}",
+            punkte: "{{ punkte_nachricht }}"
+        },
+        methods: {
+            showMessages() {
+                if (this.isErrorVisible) {
+                    this.showError();
+                }
+                if (this.isSuccessVisible) {
+                    this.showSuccess();
+                }
+                if (this.isPunkteVisible) {
+                    this.showPunkte();
+                }
+            },
+            showError() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display an error notification
+                message.error('{{ error }}');
+            },
+            showSuccess() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display a success notification
+                message.success('{{ success }}');
+            },
+            showPunkte() {
+                // Create an instance of Notyf
+                var message = new nachricht({
+                    duration: 5000,
+                    position: {
+                        x: 'right',
+                        y: 'top',
+                    },
+                    dismissible: true
+                });
+
+                // Display points notification
+                message.success('{{ punkte }}'); // or use message.error() if it should be an error
+            }
+        },
+        computed: {
+            isErrorVisible: function () {
+                return this.error && this.error !== '' && this.error !== 'None';
+            },
+            isSuccessVisible: function() {
+                return this.success && this.success !== '' && this.success !== 'None';
+            },
+            isPunkteVisible: function() {
+                return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+            }
+        },
+        watch: {
+            isErrorVisible(newVal) {
+                if (!newVal) {
+                    this.closeError();
+                }
+            },
+            isSuccessVisible(newVal) {
+                if (!newVal) {
+                    this.closeSuccess();
+                }
+            },
+            isPunkteVisible(newVal) {
+                if (!newVal) {
+                    this.closePunkte(); // You can implement this method if needed
+                }
+            }
+        },
+        created() {
+            this.$nextTick(() => {
+                this.showMessages();
+            })
+        }
+    });
+</script>	
+
+    
+</body>
+
+</html>

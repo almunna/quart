@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Willkommen bei {{ WhiteLabel['Bezeichnung'] }}, {{name}}!</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/icons.css"/>
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-sidebar.css"/>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-theme.css"/>
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		
+       <!--header-->
+		<header class="top-header">
+			<nav class="navbar navbar-expand">
+				<div class="sidebar-header">
+					<div class="d-none d-lg-flex">
+						<img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_lang'] }}" height="80px" alt="">
+					</div>
+				</div>
+
+				{% if WhiteLabel['Buttons'] %}
+					{% for button in WhiteLabel['Buttons'] %}
+						<a type="button" href="{{ button['Link'] }}" class="btn btn-primary me-3 d-flex">{{ button['Titel'] }}</a>
+					{% endfor %}
+				{% endif %}
+
+				
+				<div class="right-topbar ms-auto">
+					<ul class="navbar-nav">
+						<li class="nav-item dropdown dropdown-lg">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="javascript:;" data-bs-toggle="dropdown">	<span class="msg-count">6</span>
+								<i class="bx bx-comment-detail vertical-align-middle"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a href="javascript:;">
+									<div class="msg-header">
+										<h6 class="msg-header-title">6 Neue</h6>
+										<p class="msg-header-subtitle">Direktnachrichten</p>
+									</div>
+								</a>
+								<div class="header-message-list">
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-1.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer John <span class="msg-time float-end">vor 5 Sekunden</span></h6>
+										  <p class="msg-info">Denke daran, genug Wasser zu trinken heute!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-2.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Emily <span class="msg-time float-end">vor 14 Sekunden</span></h6>
+										  <p class="msg-info">Plane heute eine proteinreiche Mahlzeit ein.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-3.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainerin Sarah <span class="msg-time float-end">vor 8 Minuten</span></h6>
+										  <p class="msg-info">Heute: 30 Minuten Cardio-Workout!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-4.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Ben <span class="msg-time float-end">vor 15 Minuten</span></h6>
+										  <p class="msg-info">Hast du heute genug Vitamine?</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-5.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer Max <span class="msg-time float-end">vor 22 Minuten</span></h6>
+										  <p class="msg-info">Vergiss nicht, gut zu dehnen!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-6.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Laura <span class="msg-time float-end">vor 2 Stunden</span></h6>
+										  <p class="msg-info">Ein grüner Smoothie wäre ideal.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-7.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer David <span class="msg-time float-end">vor 5 Stunden</span></h6>
+										  <p class="msg-info">Heute trainieren wir die Beine!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Sophia <span class="msg-time float-end">vor 6 Stunden</span></h6>
+										  <p class="msg-info">Frisches Obst zum Frühstück?</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-9.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainer Tim <span class="msg-time float-end">vor 2 Tagen</span></h6>
+										  <p class="msg-info">Heute starten wir mit Oberkörper!</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-10.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Ernährungscoach Anna <span class="msg-time float-end">vor 5 Tagen</span></h6>
+										  <p class="msg-info">Plane eine gesunde Mahlzeit.</p>
+										</div>
+									  </div>
+									</a>
+									<a class="dropdown-item" href="javascript:;">
+									  <div class="d-flex align-items-center">
+										<div class="user-online">
+										  <img src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-11.png" class="msg-avatar" alt="user avatar">
+										</div>
+										<div class="flex-grow-1">
+										  <h6 class="msg-name">Fitnesstrainerin Lisa <span class="msg-time float-end">vor 4 Monaten</span></h6>
+										  <p class="msg-info">Setze dir ein Ziel für die Woche!</p>
+										</div>
+									  </div>
+									</a>
+								  </div>								  
+								<a href="javascript:;">
+									<div class="text-center msg-footer">Alle Direktnachrichten anzeigen</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown dropdown-lg">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="javascript:;" data-bs-toggle="dropdown">	<i class="bx bx-bell vertical-align-middle"></i>
+								<span class="msg-count">2</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a href="javascript:;">
+									<div class="msg-header">
+										<h6 class="msg-header-title">2 Neue</h6>
+										<p class="msg-header-subtitle">System-Benachrichtigungen</p>
+									</div>
+								</a>
+								<div class="header-notifications-list">
+									<a class="dropdown-item" href="javascript:;">
+										<div class="d-flex align-items-center">
+											<div class="notify bg-light-success text-success"><i class='bx bx-check-square'></i>
+											</div>
+											<div class="flex-grow-1">
+												<h6 class="msg-name">Trainingsplan wurde erstellt <span class="msg-time float-end">vor 2 Minuten</span></h6>
+												<p class="msg-info">Fitnesstrainer John hat Dir einen<br> Trainingsplan zukommen lassen.</p>
+											</div>
+										</div>
+									</a>
+									<a class="dropdown-item" href="https://dashboard.{{WHITELABEL_Domain}}/">
+										<div class="d-flex align-items-center">
+											<div class="notify bg-light-shineblue text-shineblue"><i class="bx bx-file"></i>
+											</div>
+											<div class="flex-grow-1">
+												<h6 class="msg-name">Neue Rechnung<span class="msg-time float-end">vor 2 Tagen</span></h6>
+												<p class="msg-info">Es wurde eine neue Rechnung<br> für dich angelegt.<br>(Begleiche diese innerhalb 14 Tage)</p>
+											</div>
+										</div>
+									</a>
+								</div>
+								<a href="javascript:;">
+									<div class="text-center msg-footer">Alle Benachrichtigungen anzeigen</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown dropdown-user-profile">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+								<div class="d-flex user-box align-items-center">
+									<div class="user-info">
+										<p class="user-name mb-0">{{name}}</p>
+										{% if rolle == "Super-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-danger">{{rolle}}</span></p>
+										{% elif rolle == "Lower-Admin" %}
+											<p class="designattion mb-0"><span class="badge bg-warning">{{rolle}}</span></p>
+										{% else %}
+											<p class="designattion mb-0"><span class="badge bg-secondary">Nutzer</span></p>
+										{% endif %}
+									</div>
+									<img src="{{ avatar_url }}" class="user-img" alt="user avatar">
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">	
+								<a class="dropdown-item" href="javascript:;"><i
+										class="bx bx-user"></i><span>Mein Profil</span></a>
+								<a class="dropdown-item" href="javascript:;"><i
+										class="bx bx-cog"></i><span>Einstellungen</span></a>
+								<div class="dropdown-divider mb-0"></div>	<a class="dropdown-item" href="https://auth.{{WHITELABEL_Domain}}/logout"><i
+										class="bx bx-power-off"></i><span>Abmelden</span></a>
+							</div>
+						</li>
+						<li class="nav-item dropdown dropdown-language">
+							<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+								<div class="lang d-flex">
+									<div><i class="flag-icon flag-icon-de"></i>
+									</div>
+									<div><span>DE</span>
+									</div>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="javascript:;"><i
+										class="flag-icon flag-icon-de"></i><span>Deutsch</span></a>
+								<a class="dropdown-item" href="javascript:;"><i
+										class="flag-icon flag-icon-um"></i><span>Englisch</span></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<!--end header-->
+
+		
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+
+					
+					
+					<script>
+						document.addEventListener('DOMContentLoaded', function() {
+							document.getElementById('currentYear').textContent = new Date().getFullYear();
+						});
+					</script>
+
+
+					<div class="row justify-content-center">
+						<div class="col-12 col-lg-4">
+							<div class="card radius-15 overflow-hidden">
+								<div class="card-body d-flex flex-column align-items-center">
+									<div class="text-center">
+										<h2 class="mb-0">Willkommen</h2>
+										<p class="mb-0 font-weight-bold">{{name}}!</p>
+										{% if rolle == "Super-Admin" %}
+											<span class="badge bg-danger">{{rolle}}</span>
+										{% elif rolle == "Lower-Admin" %}
+											<span class="badge bg-warning">{{rolle}}</span>
+										{% else %}
+											<span class="badge bg-secondary">Nutzer</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row row-cols-1 row-cols-lg-3">
+						<div class="col d-flex order-2 order-lg-1">
+							<div class="card radius-15 w-100">
+							  <div class="card-body">
+								<div class="card-title">
+								  <h5 class="mb-0">Nutzer-Ranking</h5>
+								</div>
+								<hr/>
+								<div class="d-flex align-items-center gap-3">
+								  <div>
+									<img class="user-img" src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-1.png" width="35" height="35" alt=""/>
+								  </div>
+								  <div class="">
+									<h6 class="mb-0">Max Mustermann</h6>
+									<p class="mb-0">Punkte: 587</p>
+								  </div>
+								  <p class="mb-0 ms-auto">Platz 1</p>
+								  <i class='bx bxs-dice-1' style="font-size: 48px;"></i>
+								</div>
+								<hr/>
+								<div class="d-flex align-items-center gap-3">
+								  <div>
+									<img class="user-img" src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-2.png" width="35" height="35" alt=""/>
+								  </div>
+								  <div class="">
+									<h6 class="mb-0">Anna Beispiel</h6>
+									<p class="mb-0">Punkte: 358</p>
+								  </div>
+								  <p class="mb-0 ms-auto">Platz 2</p>
+								  <i class='bx bxs-dice-2' style="font-size: 48px;"></i>
+								</div>
+								<hr/>
+								<div class="d-flex align-items-center gap-3">
+								  <div>
+									<img class="user-img" src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-3.png" width="35" height="35" alt=""/>
+								  </div>
+								  <div class="">
+									<h6 class="mb-0">Peter Beispiel</h6>
+									<p class="mb-0">Punkte: 320</p>
+								  </div>
+								  <p class="mb-0 ms-auto">Platz 3</p>
+								  <i class='bx bxs-dice-3' style="font-size: 48px;"></i>
+								</div>
+								<hr/>
+								<div class="d-flex align-items-center gap-3">
+								  <div>
+									<img class="user-img" src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-4.png" width="35" height="35" alt=""/>
+								  </div>
+								  <div class="">
+									<h6 class="mb-0">Sophie Beispiel</h6>
+									<p class="mb-0">Punkte: 295</p>
+								  </div>
+								  <p class="mb-0 ms-auto">Platz 4</p>
+								  <i class='bx bxs-dice-4' style="font-size: 48px;"></i>
+								</div>
+								<hr/>
+								<div class="d-flex align-items-center gap-3">
+								  <div>
+									<img class="user-img" src="https://cdn.personalpeak360.de/syndash/assets/horizontal/images/avatars/avatar-5.png" width="35" height="35" alt=""/>
+								  </div>
+								  <div class="">
+									<h6 class="mb-0">Lukas Beispiel</h6>
+									<p class="mb-0">Punkte: 270</p>
+								  </div>
+								  <p class="mb-0 ms-auto">Platz 5</p>
+								  <i class='bx bxs-dice-5' style="font-size: 48px;"></i>
+								</div>
+							  </div>
+							</div>
+						</div>
+						  
+						<div class="col d-flex order-1 order-lg-2">
+							<div class="card radius-15 w-100">
+								<div class="card-body text-center" style="padding: 15px;">
+									<h2 style="font-weight: bold; font-size: 1.5rem; color: #333; margin-bottom: 15px;">
+										{{ titel }}
+									</h2>
+									<p style="font-size: 1.1rem; color: #555; line-height: 1.6;">
+										{{ beschreibung }}
+									</p>
+									{% if video_url %}
+										<video width="500" controls style="width: 100%; height: auto; border-radius: 15px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+											<source src="{{ video_url }}" type="video/mp4">
+											Ihr Browser unterstützt das Abspielen dieses Videos leider nicht.
+										</video>
+									{% endif %}
+								</div>
+							</div>
+						</div>						
+						<div class="col d-flex order-3 order-lg-3">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+										<div class="card-title">
+											<h5 class="mb-0">Challenges </h5>
+										</div>
+										<hr/>
+										<div class="row card-collapse">
+											{% if WhiteLabel['Challenges'] %}
+												{% for challenge in WhiteLabel['Challenges'] %}
+													<div class="col-md-12">
+														<div class="card">
+															<div class="card-header has-arrow" style="cursor: pointer;">{{ challenge['Titel'] }}</div>
+															<div class="card-body">
+																<h5 class="card-title">{{ challenge['Titel'] }}</h5>
+																<p class="card-text">{{ challenge['Beschreibung'] }}</p>
+																{% if challenge['Links'] %}
+																	{% for link in challenge['Links'] %}
+																		<a href="{{ link['Link'] }}" target="_blank" class="btn btn-primary">{{ link['Text'] }}</a>
+																	{% endfor %}
+																{% endif %}
+															</div>
+														</div>
+													</div>
+												{% endfor %}
+											{% else %}
+												<p style="font-size: 1.1rem; color: #555; text-align: center; margin-top: 20px;">
+													<strong>Derzeit gibt es keine Challenges!</strong><br>
+													<span style="font-style: italic;">Du hast alles geschafft ;)</span>
+												</p>
+											{% endif %}
+										</div>
+								</div>
+							</div>
+						</div>
+					</div><!--end row-->
+					  
+
+					<div class="row">
+						<div class="col-12 col-lg-2 d-flex" style="cursor: not-allowed;">
+							<div class="card radius-15 w-100 bg-light-warning" data-bs-toggle="tooltip" title="Leider fehlen Ihnen diese Berechtigungen">
+							  <div class="card-body text-center">
+								<div class="widgets-icons mx-auto bg-light-warning text-warning rounded-circle">
+								  <i class="bx bx-lock"></i>
+								</div>
+								<h4 class="mb-0 font-weight-bold mt-3">Admin-Panel</h4>
+								<p class="mb-0">Zugriff auf administrative Funktionen</p>
+							  </div>
+							</div>
+						</div>
+
+						<script>
+						document.addEventListener('DOMContentLoaded', function () {
+						var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+						var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+							return new bootstrap.Tooltip(tooltipTriggerEl)
+						})
+						});
+						</script>
+						  
+						  <div class="col-12 col-lg-2 d-flex ">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+							  <div class="card radius-15 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+								  <div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-cookie"></i>
+								  </div>
+								  <h4 class="mb-0 font-weight-bold mt-3">Ernährung & Analyse</h4>
+								  <p class="mb-0">Überwache deine Ernährung und Fortschritte</p>
+								</div>
+							  </div>
+							</a>
+						</div>
+						  
+						<div class="col-12 col-lg-2 d-flex">
+						  <a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+							<div class="card radius-15 w-100" style="cursor: pointer;">
+							  <div class="card-body text-center">
+								<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+								  <i class="bx bx-dumbbell"></i>
+								</div>
+								<h4 class="mb-0 font-weight-bold mt-3">Trainingshalle</h4>
+								<p class="mb-0">Plane und verfolge deine Workouts</p>
+							  </div>
+							</div>
+						  </a>
+					  	</div>
+						  
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-shopping-bag"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">eCommerce Shop</h4>
+									<p class="mb-0">Abonnements und Funktionen freischalten</p>
+								</div>
+								</div>
+							</a>
+						</div>
+
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-calendar"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Kalender</h4>
+									<p class="mb-0">Plane deine Aktiivtätem und Ereignisse</p>
+								</div>
+								</div>
+							</a>
+						</div>
+						  
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-comment-detail"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Wiki</h4>
+									<p class="mb-0">Finde hilfreiche Artikel und Tipps</p>
+								</div>
+								</div>
+							</a>
+						</div>
+						<!-- WEITERE HINZUFÜGEN
+						<div class="col-12 col-lg-2 d-flex">
+							<a href="https://dashboard.{{WHITELABEL_Domain}}/" class="w-100" style="text-decoration: none; color: inherit;">
+								<div class="card radius-15 w-100" style="cursor: pointer;">
+								<div class="card-body text-center">
+									<div class="widgets-icons mx-auto bg-light-info text-info rounded-circle">
+									<i class="bx bx-dumbbell"></i>
+									</div>
+									<h4 class="mb-0 font-weight-bold mt-3">Name</h4>
+									<p class="mb-0">Beschreibung</p>
+								</div>
+								</div>
+							</a>
+						</div>
+						-->
+					</div>									
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		<!--footer -->
+		<div class="footer">
+			<p class="mb-0">© 2024 Personal-Peak-360 | Alle Rechte vorbehalten!
+			</p>
+		</div>
+		<!-- end footer -->
+	</div>
+	<!-- end wrapper -->
+	
+	<!--start switcher-->
+	<div class="switcher-body">
+		<button class="btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="bx bx-cog bx-spin"></i></button>
+		<div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling">
+		  <div class="offcanvas-header border-bottom">
+			<h5 class="offcanvas-title" id="offcanvasScrollingLabel">Design-Anpassungen</h5>
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+		  </div>
+		  <div class="offcanvas-body">
+			<h6 class="mb-0">Farbmodus</h6>
+			<hr>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="lightmode" value="option1" checked>
+			  <label class="form-check-label" for="lightmode">Hell</label>
+			</div>
+			<hr>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="darkmode" value="option2">
+			  <label class="form-check-label" for="darkmode">Dunkel</label>
+			</div>
+			  <hr>
+			 <div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="inlineRadioOptions" id="ColorLessIcons" value="option3">
+				<label class="form-check-label" for="ColorLessIcons">Farblose Symbole</label>
+			  </div>
+		  </div>
+		</div>
+	</div>
+	<!--end switcher-->
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/bootstrap.bundle.min.js"></script>
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/index.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			error: "{{ error }}",
+			success: "{{ success }}"
+		},
+		methods: {
+			showMessages() {
+			if (this.isErrorVisible) {
+				this.showError();
+			}
+			if (this.isSuccessVisible) {
+				this.showSuccess();
+			}
+			},
+			showError() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+  
+				// Display an error notification
+				message.error('{{ error }}');
+			},
+			showSuccess() {
+				// Create an instance of Notyf
+				var message = new nachricht({
+					duration: 5000,
+					position: {
+						x: 'right',
+						y: 'top',
+					},
+					dismissible: true
+				});
+  
+				// Display an error notification
+				message.success('{{ success }}');
+			}
+		},
+		computed: {
+			isErrorVisible: function () {
+				return this.error && this.error !== '' && this.error !== 'None';
+			},
+			isSuccessVisible: function() {
+				return this.success && this.success !== '' && this.success !== 'None';
+			}
+		},
+		watch: {
+			isErrorVisible(newVal) {
+				if (!newVal) {
+					this.closeError();
+				}
+			},
+			isSuccessVisible(newVal) {
+				if (!newVal) {
+					this.closeSuccess();
+				}
+			}
+		},
+		created() {
+			this.$nextTick(() => {
+				this.showMessages();
+			})
+		}
+	});
+  </script>
+</body>
+
+</html>

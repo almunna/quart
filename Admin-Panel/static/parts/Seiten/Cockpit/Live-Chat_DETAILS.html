@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Live-Chat (#{{ chat_details['ID'] }}) → Cockpit</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<div class="modal fade" id="modal_Erstellen" tabindex="-1" aria-labelledby="modal_Erstellen" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Neue Live-Chat Sitzung vereinbaren</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+					<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/live-chat" method="post" id="Erstellen_FORM">
+						<div class="form-group mb-3">
+							<label for="Thema">Thema</label>
+							<input type="date" class="form-control" name="Thema" id="Thema">
+						</div>
+
+						<div class="form-group">
+							<label for="Zeitpunkt">Gewünschter Zeitpunkt</label>
+							<input type="date" class="form-control" name="Zeitpunkt" id="Zeitpunkt">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+					<button type="submit" class="btn btn-primary">Buchung absenden</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Live-Chat: "{{ chat_details['Thema'] }}"</h4>
+                                <h6 class="mb-0">Dieser Live-Chat ist ab dem {{ chat_details['Zeitpunkt'] | format_datetime('%Y-%m-%dT%H:%M:%S', '%d.%m.%Y um %H:%M Uhr') }} zur Kommunikation freigegeben.</h6>
+                            </div>
+                        </div>
+                    </div>
+					<div class="chat-wrapper radius-15">
+						<div class="chat-header d-flex align-items-center">
+							<div class="chat-toggle-btn"><i class='bx bx-menu-alt-left'></i>
+							</div>
+							<div>
+								<h4 class="mb-1 font-weight-bold">
+									{% set other_users = chat_details['Sender_Liste'] | selectattr('id', '!=', Nutzer_ID) | list %}
+									{% for nutzer in other_users %}
+										{{ nutzer['Vorname'] }} {{ nutzer['Nachname'] }}
+										{% if not loop.last %}
+											| 
+										{% endif %}
+									{% endfor %}
+								</h4>
+								
+								
+								<div class="list-inline d-sm-flex mb-0 d-none"> <a href="javascript:;" class="list-inline-item d-flex align-items-center text-secondary"><small class='bx bxs-circle me-1 chart-online'></small>Gerade Online</a>
+								</div>
+							</div>
+						</div>
+						<div class="chat-content" id="chatContent">
+							{% for nachricht in chat_details['Nachrichten'] %}
+								{% set user_key = nachricht['Nutzer']['key'] | int %}
+								{% set nachricht_user = chat_details['Nutzer_Map'].get(user_key, {}) %}
+								
+								{% if user_key == Nutzer_ID %}
+									<div class="chat-content-rightside">
+										<div class="d-flex ms-auto">
+											<div class="flex-grow-1 me-2">
+												<p class="mb-0 chat-time text-end">Du (am {{ nachricht['Zeitstempel'] | format_datetime_TIMEZONE }})</p>
+												<p class="chat-right-msg" style="white-space: pre-wrap;">{{ nachricht['Nachricht'] }}</p>
+											</div>
+										</div>
+									</div>
+								{% else %}
+									<div class="chat-content-leftside">
+										<div class="d-flex">
+											<img src="https://cdn.personalpeak360.de/avatar/{{ nachricht_user['Avatar'] if nachricht_user else 'default-avatar.png' }}" width="48" height="48" class="rounded-circle" alt="{{ nachricht_user['Vorname'] if nachricht_user else 'Unknown User' }} {{ nachricht_user['Nachname'] if nachricht_user else '' }}">
+											<div class="flex-grow-1 ms-2">
+												<p class="mb-0 chat-time">
+													{{ nachricht_user['Vorname'] if nachricht_user else 'Unknown' }} {{ nachricht_user['Nachname'] if nachricht_user else '' }} (am {{ nachricht['Zeitstempel'] | format_datetime_TIMEZONE }})
+												</p>
+												<p class="chat-left-msg" style="white-space: pre-wrap;">{{ nachricht['Nachricht'] }}</p>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+						
+						<div class="chat-footer d-flex align-items-center">
+							<div class="flex-grow-1 pe-2">
+								<div class="input-group">
+									<span class="input-group-text"><i class='bx bx-smile'></i></span>
+									<textarea id="messageInput" class="form-control" rows="1" placeholder="Gib eine Nachricht ein..."></textarea>
+									<input type="file" id="fileInput" class="form-control" accept="*/*" style="display:none;" />
+									<button id="sendMessageBtn" class="btn btn-primary">Senden</button>
+								</div>
+							</div>
+							<div class="chat-footer-menu">
+								<a onclick="$('#uploadModal').modal('show');"><i class='bx bx-file'></i> </a>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+			
+			<!-- Modal für den Datei-Upload -->
+			<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="uploadModalLabel">Datei hochladen</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<input type="file" id="fileInputModal" class="form-control" accept="*/*" />
+							<div id="progressContainer" style="display: none;">
+								<div class="progress">
+									<div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">0%</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+							<button type="button" class="btn btn-primary" id="uploadFileBtn">Hochladen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+		
+
+		
+		
+		<script>
+			// Create an instance of Notyf
+			var nachricht = new nachricht({
+				duration: 5000,
+				position: {
+					x: 'right',
+					y: 'top',
+				},
+				dismissible: true
+			});
+		
+			const socket_LiveChat = new WebSocket(`wss://dashboard.personalpeak360.de/cockpit/ws/live-chat/{{ chat_details['ID'] }}`);
+			
+			socket_LiveChat.onopen = function() {
+				console.log(`WebSocket-Verbindung zu Chat-ID {{ chat_details['ID'] }} erfolgreich hergestellt.`);
+			};
+
+			// Funktion zum Senden einer Keep Alive-Nachricht
+			function sendKeepAlive() {
+				if (socket_LiveChat.readyState === WebSocket.OPEN) {
+					try {
+						socket_LiveChat.send("Keep alive");
+					} catch (error) {
+						console.error('Fehler beim Senden der Keep Alive-Nachricht:', error);
+					}
+				}
+			}
+
+			// Intervall für die Keep Alive-Nachricht (z.B. alle 20 Sekunden)
+			setInterval(sendKeepAlive, 20000);
+
+
+			function sendMessage() {
+				const messageInput = document.getElementById('messageInput');
+				const message = messageInput.value.trim();
+				if (message != "") {
+					if (socket_LiveChat.readyState === WebSocket.OPEN) {
+						try {
+							// Nachricht an den WebSocket-Server senden
+							socket_LiveChat.send(message);
+							messageInput.value = '';  // Eingabefeld zurücksetzen
+
+							// Aktuelles Datum und Uhrzeit für die Nachricht
+							const now = new Date();
+
+							// Formatieren des Datums
+							const day = String(now.getDate()).padStart(2, '0'); // Tag mit führender Null
+							const month = String(now.getMonth() + 1).padStart(2, '0'); // Monat mit führender Null (0-11)
+							const year = now.getFullYear(); // Jahr
+
+							// Formatieren der Uhrzeit
+							const hours = String(now.getHours()).padStart(2, '0'); // Stunden mit führender Null
+							const minutes = String(now.getMinutes()).padStart(2, '0'); // Minuten mit führender Null
+
+							// Kombinierter Timestamp im gewünschten Format
+							const timestamp = `am ${day}.${month}.${year} um ${hours}:${minutes} Uhr`;
+
+							// Nachricht im eigenen Chat anzeigen
+							const chatContent = document.getElementById('chatContent');
+							const newMessageDiv = document.createElement('div');
+							newMessageDiv.classList.add('chat-content-rightside');  // Klasse für eigene Nachricht
+							newMessageDiv.innerHTML = `
+								<div class="d-flex ms-auto">
+									<div class="flex-grow-1 me-2">
+										<p class="mb-0 chat-time text-end"> Du (${timestamp})</p>
+										<p class="chat-right-msg" style="white-space: pre-wrap;">${message.replace(/\n/g, '<br>')}</p>
+									</div>
+								</div>
+							`;
+							chatContent.appendChild(newMessageDiv);
+							chatContent.scrollTop = chatContent.scrollHeight;  // Scrollen Sie zum Ende des Chats
+						} catch (error) {
+							console.error('Fehler beim Senden der Nachricht:', error);
+							nachricht.error(error);
+						}
+					} else {
+						console.warn('WebSocket ist nicht offen. Der aktuelle Status ist:', socket_LiveChat.readyState);
+						nachricht.error('Deine Nachricht konnte nicht versandt werden. Bitte versuchen Sie es später erneut.');
+					}
+				}
+			}
+
+		
+			socket_LiveChat.onmessage = function(event) {
+				const data = JSON.parse(event.data); // JSON-Daten parsen
+
+				if (data.Nachricht == "<<< CLOSE >>>") {
+					// Aktuelles Datum und Uhrzeit für die Nachricht
+					const now = new Date();
+
+					// Formatieren des Datums
+					const day = String(now.getDate()).padStart(2, '0'); // Tag mit führender Null
+					const month = String(now.getMonth() + 1).padStart(2, '0'); // Monat mit führender Null (0-11)
+					const year = now.getFullYear(); // Jahr
+
+					// Formatieren der Uhrzeit
+					const hours = String(now.getHours()).padStart(2, '0'); // Stunden mit führender Null
+					const minutes = String(now.getMinutes()).padStart(2, '0'); // Minuten mit führender Null
+
+					// Kombinierter Timestamp im gewünschten Format
+					const timestamp = `am ${day}.${month}.${year} um ${hours}:${minutes} Uhr`;
+
+					const chatContent = document.getElementById('chatContent');
+					const newMessageDiv = document.createElement('div');
+					newMessageDiv.classList.add('chat-content-leftside');
+					newMessageDiv.innerHTML = `
+						<div class="d-flex">
+							<img src="${data.Sender.Avatar}" width="48" height="48" class="rounded-circle" alt="">
+							<div class="flex-grow-1 ms-2">
+								<p class="mb-0 chat-time">
+									${data.Sender.Name} (${timestamp})
+								</p>
+								<p class="chat-left-msg" style="white-space: pre-wrap;">Dieser Chat wurde soeben geschlossen.</p>
+							</div>
+						</div>
+					`;
+					chatContent.appendChild(newMessageDiv);
+					chatContent.scrollTop = chatContent.scrollHeight;
+
+					// Weiterleitung nach 3 Sekunden
+					setTimeout(() => {
+						window.location.href = "https://dashboard.personalpeak360.de/cockpit/live-chat";
+					}, 3000); // 3000 Millisekunden = 3 Sekunden
+				} 
+				else if (data.Nachricht != "Keep alive") {
+					// Aktuelles Datum und Uhrzeit für die Nachricht
+					const now = new Date();
+
+					// Formatieren des Datums
+					const day = String(now.getDate()).padStart(2, '0'); // Tag mit führender Null
+					const month = String(now.getMonth() + 1).padStart(2, '0'); // Monat mit führender Null (0-11)
+					const year = now.getFullYear(); // Jahr
+
+					// Formatieren der Uhrzeit
+					const hours = String(now.getHours()).padStart(2, '0'); // Stunden mit führender Null
+					const minutes = String(now.getMinutes()).padStart(2, '0'); // Minuten mit führender Null
+
+					// Kombinierter Timestamp im gewünschten Format
+					const timestamp = `am ${day}.${month}.${year} um ${hours}:${minutes} Uhr`;
+
+					const chatContent = document.getElementById('chatContent');
+					const newMessageDiv = document.createElement('div');
+					newMessageDiv.classList.add('chat-content-leftside');
+					newMessageDiv.innerHTML = `
+						<div class="d-flex">
+							<img src="${data.Sender.Avatar}" width="48" height="48" class="rounded-circle" alt="">
+							<div class="flex-grow-1 ms-2">
+								<p class="mb-0 chat-time">
+									${data.Sender.Name} (${timestamp})
+								</p>
+								<p class="chat-left-msg" style="white-space: pre-wrap;">${data.Nachricht.replace(/\n/g, '<br>')}</p>
+							</div>
+						</div>
+					`;
+					chatContent.appendChild(newMessageDiv);
+					chatContent.scrollTop = chatContent.scrollHeight;
+				}  else {
+					console.log("Keep Alive!")
+				}
+			};
+		
+			socket_LiveChat.onerror = function(error) {
+				console.error('WebSocket-Fehler:', error);
+				nachricht.error('Leider kann derzeit keine sichere Verbindung aufgebaut werden. Bitte versuchen Sie es später erneut.');
+			};
+		
+			socket_LiveChat.onclose = function(event) {
+				console.log(`WebSocket-Verbindung zu Chat-ID {{ chat_details['ID'] }} geschlossen. Grund: ${event.reason}`);
+			};
+		
+			document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+			document.getElementById('messageInput').addEventListener('keypress', function(event) {
+				if (event.key === 'Enter' && !event.shiftKey) {
+					event.preventDefault();
+					sendMessage();
+				}
+			});
+
+
+
+
+
+			document.getElementById('uploadFileBtn').addEventListener('click', function() {
+				const fileInputModal = document.getElementById('fileInputModal');
+				const file = fileInputModal.files[0];
+
+				if (file) {
+					const formData = new FormData();
+					formData.append('file', file);
+
+					const xhr = new XMLHttpRequest();
+					xhr.open('POST', 'https://dashboard.personalpeak360.de/upload'); // Ersetzen Sie dies durch die URL zu Ihrem Backend-Endpunkt
+
+					xhr.upload.onprogress = function(event) {
+						if (event.lengthComputable) {
+							const percentComplete = (event.loaded / event.total) * 100;
+							const progressBar = document.getElementById('progressBar');
+							progressBar.style.width = percentComplete + '%';
+							progressBar.textContent = Math.round(percentComplete) + '%';
+						}
+					};
+
+					xhr.onload = function() {
+						if (xhr.status === 200) {
+							const response = JSON.parse(xhr.responseText);
+							
+							// Dateiupload erfolgreich, Nachricht senden
+							const message = `Datei: ${file.name}`; // Oder eine andere Nachricht, die Sie senden möchten
+							// URL der hochgeladenen Datei erstellen
+							const fileId = response.data; // die ID der Datei
+            				const downloadUrl = `https://cdn.personalpeak360.de/download/${fileId}`; // vollständige URL
+
+							$('#uploadModal').modal('hide'); // Modal schließen
+							fileInput.value = ''
+							const messageInput = document.getElementById('messageInput');
+
+							messageInput.value += `\n\nDATEI: ${downloadUrl}`; // Den Text in das Input-Feld einfügen
+							nachricht.success("Die Datei wurde erfolgreich hochgeladen")
+							document.getElementById('progressContainer').style.display = 'none'; // Fortschrittsanzeige zurücksetzen
+						} else {
+							console.error('Fehler beim Hochladen der Datei:', xhr.responseText);
+							nachricht.error("Fehler beim Hochladen der Datei")
+						}
+					};
+
+					xhr.onerror = function() {
+						console.error('Fehler beim Hochladen der Datei.');
+					};
+
+					xhr.send(formData);
+					document.getElementById('progressContainer').style.display = 'block'; // Fortschrittsanzeige zeigen
+				} else {
+					alert('Bitte wählen Sie eine Datei aus.');
+				}
+			});
+
+			// Funktion zum Senden von Nachrichten mit Dateien
+			function sendMessageWithFile(message) {
+				if (socket_LiveChat.readyState === WebSocket.OPEN) {
+					try {
+						// Nachricht an den WebSocket-Server senden
+						socket_LiveChat.send(message);
+					} catch (error) {
+						console.error('Fehler beim Senden der Nachricht:', error);
+					}
+				} else {
+					console.warn('WebSocket ist nicht offen. Der aktuelle Status ist:', socket_LiveChat.readyState);
+				}
+			}
+
+			document.getElementById('fileInput').addEventListener('change', function() {
+				const file = this.files[0];
+				if (file) {
+					$('#uploadModal').modal('show'); // Modal öffnen
+				}
+			});
+		</script>
+		
+		
+			
+			
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script>
+		new PerfectScrollbar('.chat-content');
+	</script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

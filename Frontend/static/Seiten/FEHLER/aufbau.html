@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonalPeak360 | Pre-Launch Anmeldung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!--favicon-->
+    <link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+    <!-- Vector CSS -->
+    <link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+    <!--plugins-->
+    <link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <!-- loader-->
+    <link href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/pace.min.css" rel="stylesheet" />
+    <script src="https://cdn.personalpeak360.de/syndash/assets/horizontal/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/icons.css"/>
+    <!-- App CSS -->
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/app.css" />
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-sidebar.css"/>
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/horizontal/css/dark-theme.css"/>
+  
+    <script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+    <link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+    <script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f7f6;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        /* Leuchtendes und pulsierendes Logo */
+        .logo-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        /* Countdown im Flip-Stil */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .countdown div {
+            font-size: 2.5rem;
+            background-color: #000;
+            color: #fff;
+            margin: 0 10px;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            transition: transform 1.5s ease-in-out;
+        }
+
+        .countdown div::before {
+            content: attr(data-label);
+            font-size: 1.2rem;
+            color: #ff5722;
+            position: absolute;
+            top: -35px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            padding: 20px 60px;
+            background-color: #ff5722;
+            color: #fff;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 40px;
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.5);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: #e64a19;
+            transform: scale(1.05);
+        }
+    </style>
+
+
+    <style>
+        #login-button {
+            position: fixed;
+            top: 45%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px 0 0 5px;
+            margin-bottom: 10px;
+        }
+    
+        #login-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+
+
+
+<style>
+    body {
+      /* Default theme is dark, but can be overridden by JavaScript */
+      --theme: light;
+    }
+    /* THEMES */
+    /********** Theme: dark **********/
+    /* Font styles */
+    .flipdown.flipdown__theme-dark {
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+    /* Rotor group headings */
+    .flipdown.flipdown__theme-dark .rotor-group-heading:before {
+      color: #000000;
+    }
+    /* Delimeters */
+    .flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+    .flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+      background-color: #151515;
+    }
+    /* Rotor tops */
+    .flipdown.flipdown__theme-dark .rotor,
+    .flipdown.flipdown__theme-dark .rotor-top,
+    .flipdown.flipdown__theme-dark .rotor-leaf-front {
+      color: #FFFFFF;
+      background-color: #151515;
+    }
+    /* Rotor bottoms */
+    .flipdown.flipdown__theme-dark .rotor-bottom,
+    .flipdown.flipdown__theme-dark .rotor-leaf-rear {
+      color: #EFEFEF;
+      background-color: #202020;
+    }
+    /* Hinge */
+    .flipdown.flipdown__theme-dark .rotor:after {
+      border-top: solid 1px #151515;
+    }
+
+    /********** Theme: light **********/
+    /* Font styles */
+    .flipdown.flipdown__theme-light {
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+    /* Rotor group headings */
+    .flipdown.flipdown__theme-light .rotor-group-heading:before {
+      color: #EEEEEE;
+    }
+    /* Delimeters */
+    .flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+    .flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+      background-color: #DDDDDD;
+    }
+    /* Rotor tops */
+    .flipdown.flipdown__theme-light .rotor,
+    .flipdown.flipdown__theme-light .rotor-top,
+    .flipdown.flipdown__theme-light .rotor-leaf-front {
+      color: #222222;
+      background-color: #DDDDDD;
+    }
+    /* Rotor bottoms */
+    .flipdown.flipdown__theme-light .rotor-bottom,
+    .flipdown.flipdown__theme-light .rotor-leaf-rear {
+      color: #333333;
+      background-color: #EEEEEE;
+    }
+    /* Hinge */
+    .flipdown.flipdown__theme-light .rotor:after {
+      border-top: solid 1px #222222;
+    }
+
+    /* END OF THEMES */
+
+    .flipdown {
+      overflow: visible;
+      width: 510px;
+      height: 110px;
+    }
+
+    .flipdown .rotor-group {
+      position: relative;
+      float: left;
+      padding-right: 30px;
+    }
+
+    .flipdown .rotor-group:last-child {
+      padding-right: 0;
+    }
+
+    .flipdown .rotor-group-heading:before {
+      display: block;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .flipdown .rotor-group:nth-child(1) .rotor-group-heading:before {
+      content: attr(data-before);
+    }
+
+    .flipdown .rotor-group:nth-child(2) .rotor-group-heading:before {
+      content: attr(data-before);
+    }
+
+    .flipdown .rotor-group:nth-child(3) .rotor-group-heading:before {
+      content: attr(data-before);
+    }
+
+    .flipdown .rotor-group:nth-child(4) .rotor-group-heading:before {
+      content: attr(data-before);
+    }
+
+    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      left: 115px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+      content: '';
+      position: absolute;
+      bottom: 50px;
+      left: 115px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .flipdown .rotor {
+      position: relative;
+      float: left;
+      width: 50px;
+      height: 80px;
+      margin: 0px 5px 0px 0px;
+      border-radius: 4px;
+      font-size: 4rem;
+      text-align: center;
+      perspective: 200px;
+    }
+
+    .flipdown .rotor:last-child {
+      margin-right: 0;
+    }
+
+    .flipdown .rotor-top,
+    .flipdown .rotor-bottom {
+      overflow: hidden;
+      position: absolute;
+      width: 50px;
+      height: 40px;
+    }
+
+    .flipdown .rotor-leaf {
+      z-index: 1;
+      position: absolute;
+      width: 50px;
+      height: 80px;
+      transform-style: preserve-3d;
+      transition: transform 0s;
+    }
+
+    .flipdown .rotor-leaf.flipped {
+      transform: rotateX(-180deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    .flipdown .rotor-leaf-front,
+    .flipdown .rotor-leaf-rear {
+      overflow: hidden;
+      position: absolute;
+      width: 50px;
+      height: 40px;
+      margin: 0;
+      transform: rotateX(0deg);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .flipdown .rotor-leaf-front {
+      line-height: 80px;
+      border-radius: 4px 4px 0px 0px;
+    }
+
+    .flipdown .rotor-leaf-rear {
+      line-height: 0px;
+      border-radius: 0px 0px 4px 4px;
+      transform: rotateX(-180deg);
+    }
+
+    .flipdown .rotor-top {
+      line-height: 80px;
+      border-radius: 4px 4px 0px 0px;
+    }
+
+    .flipdown .rotor-bottom {
+      bottom: 0;
+      line-height: 0px;
+      border-radius: 0px 0px 4px 4px;
+    }
+
+    .flipdown .rotor:after {
+      content: '';
+      z-index: 2;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      width: 50px;
+      height: 40px;
+      border-radius: 0px 0px 4px 4px;
+    }
+
+    @media (max-width: 550px) {
+
+      .flipdown {
+        width: 312px;
+        height: 70px;
+      }
+
+      .flipdown .rotor {
+        font-size: 2.2rem;
+        margin-right: 3px;
+      }
+
+      .flipdown .rotor,
+      .flipdown .rotor-leaf,
+      .flipdown .rotor-leaf-front,
+      .flipdown .rotor-leaf-rear,
+      .flipdown .rotor-top,
+      .flipdown .rotor-bottom,
+      .flipdown .rotor:after {
+        width: 30px;
+      }
+
+      .flipdown .rotor-group {
+        padding-right: 20px;
+      }
+
+      .flipdown .rotor-group:last-child {
+        padding-right: 0px;
+      }
+
+      .flipdown .rotor-group-heading:before {
+        font-size: 0.8rem;
+        height: 20px;
+        line-height: 20px;
+      }
+
+      .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+      .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+        left: 69px;
+      }
+
+      .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
+        bottom: 13px;
+        height: 8px;
+        width: 8px;
+      }
+
+      .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+        bottom: 29px;
+        height: 8px;
+        width: 8px;
+      }
+
+      .flipdown .rotor-leaf-front,
+      .flipdown .rotor-top {
+        line-height: 50px;
+      }
+
+      .flipdown .rotor-leaf,
+      .flipdown .rotor {
+        height: 50px;
+      }
+
+      .flipdown .rotor-leaf-front,
+      .flipdown .rotor-leaf-rear,
+      .flipdown .rotor-top,
+      .flipdown .rotor-bottom,
+      .flipdown .rotor:after {
+        height: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Pre-Launch Vorteile sichern!</h1>
+
+    <!-- Leuchtendes und pulsierendes Logo -->
+    <div class="logo-container" onclick="openPreLaunchPage()">
+        <img src="https://cdn.personalpeak360.de/white-label/23f327c9-a786-41c2-b2ff-e2067175194b" alt="Personal Peak 360 Logo">
+    </div>
+
+    <p class="cta-text">Klicke auf den Button und setze dich kostenfrei und unverbindlich auf die Warteliste!</p>
+
+    <p class="mb-4 mx-2">Die Veröffentlichung erfolgt voraussichtlich am {{ targetDate.strftime('%d.%m.%Y') }} um {{ targetDate.strftime('%H:%M') }} Uhr.</p>
+    <div style="display: block; margin-left: auto; margin-right: auto; width: fit-content;" id="flipdown" class="flipdown"></div>
+
+
+    <!-- Der Anmelde-Button mit Schloss-Icon -->
+    <a id="login-button" href="https://auth.{{ WhiteLabel['Domain'] }}">
+        <i id="lock-icon" class="fas fa-lock"></i>
+        Anmelden
+    </a>
+
+
+    <button class="cta-btn" data-bs-toggle="modal" data-bs-target="#modalRegister">Jetzt registrieren</button>
+
+
+    <!-- Modal -->
+<div class="modal fade" id="modalRegister" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog" style="display: none;">
+  <div class="modal-dialog">
+      <form id="personalInfoForm" action="https://www.personalpeak360.de/voranmeldung" method="post">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Registrierung</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div id="step-1" class="form-step">
+                      <h6>Schritt 1 von 2: Persönliche Informationen</h6>
+                      <div class="form-group">
+                          <label class="required" for="vorname">Vorname</label>
+                          <input type="text" class="form-control" id="vorname" name="vorname" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="nachname">Nachname</label>
+                          <input type="text" class="form-control" id="nachname" name="nachname" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="strasse">Straße und Hausnummer</label>
+                          <input type="text" class="form-control" id="strasse" name="strasse" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="plz">PLZ</label>
+                          <input type="text" class="form-control" id="plz" name="plz" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="stadt">Ort</label>
+                          <input type="text" class="form-control" id="stadt" name="stadt" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="email">E-Mail</label>
+                          <input type="email" class="form-control" id="email" name="email" required>
+                      </div>
+                      <div class="form-group">
+                          <label class="required" for="telefon">Telefonnummer</label>
+                          <input type="tel" class="form-control" id="telefon" name="telefon" required>
+                      </div>
+                      <div class="col-12 text-center">
+                          <input type="checkbox" id="contactPermission" name="contactPermission">
+                          <label for="contactPermission">
+                              Ich erlaube eine Kontaktaufnahme durch PP360!
+                          </label>
+                      </div>
+                  </div>
+
+                  <div id="step-2" class="form-step" style="display: none;">
+                    <h6>Schritt 2 von 2: Interessen auswählen</h6>
+                    <div class="form-group">
+                        <label>Wählen Sie Ihre Interessen aus:</label>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="painRelief" name="interests" value="Schmerzfreiheit" class="d-none" onchange="toggleCard(this)">
+                                    <label for="painRelief" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/1.jpg" alt="Schmerzfreiheit" class="interest-image">
+                                        <h6 class="card-title">Schmerzfreiheit</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="weightLoss" name="interests" value="Gewichtsverlust" class="d-none" onchange="toggleCard(this)">
+                                    <label for="weightLoss" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/2.jpg" alt="Gewichtsverlust" class="interest-image">
+                                        <h6 class="card-title">Gewichtsverlust</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="muscleGain" name="interests" value="Muskelaufbau" class="d-none" onchange="toggleCard(this)">
+                                    <label for="muscleGain" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/3.jpg" alt="Muskelaufbau" class="interest-image">
+                                        <h6 class="card-title">Muskelaufbau</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="sleepQuality" name="interests" value="Bessere Schlafqualität" class="d-none" onchange="toggleCard(this)">
+                                    <label for="sleepQuality" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/4.jpg" alt="Bessere Schlafqualität" class="interest-image">
+                                        <h6 class="card-title">Bessere Schlafqualität</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="moreEnergy" name="interests" value="Mehr Energie" class="d-none" onchange="toggleCard(this)">
+                                    <label for="moreEnergy" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/5.jpg" alt="Mehr Energie" class="interest-image">
+                                        <h6 class="card-title">Mehr Energie</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="stressManagement" name="interests" value="Stressbewältigung" class="d-none" onchange="toggleCard(this)">
+                                    <label for="stressManagement" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/6.jpg" alt="Stressbewältigung" class="interest-image">
+                                        <h6 class="card-title">Stressbewältigung</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="healthWellbeing" name="interests" value="Gesundheit und Wohlbefinden" class="d-none" onchange="toggleCard(this)">
+                                    <label for="healthWellbeing" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/7.jpg" alt="Gesundheit und Wohlbefinden" class="interest-image">
+                                        <h6 class="card-title">Gesundheit und Wohlbefinden</h6>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="card interest-card">
+                                    <input type="checkbox" id="workshops" name="interests" value="Workshops" class="d-none" onchange="toggleCard(this)">
+                                    <label for="workshops" class="card-body">
+                                        <img src="https://cdn.personalpeak360.de/assets/landingpage/img/8.jpg" alt="Workshops" class="interest-image">
+                                        <h6 class="card-title">Workshops</h6>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+
+                <div id="step-3" class="form-step" style="display: none;">
+                    <h6>Schritt 3 von 3: Aktivierungscode (optional)</h6>
+                    <div class="form-group">
+                        <label for="activationCode">Aktivierungscode (optional)</label>
+                        <input type="text" class="form-control" id="activationCode" name="activationCode" placeholder="Falls vorhanden">
+                    </div>
+                </div>
+
+                
+                <style>
+                    .interest-image {
+                        width: 100px; /* Beispielgröße für die Bilder */
+                        height: 70px; /* Beispielgröße für die Bilder */
+                        object-fit: cover;
+                        border-radius: 10px; /* Abgerundete Ecken für die Bilder */
+                    }
+                
+                    .interest-card {
+                        border: 1px solid #ddd; /* Rahmen für die Karten */
+                        border-radius: 10px; /* Abgerundete Ecken für die Karten */
+                        padding: 10px; /* Innenabstand für die Karten */
+                        cursor: pointer !important; /* Zeigt an, dass die Karte klickbar ist */
+                        transition: 0.3s; /* Übergang für Hover-Effekte */
+                        margin-bottom: 15px; /* Abstand zwischen den Karten */
+                    }
+                
+                    .interest-card:hover {
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Schatteneffekt beim Hover */
+                    }
+                
+                    .interest-card.selected {
+                        border-color: blue; /* Blaue Umrandung für ausgewählte Karten */
+                    }
+                
+                    .card-body {
+                        text-align: center; /* Zentrierter Text in der Kartenmitte */
+                    }
+                </style>
+                
+                <script>
+                    function toggleCard(checkbox) {
+                        const card = checkbox.closest('.interest-card');
+                        if (checkbox.checked) {
+                            card.classList.add('selected');
+                        } else {
+                            card.classList.remove('selected');
+                        }
+                    }
+                </script>
+                
+              </div>
+              
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                  <button type="button" class="btn btn-primary" id="prevStep" style="display: none;">Zurück</button>
+                  <button type="button" class="btn btn-primary" id="nextStep">Nächster Schritt</button>
+                  <button type="submit" class="btn btn-primary" style="display: none;" id="submitForm">Registrieren</button>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>
+
+<script>
+  var message = new nachricht({
+      duration: 5000,
+      position: {
+          x: 'right',
+          y: 'top',
+      },
+      dismissible: true
+  });
+
+  let currentStep = 1;
+
+  document.getElementById('nextStep').addEventListener('click', function() {
+      if (currentStep === 1) {
+          // Validierung für Schritt 1
+          // (Vorname, Nachname, Straße, PLZ, Ort, E-Mail, Telefonnummer, Zustimmung zur Kontaktaufnahme)
+          // Validierung für Schritt 1
+          const firstName = document.getElementById('vorname').value.trim();
+          const lastName = document.getElementById('nachname').value.trim();
+          const street = document.getElementById('strasse').value.trim();
+          const postalCode = document.getElementById('plz').value.trim();
+          const city = document.getElementById('stadt').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const telefon = document.getElementById('telefon').value.trim();
+          // Validierung für die Kontaktaufnahme
+          const contactPermission = document.getElementById('contactPermission').checked;
+
+          let errorMessageFields = '';
+          let errorMessagePermission = '';
+
+          if (!firstName || !lastName || !street || !postalCode || !city || !email || !telefon) {
+              errorMessageFields += 'Bitte füllen Sie alle Pflichtfelder aus: Vorname, Nachname, Straße, Postleitzahl, Stadt, E-Mail.';
+          }
+
+          if (!contactPermission) {
+              errorMessagePermission += 'Bitte geben Sie Ihre Zustimmung zur Kontaktaufnahme.';
+          }
+
+          if (errorMessageFields) {
+              message.error(errorMessageFields);
+          }
+
+          if (errorMessagePermission) {
+              message.error(errorMessagePermission);
+          }
+
+          if (errorMessageFields || errorMessagePermission) {
+            return;
+          }
+          // Wenn Validierung erfolgreich, gehe zu Schritt 2
+          document.getElementById('step-1').style.display = 'none';
+          document.getElementById('step-2').style.display = 'block';
+          document.getElementById('prevStep').style.display = 'inline-block';
+          currentStep++;
+      } else if (currentStep === 2) {
+          // Validierung für Schritt 2 (Interessen)
+          const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
+          if (selectedInterests.length === 0) {
+              message.error('Bitte wählen Sie mindestens ein Interesse aus.');
+              return;
+          }
+          // Wenn Validierung erfolgreich, gehe zu Schritt 3
+          document.getElementById('step-2').style.display = 'none';
+          document.getElementById('step-3').style.display = 'block';
+          document.getElementById('nextStep').style.display = 'none';
+          document.getElementById('submitForm').style.display = 'inline-block';
+          currentStep++;
+      }
+  });
+
+  document.getElementById('prevStep').addEventListener('click', function() {
+      if (currentStep === 2) {
+          document.getElementById('step-2').style.display = 'none';
+          document.getElementById('step-1').style.display = 'block';
+          document.getElementById('prevStep').style.display = 'none';
+          currentStep--;
+      } else if (currentStep === 3) {
+          document.getElementById('step-3').style.display = 'none';
+          document.getElementById('step-2').style.display = 'block';
+          document.getElementById('nextStep').style.display = 'inline-block';
+          document.getElementById('submitForm').style.display = 'none';
+          currentStep--;
+      }
+  });
+
+  document.getElementById('submitForm').addEventListener('click', function() {
+      // Validierung für Schritt 3 (Aktivierungscode optional, keine Validierung nötig)
+  });
+</script>
+
+
+<style>
+  .interest-image {
+      width: 100px; /* Beispielgröße für die Bilder */
+      height: 70px; /* Beispielgröße für die Bilder */
+      object-fit: cover;
+      border: 1px solid #ddd; /* optional: Rahmen für die Bilder */
+      margin-bottom: 5px; /* Abstand unter den Bildern */
+  }
+</style>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    // Convert target date to Unix timestamp (in seconds)
+    var targetDate = new Date("{{ targetDate.isoformat() }}").getTime() / 1000;
+
+    // Set up FlipDown
+    var flipdown = new FlipDown(targetDate)
+
+      // Start the countdown
+      .start()
+
+      // Do something when the countdown ends
+      .ifEnded(() => {
+        console.log('The countdown has ended!');
+      });
+
+
+      // Define theme toggling logic
+      const body = document.body;
+      const flipdownElement = document.getElementById('flipdown');
+
+      // Function to apply theme based on light/dark style
+      function applyTheme() {
+        if (Helpers.isLightStyle()) {
+          body.classList.add('dark-theme');
+          body.classList.remove('light-theme');
+          flipdownElement.classList.add('flipdown__theme-dark');
+          flipdownElement.classList.remove('flipdown__theme-light');
+        } else {
+          body.classList.add('light-theme');
+          body.classList.remove('dark-theme');
+          flipdownElement.classList.add('flipdown__theme-light');
+          flipdownElement.classList.remove('flipdown__theme-dark');
+        }
+      }
+
+      // Apply the theme once on page load
+      applyTheme();
+
+    var ver = document.getElementById('ver');
+    ver.innerHTML = flipdown.version;
+    });
+
+    "use strict";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FlipDown = function () {
+function FlipDown(uts) {
+  var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "flipdown";
+  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  _classCallCheck(this, FlipDown);
+
+  if (typeof uts !== "number") {
+    throw new Error("FlipDown: Constructor expected unix timestamp, got ".concat(_typeof(uts), " instead."));
+  }
+
+  if (_typeof(el) === "object") {
+    opt = el;
+    el = "flipdown";
+  }
+
+  this.version = "0.3.2";
+  this.initialised = false;
+  this.now = this._getTime();
+  this.epoch = uts;
+  this.countdownEnded = false;
+  this.hasEndedCallback = null;
+  this.element = document.getElementById(el);
+  this.rotors = [];
+  this.rotorLeafFront = [];
+  this.rotorLeafRear = [];
+  this.rotorTops = [];
+  this.rotorBottoms = [];
+  this.countdown = null;
+  this.daysRemaining = 0;
+  this.clockValues = {};
+  this.clockStrings = {};
+  this.clockValuesAsString = [];
+  this.prevClockValuesAsString = [];
+  this.opts = this._parseOptions(opt);
+
+  this._setOptions();
+
+  console.log("FlipDown ".concat(this.version, " (Theme: ").concat(this.opts.theme, ")"));
+}
+
+_createClass(FlipDown, [{
+  key: "start",
+  value: function start() {
+    if (!this.initialised) this._init();
+    this.countdown = setInterval(this._tick.bind(this), 1000);
+    return this;
+  }
+}, {
+  key: "ifEnded",
+  value: function ifEnded(cb) {
+    this.hasEndedCallback = function () {
+      cb();
+      this.hasEndedCallback = null;
+    };
+
+    return this;
+  }
+}, {
+  key: "_getTime",
+  value: function _getTime() {
+    return new Date().getTime() / 1000;
+  }
+}, {
+  key: "_hasCountdownEnded",
+  value: function _hasCountdownEnded() {
+    if (this.epoch - this.now < 0) {
+      this.countdownEnded = true;
+
+      if (this.hasEndedCallback != null) {
+        this.hasEndedCallback();
+        this.hasEndedCallback = null;
+      }
+
+      return true;
+    } else {
+      this.countdownEnded = false;
+      return false;
+    }
+  }
+}, {
+  key: "_parseOptions",
+  value: function _parseOptions(opt) {
+    var headings = ["Tage", "Stunden", "Minuten", "Sekunden"];
+
+    if (opt.headings && opt.headings.length === 4) {
+      headings = opt.headings;
+    }
+
+    return {
+      theme: opt.hasOwnProperty("theme") ? opt.theme : "dark",
+      headings: headings
+    };
+  }
+}, {
+  key: "_setOptions",
+  value: function _setOptions() {
+    this.element.classList.add("flipdown__theme-".concat(this.opts.theme));
+  }
+}, {
+  key: "_init",
+  value: function _init() {
+    this.initialised = true;
+
+    if (this._hasCountdownEnded()) {
+      this.daysremaining = 0;
+    } else {
+      this.daysremaining = Math.floor((this.epoch - this.now) / 86400).toString().length;
+    }
+
+    var dayRotorCount = this.daysremaining <= 2 ? 2 : this.daysremaining;
+
+    for (var i = 0; i < dayRotorCount + 6; i++) {
+      this.rotors.push(this._createRotor(0));
+    }
+
+    var dayRotors = [];
+
+    for (var i = 0; i < dayRotorCount; i++) {
+      dayRotors.push(this.rotors[i]);
+    }
+
+    this.element.appendChild(this._createRotorGroup(dayRotors, 0));
+    var count = dayRotorCount;
+
+    for (var i = 0; i < 3; i++) {
+      var otherRotors = [];
+
+      for (var j = 0; j < 2; j++) {
+        otherRotors.push(this.rotors[count]);
+        count++;
+      }
+
+      this.element.appendChild(this._createRotorGroup(otherRotors, i + 1));
+    }
+
+    this.rotorLeafFront = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-leaf-front"));
+    this.rotorLeafRear = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-leaf-rear"));
+    this.rotorTop = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-top"));
+    this.rotorBottom = Array.prototype.slice.call(this.element.getElementsByClassName("rotor-bottom"));
+
+    this._tick();
+
+    this._updateClockValues(true);
+
+    return this;
+  }
+}, {
+  key: "_createRotorGroup",
+  value: function _createRotorGroup(rotors, rotorIndex) {
+    var rotorGroup = document.createElement("div");
+    rotorGroup.className = "rotor-group";
+    var dayRotorGroupHeading = document.createElement("div");
+    dayRotorGroupHeading.className = "rotor-group-heading";
+    dayRotorGroupHeading.setAttribute("data-before", this.opts.headings[rotorIndex]);
+    rotorGroup.appendChild(dayRotorGroupHeading);
+    appendChildren(rotorGroup, rotors);
+    return rotorGroup;
+  }
+}, {
+  key: "_createRotor",
+  value: function _createRotor() {
+    var v = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var rotor = document.createElement("div");
+    var rotorLeaf = document.createElement("div");
+    var rotorLeafRear = document.createElement("figure");
+    var rotorLeafFront = document.createElement("figure");
+    var rotorTop = document.createElement("div");
+    var rotorBottom = document.createElement("div");
+    rotor.className = "rotor";
+    rotorLeaf.className = "rotor-leaf";
+    rotorLeafRear.className = "rotor-leaf-rear";
+    rotorLeafFront.className = "rotor-leaf-front";
+    rotorTop.className = "rotor-top";
+    rotorBottom.className = "rotor-bottom";
+    rotorLeafRear.textContent = v;
+    rotorTop.textContent = v;
+    rotorBottom.textContent = v;
+    appendChildren(rotor, [rotorLeaf, rotorTop, rotorBottom]);
+    appendChildren(rotorLeaf, [rotorLeafRear, rotorLeafFront]);
+    return rotor;
+  }
+}, {
+  key: "_tick",
+  value: function _tick() {
+    this.now = this._getTime();
+    var diff = this.epoch - this.now <= 0 ? 0 : this.epoch - this.now;
+    this.clockValues.d = Math.floor(diff / 86400);
+    diff -= this.clockValues.d * 86400;
+    this.clockValues.h = Math.floor(diff / 3600);
+    diff -= this.clockValues.h * 3600;
+    this.clockValues.m = Math.floor(diff / 60);
+    diff -= this.clockValues.m * 60;
+    this.clockValues.s = Math.floor(diff);
+
+    this._updateClockValues();
+
+    this._hasCountdownEnded();
+  }
+}, {
+  key: "_updateClockValues",
+  value: function _updateClockValues() {
+    var _this = this;
+
+    var init = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    this.clockStrings.d = pad(this.clockValues.d, 2);
+    this.clockStrings.h = pad(this.clockValues.h, 2);
+    this.clockStrings.m = pad(this.clockValues.m, 2);
+    this.clockStrings.s = pad(this.clockValues.s, 2);
+    this.clockValuesAsString = (this.clockStrings.d + this.clockStrings.h + this.clockStrings.m + this.clockStrings.s).split("");
+    this.rotorLeafFront.forEach(function (el, i) {
+      el.textContent = _this.prevClockValuesAsString[i];
+    });
+    this.rotorBottom.forEach(function (el, i) {
+      el.textContent = _this.prevClockValuesAsString[i];
+    });
+
+    function rotorTopFlip() {
+      var _this2 = this;
+
+      this.rotorTop.forEach(function (el, i) {
+        if (el.textContent != _this2.clockValuesAsString[i]) {
+          el.textContent = _this2.clockValuesAsString[i];
+        }
+      });
+    }
+
+    function rotorLeafRearFlip() {
+      var _this3 = this;
+
+      this.rotorLeafRear.forEach(function (el, i) {
+        if (el.textContent != _this3.clockValuesAsString[i]) {
+          el.textContent = _this3.clockValuesAsString[i];
+          el.parentElement.classList.add("flipped");
+          var flip = setInterval(function () {
+            el.parentElement.classList.remove("flipped");
+            clearInterval(flip);
+          }.bind(_this3), 500);
+        }
+      });
+    }
+
+    if (!init) {
+      setTimeout(rotorTopFlip.bind(this), 500);
+      setTimeout(rotorLeafRearFlip.bind(this), 500);
+    } else {
+      rotorTopFlip.call(this);
+      rotorLeafRearFlip.call(this);
+    }
+
+    this.prevClockValuesAsString = this.clockValuesAsString;
+  }
+}]);
+
+return FlipDown;
+}();
+
+function pad(n, len) {
+n = n.toString();
+return n.length < len ? pad("0" + n, len) : n;
+}
+
+function appendChildren(parent, children) {
+children.forEach(function (el) {
+  parent.appendChild(el);
+});
+}
+
+  </script>
+
+  
+<script>
+  new Vue({
+      el: '#app',
+      data: {
+          error: "{{ error }}",
+          success: "{{ success }}"
+      },
+      methods: {
+          showMessages() {
+          if (this.isErrorVisible) {
+              this.showError();
+          }
+          if (this.isSuccessVisible) {
+              this.showSuccess();
+          }
+          },
+          showError() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.error('{{ error }}');
+          },
+          showSuccess() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.success('{{ success }}');
+          }
+      },
+      computed: {
+          isErrorVisible: function () {
+              return this.error && this.error !== '' && this.error !== 'None';
+          },
+          isSuccessVisible: function() {
+              return this.success && this.success !== '' && this.success !== 'None';
+          }
+      },
+      watch: {
+          isErrorVisible(newVal) {
+              if (!newVal) {
+                  this.closeError();
+              }
+          },
+          isSuccessVisible(newVal) {
+              if (!newVal) {
+                  this.closeSuccess();
+              }
+          }
+      },
+      created() {
+          this.$nextTick(() => {
+              this.showMessages();
+          })
+      }
+  });
+</script>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

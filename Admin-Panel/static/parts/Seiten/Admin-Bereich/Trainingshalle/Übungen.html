@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Übungen - Traingingshalle → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+
+    <!-- Füge das CSS für Select2 hinzu -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Füge das JavaScript für Select2 hinzu -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					{% for übung in Übungen %}
+						<!-- Modal -->
+						<div class="modal fade" id="modalDetails-{{ übung['id'] }}" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/übungen?Art=Update&ID={{ übung['id'] }}" method="post" id="Erstellen_FORM" enctype="multipart/form-data">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Übung bearbeiten</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+											<div class="alert alert-warning fade show" role="alert" id="alert-warning">
+												Du hast folgende Möglichkeiten:
+												<ul class="mb-0">
+													<li>Gib alle Übersetzungen manuell ein</li>
+													<li>Hinterlege Deine API-Tokens in den Einstellungen, um automatische Übersetzungen für die Übungen zu aktivieren</li>
+												</ul>
+											</div>
+
+											{% if WhiteLabel['API_TOKEN_Deepl'] %}
+												<div class="form-group mb-3">
+													<label class="form-label">Einstellungen (Texte)</label>
+													<select class="form-control" id="Generiere_Texte_{{ übung['id'] | replace('-', '') }}" name="Generiere_Texte" onchange="toggleLanguageSelect_Texte_{{ übung['id'] | replace('-', '') }}()">
+														<option value="Gar nichts" selected>Texte nicht übersetzen</option>
+														<option value="Alles">Für alle Texte Übersetzung anwenden</option>
+														<option value="Bestimmte">Für bestimmte Sprachen Texte übersetzen</option>
+														<!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+													</select>
+												</div>
+
+												<div class="form-group mb-3" id="languageSelectContainer_Text_{{ übung['id'] | replace('-', '') }}" style="display: none;">
+													<label class="form-label">Wähle Sprachen für welche Texte übersetzt werden sollen</label>
+													<select class="form-control" id="languagesSelect_Text_{{ übung['id'] | replace('-', '') }}" name="languagesSelect_Text[]" multiple>
+														<option value="DE"><span class="flag-icon flag-icon-de"></span> Deutsch</option>
+														<option value="EN"><span class="flag-icon flag-icon-um"></span> Englisch</option>
+														<option value="ES"><span class="flag-icon flag-icon-es"></span> Spanisch</option>
+														<option value="AR"><span class="flag-icon flag-icon-sa"></span> Arabisch</option>
+														<option value="GR"><span class="flag-icon flag-icon-gr"></span> Griechisch</option>
+														<option value="RU"><span class="flag-icon flag-icon-ru"></span> Russisch</option>
+													</select>
+												</div>
+
+
+												<script>
+													function toggleLanguageSelect_Texte_{{ übung['id'] | replace('-', '') }}() {
+														const voiceoverSetting = document.getElementById("Generiere_Texte_{{ übung['id'] | replace('-', '') }}").value;
+														const languageSelectContainer = document.getElementById("languageSelectContainer_Text_{{ übung['id'] | replace('-', '') }}");
+
+														if (voiceoverSetting === "Bestimmte") {
+															languageSelectContainer.style.display = "block";
+														} else {
+															languageSelectContainer.style.display = "none";
+														}
+													}
+												</script>
+											{% endif %}
+
+											{% if WhiteLabel['API_TOKEN_ElevenLabs'] %}
+												<div class="form-group mb-3">
+													<label class="form-label">Einstellungen (Voiceover)</label>
+													<select class="form-control" id="Generiere_Voiceover_{{ übung['id'] | replace('-', '') }}" name="Generiere_Voiceover" onchange="toggleLanguageSelect_Voiceover_{{ übung['id'] | replace('-', '') }}()">
+														<option value="Gar nichts" selected>Keine Voiceover generieren</option>
+														<option value="Alles">Für alle Texte (Hinweise und Tipps) Voiceover generieren</option>
+														<option value="Änderungen">Für alle GEÄNDERTEN Texte (Hinweise und Tipps) Voiceover generieren</option>
+														<option value="Bestimmte">Für bestimmte Sprachen Voiceover generieren</option>
+														<!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+													</select>
+												</div>
+
+												<div class="form-group mb-3" id="languageSelectContainer_Voiceover_{{ übung['id'] | replace('-', '') }}" style="display: none;">
+													<label class="form-label">Wähle Sprachen für welche Voiceover generiert werden sollen</label>
+													<select class="form-control" id="languagesSelect_Voiceover_{{ übung['id'] | replace('-', '') }}" name="languagesSelect_Voiceover[]" multiple>
+														<option value="DE"><span class="flag-icon flag-icon-de"></span> Deutsch</option>
+														<option value="EN"><span class="flag-icon flag-icon-um"></span> Englisch</option>
+														<option value="ES"><span class="flag-icon flag-icon-es"></span> Spanisch</option>
+														<option value="AR"><span class="flag-icon flag-icon-sa"></span> Arabisch</option>
+														<option value="GR"><span class="flag-icon flag-icon-gr"></span> Griechisch</option>
+														<option value="RU"><span class="flag-icon flag-icon-ru"></span> Russisch</option>
+													</select>
+												</div>
+
+
+												<script>
+													function toggleLanguageSelect_Voiceover_{{ übung['id'] | replace('-', '') }}() {
+														const voiceoverSetting = document.getElementById("Generiere_Voiceover_{{ übung['id'] | replace('-', '') }}").value;
+														const languageSelectContainer = document.getElementById("languageSelectContainer_Voiceover_{{ übung['id'] | replace('-', '') }}");
+
+														if (voiceoverSetting === "Bestimmte") {
+															languageSelectContainer.style.display = "block";
+														} else {
+															languageSelectContainer.style.display = "none";
+														}
+													}
+												</script>
+											{% endif %}
+
+											<ul class="nav nav-pills mb-3" id="pills-tab_DETAILS_{{ übung['id'] }}" role="tablist">
+												<!-- Tabs werden hier dynamisch erzeugt -->
+											</ul>
+											
+											<div class="tab-content" id="pills-tabContent_DETAILS_{{ übung['id'] }}">
+												<!-- Tab-Inhalte werden hier dynamisch erzeugt -->
+											</div>
+											
+											<script>
+												const pillsTab_DETAILS_{{ übung["id"] | replace("-", "") }} = document.getElementById('pills-tab_DETAILS_{{ übung["id"] }}');
+												const pillsTabContent_DETAILS_{{ übung["id"] | replace("-", "") }} = document.getElementById('pills-tabContent_DETAILS_{{ übung["id"] }}');
+												
+												languages2 = [
+														{
+															code: 'DE',
+															name: 'Deutsch',
+															flag: 'de',
+															placeholders: {
+																name: 'Liegestütze',
+																hinweise: 'Achten Sie darauf, dass der Rücken gerade bleibt ...',
+																tipps: 'Um die Übung effektiver zu machen, ...',
+															},
+														},
+														{
+															code: 'EN',
+															name: 'Englisch',
+															flag: 'um',
+															placeholders: {
+																name: 'Push-ups',
+																hinweise: 'Make sure that your back remains straight ...',
+																tipps: 'To make the exercise more effective, ...',
+															},
+														},
+														{
+															code: 'ES',
+															name: 'Spanisch',
+															flag: 'es',
+															placeholders: {
+																name: 'Flexiones',
+																hinweise: 'Asegúrese de que su espalda permanezca recta ...',
+																tipps: 'Para hacer el ejercicio más efectivo, ...',
+															},
+														},
+														{
+															code: 'AR',
+															name: 'Arabisch',
+															flag: 'sa',
+															placeholders: {
+																name: 'تمارين الضغط',
+																hinweise: 'تأكد من أن ظهرك يظل مستقيماً ...',
+																tipps: 'لجعل التمرين أكثر فعالية ...',
+															},
+														},
+														{
+															code: 'GR',
+															name: 'Griechisch',
+															flag: 'gr',
+															placeholders: {
+																name: 'Κάμψεις',
+																hinweise: 'Βεβαιωθείτε ότι η πλάτη σας παραμένει ευθεία ...',
+																tipps: 'Για να κάνετε την άσκηση πιο αποτελεσματική, ...',
+															},
+														},
+														{
+															code: 'RU',
+															name: 'Russisch',
+															flag: 'ru',
+															placeholders: {
+																name: 'Отжимания',
+																hinweise: 'Убедитесь, что ваша спина остается прямой ...',
+																tipps: 'Чтобы сделать упражнение более эффективным, ...',
+															},
+														},
+													];
+
+												// Tabs und Inhalte generieren
+												languages2.forEach((lang, index) => {
+													const isActive = index === 0 ? 'active' : '';
+											
+													// Tab hinzufügen
+													const tab = `
+														<li class="nav-item" role="presentation">
+															<a class="nav-link ${isActive}" id="pills-${lang.code}-tab_DETAILS" data-bs-toggle="pill" href="#pills-${lang.code}_DETAILS_{{ übung["id"] | replace("-", "") }}" role="tab" aria-controls="pills-${lang.code}" aria-selected="${index === 0}">
+																<i class="flag-icon flag-icon-${lang.flag}"></i> ${lang.name}
+															</a>
+														</li>
+													`;
+													pillsTab_DETAILS_{{ übung["id"] | replace("-", "") }}.innerHTML += tab;
+
+													// Übergabe der Jinja-Variable `übung` an JavaScript
+													const Uebung_Details = {{ übung | tojson }};
+													console.log(Uebung_Details); // Zum Testen: Ausgabe der gesamten übung-Daten in der Konsole
+											
+													// Tab-Inhalte hinzufügen
+													const content = `
+														<div class="tab-pane fade ${isActive ? 'active show' : ''}" id="pills-${lang.code}_DETAILS_{{ übung["id"] | replace("-", "") }}" role="tabpanel" aria-labelledby="pills-${lang.code}-tab">
+															<div class="form-group mb-3">
+																<label for="Name_${lang.code}">Name</label>
+																<input type="text" class="form-control" name="Name_${lang.code}" id="Name_${lang.code}" placeholder="${lang.placeholders.name}" value="${Uebung_Details.Texte[lang.code].Name}">
+															</div>
+															<div class="form-group mb-3">
+																<label for="Hinweise_${lang.code}">Hinweise</label>
+																<textarea class="form-control" name="Hinweise_${lang.code}" id="Hinweise_${lang.code}" placeholder="${lang.placeholders.hinweise}">${Uebung_Details.Texte[lang.code].Hinweise}</textarea>
+															</div>
+															<div class="form-group mb-3">
+																<label for="Tipps_${lang.code}">Tipps</label>
+																<textarea class="form-control" name="Tipps_${lang.code}" id="Tipps_${lang.code}" placeholder="${lang.placeholders.tipps}">${Uebung_Details.Texte[lang.code].Tipps}</textarea>
+															</div>
+															<div class="form-group mb-3">
+																<label for="Voiceover_${lang.code}">Voiceover (${lang.name})</label>
+																<input type="file" class="form-control mb-2" name="Voiceover_${lang.code}" id="Voiceover_${lang.code}" accept="audio/mp3, audio/wav, audio/ogg, audio/*">
+																<audio class="w-100" controls>
+																	<source src="https://cdn.personalpeak360.de/trainingshalle/${Uebung_Details.Texte[lang.code].Voiceover_ID}" type="video/mp4">
+																	Dein Browser unterstützt das Audio-Element nicht.
+																</audio>
+															</div>
+														</div>
+													`;
+													pillsTabContent_DETAILS_{{ übung["id"] | replace("-", "") }}.innerHTML += content;
+												});
+											</script>
+
+											<div class="form-group mb-3">
+												<label for="Video_Animation">Animation (Video)</label>
+												<input type="file" class="form-control mb-2" name="Video_Animation" id="Video_Animation" accept="video/mp4, video/avi, video/mov, video/x-matroska, video/*">
+												
+                                                <video class="w-100" muted controls>
+                                                    <source src="https://cdn.personalpeak360.de/trainingshalle/{{ übung['Animation'] }}" type="video/mp4">
+                                                    Dein Browser unterstützt das Video-Element nicht.
+                                                </video>
+											</div>
+
+											<div class="form-group mb-3">
+												<label for="Typ">Typ</label>
+												<select name="Typ" id="Typ_DETAILS_{{ übung["id"] | replace("-", "") }}" class="form-select" onchange="toggleGesundheitsproblem_DETAILS_{{ übung["id"] | replace("-", "") }}()">
+													<option value="Alles" {% if übung["Typ"] == "Alles" %}selected{% endif %}>Für Alles geeignet</option>
+													<option value="Fitnessstudio" {% if übung["Typ"] == "Fitnessstudio" %}selected{% endif %}>Fitnessstudio</option>
+													<optgroup label="Zuhause">
+														<option value="Zuhause_GERÄTE" {% if übung["Typ"] == "Zuhause_GERÄTE" %}selected{% endif %}>MIT Geräten</option>
+														<option value="Zuhause" {% if übung["Typ"] == "Zuhause" %}selected{% endif %}>OHNE Geräte</option>
+													</optgroup>
+													<option value="Gesundheit" {% if übung["Typ"] == "Gesundheit" %}selected{% endif %}>Gesundheitliche Einschränkung</option>
+												</select>
+
+												<select class="form-control" id="Gesundheitsproblem_DETAILS_{{ übung["id"] | replace("-", "") }}" name="Gesundheitsproblem" {% if übung["Typ"] == "Gesundheit" %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+														<option value="Rückenschmerzen" {% if übung["Gesundheitsproblem"] == "Rückenschmerzen" %}selected{% endif %}>Rückenschmerzen</option>
+														<option value="Schulterschmerzen" {% if übung["Gesundheitsproblem"] == "Schulterschmerzen" %}selected{% endif %}>Schulterschmerzen</option>
+														<option value="Nackenschmerzen" {% if übung["Gesundheitsproblem"] == "Nackenschmerzen" %}selected{% endif %}>Nackenschmerzen</option>
+														<option value="Hüftschmerzen" {% if übung["Gesundheitsproblem"] == "Hüftschmerzen" %}selected{% endif %}>Hüftschmerzen</option>
+														<option value="Knieschmerzen" {% if übung["Gesundheitsproblem"] == "Knieschmerzen" %}selected{% endif %}>Knieschmerzen</option>
+														<option value="Fuß&Knöchelschmerzen" {% if übung["Gesundheitsproblem"] == "Fuß&Knöchelschmerzen" %}selected{% endif %}>Fuß & Knöchelschmerzen</option>
+														<option value="Schreibtisch-Athlet" {% if übung["Gesundheitsproblem"] == "Schreibtisch-Athlet" %}selected{% endif %}>Schreibtisch-Athlet</option>
+														<option value="Rehasport_Basis" {% if übung["Gesundheitsproblem"] == "Rehasport_Basis" %}selected{% endif %}>Rehasport Basis</option>
+												</select>
+											</div>
+
+
+											<script>
+												function toggleGesundheitsproblem_DETAILS_{{ übung["id"] | replace("-", "") }}() {
+													const typSelect = document.getElementById('Typ_DETAILS_{{ übung["id"] | replace("-", "") }}');
+													const gesundheitsproblemSelect = document.getElementById('Gesundheitsproblem_DETAILS_{{ übung["id"] | replace("-", "") }}');
+													if (typSelect.value === 'Gesundheit') {
+														gesundheitsproblemSelect.style.display = 'block';
+														typSelect.classList.add('mb-2')
+													} else {
+														gesundheitsproblemSelect.style.display = 'none';
+														typSelect.classList.remove('mb-2')
+													}
+												}
+											</script>
+
+											<div class="form-group mb-3" data-select2-id="21">
+												<label for="Muskelgruppen" class="form-label">Betroffene Muskelgruppen</label>
+												<select class="form-control multiple-select" id="multiple-select_DETAILS_{{ übung['id'] }}" name="Muskelgruppen" multiple="multiple" data-placeholder="Wähle die betroffenen Muskeln dieser Übung" placeholder="Wähle die betroffenen Muskeln dieser Übung">
+													{% for muskel in ["Brust", "Rücken", "Schultern", "Beine", "Arme", "Bauchmuskeln", "Waden", "Unterarme", "Trapezmuskeln", "Gesäßmuskeln", "Beinbizeps", "Beinstrecker", "Latissimus", "Trizeps", "Bizeps", "Schulterdeltamuskeln", "Schräge Bauchmuskeln", "Hüftbeuger", "Rumpf"] %}
+														<option value="{{ muskel }}" {% if muskel in übung['Muskelgruppen'] %} selected{% endif %}>{{ muskel }}</option>
+													{% endfor %}
+												</select>
+											</div>
+
+											<div class="form-group mb-0">
+												<label class="form-label">Suchbegriffe hinzufügen</label>
+												<select class="form-control multiple-select" multiple="multiple" data-placeholder="Füge Suchbegriffe hinzu" id="suchbegriffe_DETAILS_{{ übung["id"] }}" name="suchbegriffe[]">
+													{% for Begriff in übung['Suchbegriffe'] %}
+														<option value="{{ Begriff }}" selected>{{ Begriff }}</option>
+													{% endfor %}
+													<!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+												</select>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+											<button type="submit" class="btn btn-primary">Änderungen speichern</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					{% endfor %}
+
+
+
+					<div class="card radius-15">
+						<div class="card-body">
+							<div class="card-title">
+								<h4 class="mb-0">Übersicht der Übungen</h4>
+								<h6 class="mb-0">Trainingshalle</h6>
+							</div>
+							<hr/>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createÜbung">Übung erstellen</button>
+
+							<!-- Modal -->
+							<div class="modal fade" id="createÜbung" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/übungen" method="post" id="Erstellen_FORM" enctype="multipart/form-data">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Neue Übung anlegen</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+												<div class="alert alert-warning fade show" role="alert" id="alert-warning">
+													Du hast folgende Möglichkeiten:
+													<ul class="mb-0">
+														<li>Gib alle Übersetzungen manuell ein</li>
+														<li>Hinterlege Deine API-Tokens in den Einstellungen, um automatische Übersetzungen für die Übungen zu aktivieren</li>
+													</ul>
+												</div>
+
+												
+
+												{% if WhiteLabel['API_TOKEN_Deepl'] %}
+													<div class="form-group mb-3">
+														<label class="form-label">Einstellungen (Texte)</label>
+														<select class="form-control" id="Generiere_Texte" name="Generiere_Texte" onchange="toggleLanguageSelect_Texte()">
+															<option value="Gar nichts" selected>Texte nicht übersetzen</option>
+															<option value="Alles">Für alle Texte Übersetzung anwenden</option>
+															<option value="Bestimmte">Für bestimmte Sprachen Texte übersetzen</option>
+															<!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+														</select>
+													</div>
+
+													<div class="form-group mb-3" id="languageSelectContainer_Text" style="display: none;">
+														<label class="form-label">Wähle Sprachen für welche Texte übersetzt werden sollen</label>
+														<select class="form-control" id="languagesSelect_Text" name="languagesSelect_Text[]" multiple>
+															<option value="DE"><span class="flag-icon flag-icon-de"></span> Deutsch</option>
+															<option value="EN"><span class="flag-icon flag-icon-um"></span> Englisch</option>
+															<option value="ES"><span class="flag-icon flag-icon-es"></span> Spanisch</option>
+															<option value="AR"><span class="flag-icon flag-icon-sa"></span> Arabisch</option>
+															<option value="GR"><span class="flag-icon flag-icon-gr"></span> Griechisch</option>
+															<option value="RU"><span class="flag-icon flag-icon-ru"></span> Russisch</option>
+														</select>
+													</div>
+
+
+													<script>
+														function toggleLanguageSelect_Texte() {
+															const voiceoverSetting = document.getElementById("Generiere_Texte").value;
+															const languageSelectContainer = document.getElementById("languageSelectContainer_Text");
+
+															if (voiceoverSetting === "Bestimmte") {
+																languageSelectContainer.style.display = "block";
+															} else {
+																languageSelectContainer.style.display = "none";
+															}
+														}
+													</script>
+												{% endif %}
+
+												{% if WhiteLabel['API_TOKEN_ElevenLabs'] %}
+													<div class="form-group mb-3">
+														<label class="form-label">Einstellungen (Voiceover)</label>
+														<select class="form-control" id="Generiere_Voiceover" name="Generiere_Voiceover" onchange="toggleLanguageSelect_Voiceover()">
+															<option value="Gar nichts" selected>Keine Voiceover generieren</option>
+															<option value="Alles">Für alle Texte (Hinweise und Tipps) Voiceover generieren</option>
+															<option value="Änderungen">Für alle GEÄNDERTEN Texte (Hinweise und Tipps) Voiceover generieren</option>
+															<option value="Bestimmte">Für bestimmte Sprachen Voiceover generieren</option>
+															<!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+														</select>
+													</div>
+
+													<div class="form-group mb-3" id="languageSelectContainer_Voiceover" style="display: none;">
+														<label class="form-label">Wähle Sprachen für welche Voiceover generiert werden sollen</label>
+														<select class="form-control" id="languagesSelect_Voiceover_" name="languagesSelect_Voiceover[]" multiple>
+															<option value="DE"><span class="flag-icon flag-icon-de"></span> Deutsch</option>
+															<option value="EN"><span class="flag-icon flag-icon-um"></span> Englisch</option>
+															<option value="ES"><span class="flag-icon flag-icon-es"></span> Spanisch</option>
+															<option value="AR"><span class="flag-icon flag-icon-sa"></span> Arabisch</option>
+															<option value="GR"><span class="flag-icon flag-icon-gr"></span> Griechisch</option>
+															<option value="RU"><span class="flag-icon flag-icon-ru"></span> Russisch</option>
+														</select>
+													</div>
+
+
+													<script>
+														function toggleLanguageSelect_Voiceover() {
+															const voiceoverSetting = document.getElementById("Generiere_Voiceover").value;
+															const languageSelectContainer = document.getElementById("languageSelectContainer_Voiceover");
+
+															if (voiceoverSetting === "Bestimmte") {
+																languageSelectContainer.style.display = "block";
+															} else {
+																languageSelectContainer.style.display = "none";
+															}
+														}
+													</script>
+												{% endif %}
+
+												<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+													<!-- Tabs werden hier dynamisch erzeugt -->
+												</ul>
+												
+												<div class="tab-content" id="pills-tabContent">
+													<!-- Tab-Inhalte werden hier dynamisch erzeugt -->
+												</div>
+												
+												<script>
+													// Sprachdaten
+													const languages = [
+														{
+															code: 'DE',
+															name: 'Deutsch',
+															flag: 'de',
+															placeholders: {
+																name: 'Liegestütze',
+																hinweise: 'Achten Sie darauf, dass der Rücken gerade bleibt ...',
+																tipps: 'Um die Übung effektiver zu machen, ...',
+															},
+														},
+														{
+															code: 'EN',
+															name: 'Englisch',
+															flag: 'um',
+															placeholders: {
+																name: 'Push-ups',
+																hinweise: 'Make sure that your back remains straight ...',
+																tipps: 'To make the exercise more effective, ...',
+															},
+														},
+														{
+															code: 'ES',
+															name: 'Spanisch',
+															flag: 'es',
+															placeholders: {
+																name: 'Flexiones',
+																hinweise: 'Asegúrese de que su espalda permanezca recta ...',
+																tipps: 'Para hacer el ejercicio más efectivo, ...',
+															},
+														},
+														{
+															code: 'AR',
+															name: 'Arabisch',
+															flag: 'sa',
+															placeholders: {
+																name: 'تمارين الضغط',
+																hinweise: 'تأكد من أن ظهرك يظل مستقيماً ...',
+																tipps: 'لجعل التمرين أكثر فعالية ...',
+															},
+														},
+														{
+															code: 'GR',
+															name: 'Griechisch',
+															flag: 'gr',
+															placeholders: {
+																name: 'Κάμψεις',
+																hinweise: 'Βεβαιωθείτε ότι η πλάτη σας παραμένει ευθεία ...',
+																tipps: 'Για να κάνετε την άσκηση πιο αποτελεσματική, ...',
+															},
+														},
+														{
+															code: 'RU',
+															name: 'Russisch',
+															flag: 'ru',
+															placeholders: {
+																name: 'Отжимания',
+																hinweise: 'Убедитесь, что ваша спина остается прямой ...',
+																tipps: 'Чтобы сделать упражнение более эффективным, ...',
+															},
+														},
+													];
+												
+													const pillsTab = document.getElementById('pills-tab');
+													const pillsTabContent = document.getElementById('pills-tabContent');
+												
+													// Tabs und Inhalte generieren
+													languages.forEach((lang, index) => {
+														const isActive = index === 0 ? 'active' : '';
+												
+														// Tab hinzufügen
+														const tab = `
+															<li class="nav-item" role="presentation">
+																<a class="nav-link ${isActive}" id="pills-${lang.code}-tab" data-bs-toggle="pill" href="#pills-${lang.code}" role="tab" aria-controls="pills-${lang.code}" aria-selected="${index === 0}">
+																	<i class="flag-icon flag-icon-${lang.flag}"></i> ${lang.name}
+																</a>
+															</li>
+														`;
+														pillsTab.innerHTML += tab;
+												
+														// Tab-Inhalte hinzufügen
+														const content = `
+															<div class="tab-pane fade ${isActive ? 'active show' : ''}" id="pills-${lang.code}" role="tabpanel" aria-labelledby="pills-${lang.code}-tab">
+																<div class="form-group mb-3">
+																	<label for="Name_${lang.code}">Name</label>
+																	<input type="text" class="form-control" name="Name_${lang.code}" id="Name_${lang.code}" placeholder="${lang.placeholders.name}">
+																</div>
+																<div class="form-group mb-3">
+																	<label for="Hinweise_${lang.code}">Hinweise</label>
+																	<textarea class="form-control" name="Hinweise_${lang.code}" id="Hinweise_${lang.code}" placeholder="${lang.placeholders.hinweise}"></textarea>
+																</div>
+																<div class="form-group mb-3">
+																	<label for="Tipps_${lang.code}">Tipps</label>
+																	<textarea class="form-control" name="Tipps_${lang.code}" id="Tipps_${lang.code}" placeholder="${lang.placeholders.tipps}"></textarea>
+																</div>
+																<div class="form-group mb-3">
+																	<label for="Voiceover_${lang.code}">Voiceover (${lang.name})</label>
+																	<input type="file" class="form-control" name="Voiceover_${lang.code}" id="Voiceover_${lang.code}" accept="audio/mp3, audio/wav, audio/ogg, audio/*">
+																</div>
+															</div>
+														`;
+														pillsTabContent.innerHTML += content;
+													});
+												</script>
+												
+
+												<div class="form-group mb-3">
+													<label for="Video_Animation">Animation (Video)</label>
+													<input type="file" class="form-control" name="Video_Animation" id="Video_Animation" accept="video/mp4, video/avi, video/mov, video/x-matroska, video/*">
+												</div>
+
+                                                <div class="form-group mb-3">
+                                                    <label for="Typ">Typ</label>
+                                                    <select name="Typ" id="Typ" class="form-select" onchange="toggleGesundheitsproblem()">
+                                                        <option value="Alles">Für Alles geeignet</option>
+                                                        <option value="Fitnessstudio">Fitnessstudio</option>
+                                                        <optgroup label="Zuhause">
+                                                            <option value="Zuhause_GERÄTE">MIT Geräten</option>
+                                                            <option value="Zuhause">OHNE Geräte</option>
+                                                        </optgroup>
+                                                        <option value="Gesundheit">Gesundheitliche Einschränkung</option>
+                                                    </select>
+
+                                                    <select class="form-control" id="Gesundheitsproblem" name="Gesundheitsproblem" style="display: none;">
+														<option value="Rückenschmerzen">Rückenschmerzen</option>
+														<option value="Schulterschmerzen">Schulterschmerzen</option>
+														<option value="Nackenschmerzen">Nackenschmerzen</option>
+														<option value="Hüftschmerzen">Hüftschmerzen</option>
+														<option value="Knieschmerzen">Knieschmerzen</option>
+														<option value="Fuß&Knöchelschmerzen">Fuß & Knöchelschmerzen</option>
+														<option value="Schreibtisch-Athlet">Schreibtisch-Athlet</option>
+														<option value="Rehasport_Basis">Rehasport Basis</option>
+													</select>
+                                                </div>
+												<script>
+													function toggleGesundheitsproblem() {
+														const typSelect = document.getElementById('Typ');
+														const gesundheitsproblemSelect = document.getElementById('Gesundheitsproblem');
+														if (typSelect.value === 'Gesundheit') {
+															gesundheitsproblemSelect.style.display = 'block';
+															typSelect.classList.add('mb-2')
+														} else {
+															gesundheitsproblemSelect.style.display = 'none';
+															typSelect.classList.remove('mb-2')
+														}
+													}
+												</script>
+
+                                                <div class="form-group mb-3" data-select2-id="21">
+                                                    <label for="Muskelgruppen" class="form-label">Betroffene Muskelgruppen</label>
+                                                    <select class="form-control multiple-select" id="Muskelgruppen" name="Muskelgruppen" multiple="multiple" data-placeholder="Wähle die betroffenen Muskeln dieser Übung" placeholder="Wähle die betroffenen Muskeln dieser Übung">
+                                                        <option value="Brust">Brust</option>
+                                                        <option value="Rücken">Rücken</option>
+                                                        <option value="Schultern">Schultern</option>
+                                                        <option value="Beine">Beine</option>
+                                                        <option value="Arme">Arme</option>
+                                                        <option value="Bauchmuskeln">Bauchmuskeln</option>
+                                                        <option value="Waden">Waden</option>
+                                                        <option value="Unterarme">Unterarme</option>
+                                                        <option value="Trapezmuskeln">Trapezmuskeln</option>
+                                                        <option value="Gesäßmuskeln">Gesäßmuskeln</option>
+                                                        <option value="Beinbizeps">Beinbizeps</option>
+                                                        <option value="Beinstrecker">Beinstrecker</option>
+                                                        <option value="Latissimus">Latissimus</option>
+                                                        <option value="Trizeps">Trizeps</option>
+                                                        <option value="Bizeps">Bizeps</option>
+                                                        <option value="Schulterdeltamuskeln">Schulterdeltamuskeln</option>
+                                                        <option value="Schräge Bauchmuskeln">Schräge Bauchmuskeln</option>
+                                                        <option value="Hüftbeuger">Hüftbeuger</option>
+                                                        <option value="Rumpf">Rumpf</option>
+                                                        <!-- Weitere Optionen hier -->
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group mb-0">
+                                                    <label class="form-label">Suchbegriffe hinzufügen</label>
+                                                    <select class="form-control multiple-select" multiple="multiple" data-placeholder="Füge Suchbegriffe hinzu" id="suchbegriffe" name="suchbegriffe[]">
+                                                        <!-- Optionen sind nicht nötig, da der Benutzer selbst Suchbegriffe hinzufügen kann -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                                                <button type="submit" class="btn btn-primary">Übung anlegen</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+							</div>
+                            
+                            <style>
+                                /* Setze den z-index für das Select2-Dropdown höher als den z-index des Modals */
+                                .select2-container--open {
+                                    z-index: 1050 !important; /* Normalerweise ist der Modal z-index 1050 */
+                                }
+
+                                .select2-container {
+                                    z-index: 3000 !important; /* Ein höherer Wert als der Modal */
+                                }
+                            </style>
+
+							<div class="table-responsive">
+								<table id="example" class="table table-striped table-bordered" style="width:100%">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Muskelgruppen</th>
+											<th>Typ</th>
+											<th>Aktionen</th>
+										</tr>
+									</thead>
+									<tbody>
+                                        {% for übung in Übungen %}
+                                            <tr>
+                                                <td>{{ übung['Texte']['DE']['Name'] }}</td>
+                                                <td>
+													<p class="designattion mb-0">
+														{% for muskel in übung['Muskelgruppen'] %}
+															<span class="badge bg-secondary">{{ muskel }}</span>
+														{% endfor %}
+													</p>
+												</td>
+                                                <td>{{ übung['Typ'] }}</td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetails-{{ übung['id'] }}">Details ansehen / Bearbeiten</button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+									</tbody>
+									<tfoot>
+										<th>Name</th>
+										<th>Muskelgruppen</th>
+										<th>Typ</th>
+										<th>Aktionen</th>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/select2/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.multiple-select').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: "Muskelgruppen auswählen...",
+                allowClear: true // Ermöglicht das Entfernen der Auswahl
+            });
+
+
+            $('#suchbegriffe').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: "Füge Suchbegriffe hinzu",
+                tags: true,  // Ermöglicht die Eingabe eigener Tags
+                tokenSeparators: [',', ' '],  // Trennzeichen für die Eingabe von Suchbegriffen
+                allowClear: true,  // Ermöglicht das Löschen von Suchbegriffen
+                maximumInputLength: 50  // Maximale Länge der Suchbegriffe (optional)
+            });
+        });
+    </script>
+
+	
+
+	{% for übung in Übungen %}
+		<script>
+			$(document).ready(function() {
+				$('#multiple-select_DETAILS_{{ übung["id"] }}').select2({
+					theme: 'bootstrap4',
+					width: '100%',
+					placeholder: "Muskelgruppen auswählen...",
+					allowClear: true // Ermöglicht das Entfernen der Auswahl
+				});
+
+
+				$('#suchbegriffe_DETAILS_{{ übung["id"] }}').select2({
+					theme: 'bootstrap4',
+					width: '100%',
+					placeholder: "Füge Suchbegriffe hinzu",
+					tags: true,  // Ermöglicht die Eingabe eigener Tags
+					tokenSeparators: [',', ' '],  // Trennzeichen für die Eingabe von Suchbegriffen
+					allowClear: true,  // Ermöglicht das Löschen von Suchbegriffen
+					maximumInputLength: 50  // Maximale Länge der Suchbegriffe (optional)
+				});
+			});
+		</script>
+	{% endfor %}
+
+    
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

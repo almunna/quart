@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Kalender → Cockpit</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+					<!-- Modal -->
+					<div class="modal fade" id="modal_Erstellen" tabindex="-1" aria-labelledby="modal_Erstellen" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Neuen Termin eintragen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+									<div class="form-group mb-3">
+										<label for="eventType">Ereignistyp</label>
+										<select class="form-control" id="eventType">
+											<option value="normal">Normaler Termin</option>
+											<option value="allDay">Ganztägiges Ereignis</option>
+											<option value="timeRange">Zeitraum</option>
+										</select>
+									</div>
+									<div class="form-group mb-3" id="eventTitleGroup">
+										<label for="Thema">Thema</label>
+										<input type="text" class="form-control" name="Thema" id="Thema" required>
+									</div>
+									<div class="form-group mb-3" id="dateGroup">
+										<label for="Datum">Gewünschtes Datum</label>
+										<input type="date" class="form-control" name="Datum" id="Datum" required>
+									</div>
+									<div class="form-group mb-3" id="timeGroup">
+										<label for="Uhrzeit">Gewünschte Uhrzeit</label>
+										<input type="time" class="form-control" name="Uhrzeit" id="Uhrzeit" required>
+									</div>
+									<div class="form-group mb-3" id="endDateGroup" style="display: none;">
+										<label for="endDatum">Enddatum</label>
+										<input type="date" class="form-control" name="endDatum" id="endDatum">
+									</div>
+									<div class="form-group mb-3" id="endTimeGroup" style="display: none;">
+										<label for="UhrzeitEnde">Endzeit</label>
+										<input type="time" class="form-control" name="UhrzeitEnde" id="UhrzeitEnde">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+									<button type="button" id="submitEventBtn" class="btn btn-primary">Termin anlegen</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<!-- Modal für das Bearbeiten von Terminen -->
+					<div class="modal fade" id="modal_Bearbeiten" tabindex="-1" aria-labelledby="modal_Bearbeiten" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Termin bearbeiten</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+									<div class="form-group mb-3" id="eventTitleGroup">
+										<label for="Thema">Thema</label>
+										<input type="text" class="form-control" name="Thema" id="editThema" required>
+									</div>
+									<div class="form-group mb-3" id="dateGroup">
+										<label for="Datum">Gewünschtes Datum</label>
+										<input type="date" class="form-control" name="Datum" id="editDatum" required>
+									</div>
+									<div class="form-group mb-3" id="timeGroup">
+										<label for="Uhrzeit">Gewünschte Uhrzeit</label>
+										<input type="time" class="form-control" name="Uhrzeit" id="editUhrzeit" required>
+									</div>
+									<div class="form-group mb-3" id="endDateGroup" style="display: none;">
+										<label for="endDatum">Enddatum</label>
+										<input type="date" class="form-control" name="endDatum" id="editEndDatum">
+									</div>
+									<div class="form-group mb-3" id="endTimeGroup" style="display: none;">
+										<label for="UhrzeitEnde">Endzeit</label>
+										<input type="time" class="form-control" name="UhrzeitEnde" id="editUhrzeitEnde">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+									<button type="button" id="deleteEventBtn" class="btn btn-danger">Termin löschen</button>
+									<button type="button" id="updateEventBtn" class="btn btn-primary">Änderungen speichern</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+
+
+
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Verwalte deine Termine</h4>
+                                <h6 class="mb-0">Nutze die Gelegenheit, um dein Tagebuch für die Bereiche Ernährung und Analyse sowie für die Trainingshalle zu führen. <br>Halte deine Fortschritte fest und reflektiere deine Ziele.</h6>
+
+								<hr>
+
+								<!-- Button zum Öffnen des Modals -->
+								<button id="addEventBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_Erstellen">Neuen Termin hinzufügen</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card radius-15">
+						<div class="card-body">
+							<div class="table-responsive">
+								<div id='calendar'></div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+    
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/js/main.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			// Create an instance of Notyf
+			var message = new nachricht({
+				duration: 5000,
+				position: {
+					x: 'right',
+					y: 'top',
+				},
+				dismissible: true
+			});
+
+			var calendarEl = document.getElementById('calendar');
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'de', // Setze die Sprache auf Deutsch
+				headerToolbar: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+				},
+				buttonText: {
+					today:    'Heute',
+					month:    'Monat',
+					week:     'Woche',
+					day:      'Tag',
+					list:     'Listen-Ansicht'
+				},
+				initialView: 'dayGridMonth',
+				initialDate: '{{ today }}',
+				navLinks: true, // can click day/week names to navigate views
+				selectable: true,
+				nowIndicator: true,
+				dayMaxEvents: true, // allow "more" link when too many events
+				editable: true,
+				selectable: true,
+				businessHours: true,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: {{ Termine | safe | replace('True', 'true') | replace('False', 'false') }},
+				eventClick: function(info) {
+					const isEditable = info.event.extendedProps.editable !== false; // Nur false bedeutet nicht editierbar
+
+					if (!isEditable) {
+						// Display an error notification
+						message.error('Dieser Termin kann nicht bearbeitet werden. Grund: SYSTEMEREIGNIS');
+						return; // Termin ist nicht editierbar
+					}
+
+					// Fülle das Bearbeitungsmodal mit den aktuellen Daten des angeklickten Termins
+					document.getElementById('editThema').value = info.event.title;
+					var start = info.event.start;
+					var end = info.event.end;
+
+					// Setze das Startdatum und die Uhrzeit
+					document.getElementById('editDatum').value = start.toISOString().split('T')[0];
+					document.getElementById('editUhrzeit').value = start.toTimeString().split(' ')[0].substring(0, 5);
+
+					// Bestimme, ob es sich um einen Zeitraum handelt
+					if (end) {
+						document.getElementById('endDateGroup').style.display = 'block'; // Enddatum anzeigen
+						document.getElementById('endTimeGroup').style.display = 'block'; // Endzeit anzeigen
+						document.getElementById('editEndDatum').value = end.toISOString().split('T')[0]; // Enddatum setzen
+						document.getElementById('editUhrzeitEnde').value = end.toTimeString().split(' ')[0].substring(0, 5); // Endzeit setzen
+					} else {
+						document.getElementById('endDateGroup').style.display = 'none'; // Enddatum ausblenden
+						document.getElementById('endTimeGroup').style.display = 'none'; // Endzeit ausblenden
+					}
+
+					// Zeige das Bearbeitungsmodal an
+					var modalBearbeiten = new bootstrap.Modal(document.getElementById('modal_Bearbeiten'));
+					modalBearbeiten.show();
+
+					// Aktualisieren des Termins
+					document.getElementById('updateEventBtn').onclick = function () {
+						var title = document.getElementById('editThema').value;
+						var date = document.getElementById('editDatum').value;
+						var time = document.getElementById('editUhrzeit').value;
+						var selectedType = document.getElementById('eventType').value;
+
+						var startDateTime = date + 'T' + time;
+						var endDateTime = '';
+
+						if (document.getElementById('endDateGroup').style.display !== 'none') {
+							var endDate = document.getElementById('editEndDatum').value;
+							var endTime = document.getElementById('editUhrzeitEnde').value;
+							endDateTime = endDate + 'T' + endTime; // Endzeit für Zeitraum
+						}
+
+						// Prüfen, ob die erforderlichen Felder ausgefüllt sind
+						if (title && date) {
+							info.event.setProp('title', title);
+							info.event.setStart(startDateTime);
+
+							if (selectedType === 'normal' && time) {
+								info.event.setEnd(null); // Kein Enddatum für normale Termine
+							} else if (selectedType === 'allDay') {
+								info.event.setAllDay(true);
+								info.event.setStart(date);
+								info.event.setEnd(null); // Kein Enddatum
+							} else if (selectedType === 'timeRange' && endDateTime) {
+								info.event.setEnd(endDateTime);
+							}
+
+							// Modal schließen und Eingabefelder zurücksetzen
+							modalBearbeiten.hide();
+							document.getElementById('editThema').value = '';
+							document.getElementById('editDatum').value = '';
+							document.getElementById('editUhrzeit').value = '';
+							document.getElementById('editEndDatum').value = ''; // Enddatum zurücksetzen
+							document.getElementById('editUhrzeitEnde').value = ''; // Endzeit zurücksetzen
+						} else {
+							alert('Bitte füllen Sie alle erforderlichen Felder aus.'); // Fehlermeldung, wenn Felder leer sind
+						}
+					};
+
+					// Löschen des Termins
+					document.getElementById('deleteEventBtn').onclick = function () {
+						if (confirm('Möchten Sie diesen Termin wirklich löschen?')) {
+							info.event.remove(); // Löscht das Event aus dem Kalender
+							modalBearbeiten.hide(); // Schließe das Modal
+							sendEventsToEndpoint(); // Aktualisiere die Liste der Events auf dem Server
+						}
+					};
+				},
+				eventChange: function(info) {
+					// Alle Events an den Endpunkt senden, wenn ein Event geändert wird
+					sendEventsToEndpoint();
+				},
+				eventRemove: function(info) {
+					// Alle Events an den Endpunkt senden, wenn ein Event entfernt wird
+					sendEventsToEndpoint();
+				}
+			});
+
+
+
+			// Funktion zum Senden aller Events an den Endpunkt
+			function sendEventsToEndpoint() {
+				var events = calendar.getEvents(); // Holen Sie sich alle aktuellen Events
+				var eventData = events.map(event => {
+					// Hier wird das spezifische JSON-Format erstellt
+					return {
+						title: event.title,
+						start: event.start.toISOString(), // Startdatum im ISO-Format
+						editable: event.extendedProps.editable === true || event.extendedProps.editable === undefined, // gleiche Logik für extendedProps,
+						extendedProps: {
+							editable: event.extendedProps.editable === true || event.extendedProps.editable === undefined // gleiche Logik für extendedProps
+						},
+						end: event.end ? event.end.toISOString() : undefined // Enddatum nur hinzufügen, wenn vorhanden
+					};
+				});
+
+				console.log("Daten: ", eventData)
+
+				// Senden Sie die Daten an den gewünschten Endpunkt
+				fetch('https://dashboard.{{ WhiteLabel['Domain'] }}/cockpit/kalender', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(eventData)
+				})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Netzwerkantwort war nicht in Ordnung');
+					}
+					return response.json();
+				})
+				.then(data => {
+					console.log('Erfolgreich gesendet:', data);
+				})
+				.catch(error => {
+					console.error('Es gab ein Problem mit der Fetch-Anfrage:', error);
+				});
+			}
+
+
+			calendar.render();
+
+			
+
+			// Eingabefelder basierend auf dem ausgewählten Ereignistyp anpassen
+			document.getElementById('eventType').onchange = function () {
+				var selectedType = this.value;
+				var dateGroup = document.getElementById('dateGroup');
+				var timeGroup = document.getElementById('timeGroup');
+				var endDateGroup = document.getElementById('endDateGroup');
+				var endTimeGroup = document.getElementById('endTimeGroup');
+
+				// Standard alle Felder zurücksetzen
+				dateGroup.style.display = 'block';
+				timeGroup.style.display = 'block';
+				endDateGroup.style.display = 'none';
+				endTimeGroup.style.display = 'none';
+
+				if (selectedType === 'allDay') {
+					// Ganztägiges Ereignis: nur Datum benötigt
+					timeGroup.style.display = 'none'; // Uhrzeit ausblenden
+				} else if (selectedType === 'timeRange') {
+					// Zeitraum: Enddatum und Endzeit erforderlich
+					endDateGroup.style.display = 'block'; // Enddatum anzeigen
+					endTimeGroup.style.display = 'block'; // Endzeit anzeigen
+				}
+			};
+
+			// Event hinzufügen
+			document.getElementById('submitEventBtn').onclick = function () {
+				// Event-Daten aus dem Formular abrufen
+				var title = document.getElementById('Thema').value;
+				var date = document.getElementById('Datum').value;
+				var time = document.getElementById('Uhrzeit').value;
+				var selectedType = document.getElementById('eventType').value;
+
+				var startDateTime = date + 'T' + time; // z.B. '2020-09-12T14:30'
+				var endDateTime = '';
+
+				if (selectedType === 'timeRange') {
+					var endDate = document.getElementById('endDatum').value;
+					var endTime = document.getElementById('UhrzeitEnde').value;
+					endDateTime = endDate + 'T' + endTime; // Endzeit für Zeitraum
+				}
+
+				// Prüfen, ob die erforderlichen Felder ausgefüllt sind
+				if (title && date) {
+					if (selectedType === 'normal' && time) {
+						// Normaler Termin mit Uhrzeit
+						calendar.addEvent({
+							title: title,
+							start: startDateTime
+						});
+					} else if (selectedType === 'allDay') {
+						// Ganztägiges Ereignis
+						calendar.addEvent({
+							title: title,
+							start: date,
+							allDay: true
+						});
+					} else if (selectedType === 'timeRange' && endDateTime) {
+						// Zeitraum mit Start- und Endzeit
+						calendar.addEvent({
+							title: title,
+							start: startDateTime,
+							end: endDateTime
+						});
+					}
+
+					// Modal schließen und Eingabefelder zurücksetzen
+					var modal = bootstrap.Modal.getInstance(document.getElementById('modal_Erstellen'));
+					modal.hide();
+					document.getElementById('Thema').value = '';
+					document.getElementById('Datum').value = '';
+					document.getElementById('Uhrzeit').value = '';
+					document.getElementById('endDatum').value = ''; // Enddatum zurücksetzen
+					document.getElementById('UhrzeitEnde').value = ''; // Endzeit zurücksetzen
+
+					
+					// Alle Events an den Endpunkt senden, wenn ein Event entfernt wird
+					sendEventsToEndpoint();
+				} else {
+					alert('Bitte füllen Sie alle erforderlichen Felder aus.'); // Fehlermeldung, wenn Felder leer sind
+				}
+			};
+		});
+	</script>
+</body>
+
+</html>

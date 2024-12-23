@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="en" data-bs-theme="blue-theme">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ WhiteLabel['Bezeichnung'] }}</title>
+  <!--favicon-->
+  <link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+  <!-- loader-->
+  <link href="https://cdn.personalpeak360.de/maxtron/assets/frontend/css/pace.min.css" rel="stylesheet">
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/js/pace.min.js"></script>
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+  <!--plugins-->
+  <link href="https://cdn.personalpeak360.de/maxtron/assets/frontend/plugins/OwlCarousel/css/owl.carousel.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.personalpeak360.de/maxtron/assets/frontend/plugins/lightbox/dist/css/glightbox.min.css">
+  <!--bootstrap css-->
+  <link href="https://cdn.personalpeak360.de/maxtron/assets/frontend/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+  <!--main css-->
+  <link href="https://cdn.personalpeak360.de/maxtron/assets/frontend/css/bootstrap-extended.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/sass/frontend/main.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/assets/frontend/css/horizontal-menu.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/sass/frontend/dark-theme.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/sass/frontend/semi-dark.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/sass/frontend/blue-theme.css" rel="stylesheet">
+  <link href="https://cdn.personalpeak360.de/maxtron/sass/frontend/bordered-theme.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--start header-->
+  <header class="top-header" id="Parent_Scroll_Div">
+    <nav class="navbar navbar-expand-xl align-items-center gap-3 container px-4 px-lg-0">
+      <div class="logo-header d-none d-xl-flex align-items-center gap-2">
+        <div class="logo-icon">
+          <img src="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Logo_lang'] }}" class="logo-img" width="130" alt="">
+        </div>
+      </div>
+      <div class="btn-toggle d-xl-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+        <a href="javascript:;"><i class="material-icons-outlined">menu</i></a>
+      </div>
+
+      <div class="offcanvas offcanvas-start w-260" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header border-bottom h-70">
+          <div class="d-flex align-items-center gap-2">
+            <div class="">
+              <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/logo-icon.png" class="logo-icon" width="45" alt="logo icon">
+            </div>
+            <div class="">
+              <h4 class="logo-text">Maxton</h4>
+            </div>
+          </div>
+          <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+            <i class="material-icons-outlined">close</i>
+          </a>
+        </div>
+        <div class="offcanvas-body p-0 primary-menu">
+          <ul class="navbar-nav align-items-center mx-auto gap-0 gap-xl-1">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">
+                <div class="parent-icon"><i class="material-icons-outlined">home</i>
+                </div>
+                <div class="menu-title">Start</div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#About">
+                <div class="parent-icon"><i class="material-icons-outlined">info</i>
+                </div>
+                <div class="menu-title">Vorteile</div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Services">
+                <div class="parent-icon"><i class="material-icons-outlined">work_outline</i>
+                </div>
+                <div class="menu-title">Zielgruppe</div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Pricing">
+                <div class="parent-icon"><i class="material-icons-outlined">euro</i>
+                </div>
+                <div class="menu-title">Preise</div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Team">
+                <div class="parent-icon"><i class="material-icons-outlined">people_alt</i>
+                </div>
+                <div class="menu-title">Team</div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Contact">
+                <div class="parent-icon"><i class="material-icons-outlined">call</i>
+                </div>
+                <div class="menu-title">Kontakt</div>
+              </a>
+            </li>
+              {% if username %}
+                <li class="nav-item dropdown d-none d-xxl-block">
+                  <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+                    <div class="parent-icon"><i class='material-icons-outlined'>task</i>
+                    </div>
+                    <div class="menu-title">Links</div>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" href="https://dashboard.{{ WhiteLabel['Domain'] }}">
+                        <i class='material-icons-outlined'>dashboard</i>Dashboard
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
+          </ul>
+        </div>
+      </div>
+      <div class="">
+        {% if username %}
+          <a class="btn btn-grd btn-grd-primary raised d-flex align-items-center rounded-5 gap-2 px-4" href="https://auth.{{WHITELABEL_Domain}}/willkommen">
+            <i class="material-icons-outlined">account_circle</i>{{username}}
+          </a>
+        {% else %}
+          <a class="btn btn-grd btn-grd-primary raised d-flex align-items-center rounded-5 gap-2 px-4" href="https://auth.{{WHITELABEL_Domain}}/">
+            <i class="material-icons-outlined">account_circle</i>Anmelden
+          </a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+  <!--end top header-->
+
+
+  <!--start main wrapper-->
+  <main class="main-wrapper" data-bs-spy="scroll" data-bs-target="#Parent_Scroll_Div" data-bs-smooth-scroll="false" tabindex="0">
+    <div class="main-content">
+
+      <!--start banner-->
+      <section class="py-5" id="home">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="row align-items-center justify-content-center g-4">
+            <div class="col-12 col-xl-6 order-xl-first order-last">
+              <h1 class="fw-bold mb-3 banner-heading">Die Gesundheitssoftware zur ganzheitlichen Betreuung!</h1>
+              <h5 class="mb-0 banner-paragraph">Willkommen bei {{ WhiteLabel['Bezeichnung'] }}.</h5>
+Ihr Schlüssel zu umfassendem Erfolg in Gesundheit und Fitness!
+              <div class="d-flex flex-column flex-lg-row align-items-center gap-3 mt-5">
+                <a href="javascript:;"
+                  class="btn btn-lg btn-grd btn-grd-primary d-flex align-items-center rounded-5 gap-2 raised">
+                  <i class="material-icons-outlined">speed</i>Jetzt vorab anmelden und direkt bei Release starten
+                </a>
+              </div>
+            </div>
+            <div class="col-12 col-xl-6 text-center">
+              <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/banners/01.png" class="img-fluid" width="560" alt="">
+            </div>
+          </div><!--end row-->
+          <div class="row g-4 mt-4">
+            <div class="col-12 col-lg-6 col-xl-6 d-flex">
+              <div class="card rounded-4 mb-0 w-100">
+                <div class="card-body p-4">
+                  <div class="d-flex align-items-start gap-3">
+                    <div class="d-flex align-items-center justify-content-center rounded-circle wh-64 btn-grd-info text-white flex-shrink-0">
+                      <i class="material-icons-outlined fs-2">sports</i>
+                    </div>
+                    <div>
+                      <h5>Für den täglichen Athleten</h5>
+                      <p class="mb-0">Hobbysportler, Leistungssportler, zielorientierte, motivierte, etc.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-12 col-lg-6 col-xl-6 d-flex">
+              <div class="card rounded-4 mb-0 w-100">
+                <div class="card-body p-4">
+                  <div class="d-flex align-items-start gap-3">
+                    <div class="d-flex align-items-center justify-content-center rounded-circle wh-64 btn-grd-success text-white flex-shrink-0">
+                      <i class="material-icons-outlined fs-2">health_and_safety</i>
+                    </div>
+                    <div>
+                      <h5>Für Gesundheitsexperten</h5>
+                      <p class="mb-0">Praxisinhaber, Trainer, Osteopathen, Ernährungsberater etc.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row justify-content-center text-center gap-5 mt-4">
+            <p class="d-flex align-items-center gap-2 mb-0">
+              <i class="material-icons-outlined fs-5">check_circle</i>
+              Genaue Analysen
+            </p>
+            <p class="d-flex align-items-center gap-2 mb-0">
+              <i class="material-icons-outlined fs-5">check_circle</i>
+              All-in-One
+            </p>
+            <p class="d-flex align-items-center gap-2 mb-0">
+              <i class="material-icons-outlined fs-5">check_circle</i>
+              Leichte Bedienbarkeit
+            </p>
+          </div>
+        </div>
+      </section>
+      <!--end banner-->
+
+
+      <!--start about us-->
+      <section class="py-5 bg-section" id="About">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="section-title text-center mb-5">
+            <h1 class="mb-0 section-title-name">Weshalb Du unsere Software wählen solltest</h1>
+          </div>
+            <div class="row g-4">
+              <div class="col-12 col-xl-8"> <!-- Erste Karte auf 8 Spalten setzen -->
+                <div class="card h-100 border-top border-4 border-primary rounded-4 mb-0">
+                  <div class="card-body p-4">
+                    <div class="my-4">
+                      <h3 class="mb-0">{{ WhiteLabel['Bezeichnung'] }}</h3>
+                    </div>
+                    
+                    <div class="pricing-content d-flex flex-column gap-3">
+                      <div class="d-flex flex-column align-items-start gap-2">
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Genaue Tests & Analysen
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Hormonelle Berücksichtigung
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Maßgeschneidert für dich
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Terminbuchungssystem
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> LiveChat-Funktion
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Alles an einem Ort
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Videoanalysen
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Challenges
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Exklusive Rabatte
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Gesundheitsprotokolle
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Tagebuch
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Individuelle Betreuung
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Leichte Bedienbarkeit
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Holt Dich dort ab, wo Du stehst
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Detaillierte Auswertungen
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Animation & Grafiken
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">check_circle</i> Ernährungstracking
+                        </p>
+                      </div>
+                    </div>
+                    
+
+                    <div class="price-tag d-flex align-items-center justify-content-center gap-2 my-5"></div>
+                    <div class="d-grid">
+                      <button class="btn btn-lg btn-grd btn-grd-info w-100 rounded-5">Jetzt durchstarten!</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="col-12 col-xl-4"> <!-- Zweite Karte auf 4 Spalten setzen -->
+                <div class="card h-100 border-top border-4 border-secondary rounded-4 mb-0">
+                  <div class="card-body p-4">
+                    <div class="my-4">
+                      <h3 class="mb-0">Andere Software</h3>
+                    </div>
+                    <div class="pricing-content d-flex flex-column gap-3">
+                      <div class="d-flex flex-column align-items-start gap-2">
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Ungenaue Analysen/Tests
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine hormonelle Auswertung
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Zu oft generalisiert
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine Terminbuchung
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine LiveChat-Funktion
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Mehrere Plattformen
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine Videoanalysen
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine Challenges
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine Rabatte
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Keine Gesundheitsprotokolle
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Kein Reflektionsbereich
+                        </p>
+                        <p class="align-items-center gap-2 mb-0">
+                          <i class="material-icons-outlined fs-5">remove_circle_outline</i> Oft unübersichtlich
+                        </p>
+                      </div>
+                    </div>
+                    <div class="price-tag d-flex align-items-center justify-content-center gap-2 my-5"></div>
+                  </div>
+                </div>
+              </div>
+            </div><!--end row-->
+            
+          <!--
+            <div class="mt-5 clients">
+              <h3 class="d-none">Brands</h3>
+              <div class="clients-grid py-3">
+                <div class="clients-shops owl-carousel owl-theme">
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/01.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/02.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/03.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/04.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/05.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/06.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="p-4 rounded-4 card mb-0">
+                      <a href="javascript:;">
+                        <img src="https://cdn.personalpeak360.de/maxtron/assets/frontend/images/clients/07.png" class="img-fluid" alt="...">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          -->
+        </div>
+      </section>
+      <!--end about us-->
+
+
+      <!--start services-->
+      <section class="py-5" id="Services">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="section-title text-center mb-5">
+            <h1 class="mb-0 section-title-name">Für wen ist {{ WhiteLabel['Bezeichnung'] }} ideal?</h1>
+          </div>
+          <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            <div class="col d-flex">
+              <div class="card rounded-4 mb-0 w-100">
+                <div class="card-body text-center p-4">
+                  <div class="d-flex flex-column gap-4">
+                    <div
+                      class="d-flex align-items-center justify-content-center rounded-circle wh-64 bg-grd-primary text-white flex-shrink-0 mx-auto">
+                      <i class="material-icons-outlined fs-2">favorite_border</i>
+                    </div>
+                    <div class="">
+                      <h5>Alltagshelden & Schreibtischathleten</h5>
+                      <p class="mb-0">Erhalte perfekt auf dich zugeschnittene Trainings-& Ernährungspläne. Maßgeschneiderte Lösungen für deine Ernährung, dein Stresslevel, deinen Trainingsfortschritt. Simpel & leicht umsetzbar.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col d-flex">
+              <div class="card rounded-4 mb-0 w-100">
+                <div class="card-body text-center p-4">
+                  <div class="d-flex flex-column gap-4">
+                    <div
+                      class="d-flex align-items-center justify-content-center rounded-circle wh-64 bg-grd-danger text-white flex-shrink-0 mx-auto">
+                      <i class="material-icons-outlined fs-2">card_membership</i>
+                    </div>
+                    <div class="">
+                      <h5>Trainer, Studios & Praxen</h5>
+                      <p class="mb-0">Unterstütze deine Mitglieder mit genauen Analysen. Gebe Ernährungsempfehlungen anhand von Messergebnisse und des Hormonstatus. Stelle Trainingspläne bereit, die auch von Zuhause aus durchführbar sind.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col d-flex">
+              <div class="card rounded-4 mb-0 w-100">
+                <div class="card-body text-center p-4">
+                  <div class="d-flex flex-column gap-4">
+                    <div
+                      class="d-flex align-items-center justify-content-center rounded-circle wh-64 bg-grd-warning text-white flex-shrink-0 mx-auto">
+                      <i class="material-icons-outlined fs-2">language</i>
+                    </div>
+                    <div class="">
+                      <h5>Experten im Gesundheitswesen</h5>
+                      <p class="mb-0">Betreue deine Kunden ganzheitlich. Nutze die genaue Hormon-& Ernährungsanalyse für Nährstoffempfehlungen. Grafiken und Voiceover helfen deinem Kunden Übungen spielend zu verstehen und auszuführen.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!--end row-->
+        </div>
+      </section>
+      <!--end services-->
+
+
+      <!-- start call to action-->
+      <section class="py-5 bg-call-to-action">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="text-center">
+            <h1 class="text-white">Call To Action</h1>
+            <p class="mb-1 text-white">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+              fugiat nulla pariatur.
+              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+              laborum.
+              Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida.
+              Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+            </p>
+            <div class="mt-4">
+              <a href="javascriptt:;" class="btn btn-grd btn-lg btn-grd-primary rounded-5 px-4 raised">Call To
+                Action</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--end call to action-->
+
+
+      <!--start pricing table-->
+      <section class="py-5" id="Pricing">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="section-title text-center mb-5">
+            <h1 class="mb-0 section-title-name">Preisoptionen</h1>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-12 col-xl-4">
+              <div class="card border-top border-4 border-primary rounded-4 mb-0">
+                <div class="card-body p-4">
+                  <div class="my-4">
+                    <h3 class="mb-0">Training oder Ernährung</h3>
+                  </div>
+                  <div class="pricing-content d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Entscheide dich zwischen der Trainingshalle oder unserem Ernährungs-& Analysezentrum</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Profitire in dem von dir gewählten Bereich von genauen Analysen</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Übersichtliche Auswertungen</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Ganzheitliche Betreuung</p>
+                      <i class="bi bi-x-circle me-2 text-danger"></i>
+                    </div>
+                  </div>
+                  <div class="price-tag d-flex align-items-center justify-content-center gap-2 my-5">
+                    <h5 class="mb-0 align-self-end text-primary">ab</h5>
+                    <h1 class="mb-0 lh-1 price-amount text-primary">19,99</h1>
+                    <h5 class="mb-0 align-self-end text-primary">€</h5>
+                    <h5 class="mb-0 align-self-end text-primary"> / Monat</h5>
+                  </div>
+                  <div class="d-grid">
+                    <button class="btn btn-lg btn-grd btn-grd-info w-100 rounded-5">Jetzt loslegen</button>
+                  </div>
+                </div>                
+              </div>
+            </div>
+            <div class="col-12 col-xl-4">
+              <div class="card border-top border-4 border-success rounded-4 mb-0">
+                <div class="card-body p-4">
+                  <div class="my-4">
+                    <h3 class="mb-0">All-In</h3>
+                  </div>
+                  <div class="pricing-content d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Nutze die Trainingshalle</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Nutze unser Ernährungs-& Analysezentrum</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Detaillierte Auswertungen</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Dein persönlicher Coach</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Ganzheitliche Betreuung</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Voller umfang, All-In</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                  </div>
+                  <div class="price-tag d-flex align-items-center justify-content-center gap-2 my-5">
+                    <h1 class="mb-0 lh-1 price-amount text-primary">49,99</h1>
+                    <h5 class="mb-0 align-self-end text-primary">€</h5>
+                    <h5 class="mb-0 align-self-end text-primary"> / Monat</h5>
+                  </div>
+                  <div class="d-grid">
+                    <button class="btn btn-lg btn-grd btn-grd-success w-100 rounded-5">Ganzheitlich Ziele erreichen</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-4">
+              <div class="card border-top border-4 border-danger rounded-4 mb-0">
+                <div class="card-body p-4">
+                  <div class="my-4">
+                    <h6 class="mb-0"><span class="badge bg-grd-danger">Experten, Studios & Praxen</span></h6>
+                    <br>
+                    <h3 class="mb-0">Let´s talk!</h3>
+                  </div>
+                  <div class="pricing-content d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Nutze die Software als wäre es deine eigene</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Eigener Adminbereich</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Unbegrenzte Nutzer</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">Eigenes, komplettes Branding</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <p class="mb-0 fs-6">uvm.</p>
+                      <i class="bi bi-check-circle me-2 text-success"></i>
+                    </div>
+                  </div>
+                  <div class="price-tag d-flex align-items-center justify-content-center gap-2 my-5">
+                    <h1 class="mb-0 lh-1 price-amount text-primary">AUF ANFRAGE</h1>
+                  </div>
+                  <div class="d-grid">
+                    <a href="mailto:info@personalpeak360.de" class="btn btn-lg btn-grd btn-grd-danger w-100 rounded-5">Kontakt aufnehmen</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!--end row-->
+
+        </div>
+      </section>
+      <!--end pricing table-->
+
+
+      <!--start portfolio-->
+      <section class="py-5" id="Portfolio">
+        <div class="container py-4 px-4 px-lg-0">
+
+          <div class="row row-cols-1 row-cols-lg-3 g-4">
+            <div class="col">
+              <div class="inner">
+                <img src="https://cdn.{{ WhiteLabel['Domain'] }}/EMail/Bilder/Ernährungstracking.png" class="img-fluid rounded-4 p-1 bg-grd-branding"
+                  alt="image">
+              </div>
+            </div>
+            <div class="col">
+              <div class="inner">
+                <img src="https://cdn.{{ WhiteLabel['Domain'] }}/EMail/Bilder/Trainingshalle.png" class="img-fluid rounded-4 p-1 bg-grd-danger"
+                  alt="image">
+              </div>
+            </div>
+            <div class="col">
+              <div class="inner">
+                <img src="https://cdn.{{ WhiteLabel['Domain'] }}/EMail/Bilder/willkommen.png" class="img-fluid rounded-4 p-1 bg-grd-info"
+                  alt="image">
+              </div>
+            </div>
+          </div><!--end row-->
+        </div>
+      </section>
+      <!--end portfolio-->
+
+
+
+      <!--start team-->
+      <section class="py-5 bg-section" id="Team">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="section-title text-center mb-5">
+            <h1 class="mb-0 section-title-name">Team</h1>
+          </div>
+
+          <div class="row row-cols-1 row-cols-xl-2 g-4">
+            <div class="col">
+              <div class="card mb-0 rounded-4">
+                <div class="card-body p-4">
+                  <div class="d-flex flex-column flex-lg-row align-items-center gap-4">
+                    <div class="">
+                      <img src="https://placehold.co/120x120/png" width="120" height="120"
+                        class="rounded-circle p-1 bg-white bg-grd-warning" alt="">
+                    </div>
+                    <div class="profile-info">
+                      <div class="my-4">
+                        <h3 class="mb-1">Samuel Hufnagel</h3>
+                        <p class="mb-3 fs-6">Projektleiter</p>
+                        <p class="mb-0">Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-start gap-3">
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-deep-blue text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-linkedin fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-info text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-facebook fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-danger text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-youtube fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-voilet text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-twitter-x fs-5"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card mb-0 rounded-4">
+                <div class="card-body p-4">
+                  <div class="d-flex flex-column flex-lg-row align-items-center gap-4">
+                    <div class="">
+                      <img src="https://placehold.co/120x120/png" width="120" height="120"
+                        class="rounded-circle p-1 bg-white bg-grd-danger" alt="">
+                    </div>
+                    <div class="profile-info">
+                      <div class="my-4">
+                        <h3 class="mb-1">Thomas Fischbach</h3>
+                        <p class="mb-3 fs-6">Projektleiter</p>
+                        <p class="mb-0">Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-start gap-3">
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-deep-blue text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-linkedin fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-info text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-facebook fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-danger text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-youtube fs-5"></i></a>
+                        <a href="javascript:;"
+                          class="wh-42 bg-grd-voilet text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                            class="bi bi-twitter-x fs-5"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!--end row-->
+        </div>
+      </section>
+      <!--end team-->
+
+
+      <!--start contact form-->
+      <section class="py-5 bg-section" id="Contact">
+        <div class="container py-4 px-4 px-lg-0">
+          <div class="section-title text-center mb-5">
+            <h1 class="mb-0 section-title-name">Kontakt aufnehmen</h1>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-12 col-xl-5">
+              <div class="card rounded-4">
+                <div class="card-body p-4">
+                  <div class="d-flex flex-column gap-4">
+                    <div class="d-flex align-items-center gap-3">
+                      <div
+                        class="wh-48 bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="material-icons-outlined">house</i>
+                      </div>
+                      <div class="">
+                        <h5 class="mb-0">Adresse</h5>
+                        <p class="mb-0">Eltzerhofstraße 2, 56068 Koblenz</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                      <div
+                        class="wh-48 bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="material-icons-outlined">call</i>
+                      </div>
+                      <div class="">
+                        <h5 class="mb-0">Telefon</h5>
+                        <p class="mb-0">+49 (0) 1234 5678910</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                      <div
+                        class="wh-48 bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="material-icons-outlined">email</i>
+                      </div>
+                      <div class="">
+                        <h5 class="mb-0">E-Mail</h5>
+                        <p class="mb-0">info@personalpeak360.de</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card rounded-4">
+                <div class="card-body p-4">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2243.5399056723704!2d7.586343915106117!3d50.35875797943225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b1fdd7f8cf49a1%3A0xe99c90ef42f0139c!2sEltzerhofstra%C3%9Fe%202%2C%2056068%20Koblenz%2C%20Germany!5e0!3m2!1sen!2sin!4v1722715182573!5m2!1sen!2sin"
+                    height="255" style="border:0; border-radius: 16px; width: 100%;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-12 col-xl-7">
+              <div class="card rounded-4 mb-0">
+                <div class="card-body p-4">
+                  <form>
+                    <div class="row g-4">
+                      <div class="col-12 col-lg-6">
+                        <label for="YourName" class="form-label">Dein Name</label>
+                        <input type="text" class="form-control" id="YourName" placeholder="Gib Deinen Namen ein">
+                      </div>
+                      <div class="col-12 col-lg-6">
+                        <label for="YourName" class="form-label">E-Mail Adresse</label>
+                        <input type="email" class="form-control" id="EmailId" placeholder="Gib Deine E-Mail Adresse ein">
+                      </div>
+                      <div class="col-12 col-lg-12">
+                        <label for="Subject" class="form-label">Betreff</label>
+                        <input type="text" class="form-control" id="Subject" placeholder="Betreff">
+                      </div>
+                      <div class="col-12 col-lg-12">
+                        <label for="Message" class="form-label">Nachricht</label>
+                        <textarea class="form-control" id="Message" rows="10" cols="5" placeholder="Deine Nachricht an uns"></textarea>
+                      </div>
+                      <div class="col-12 col-lg-12">
+                        <button type="submit" class="btn btn-grd btn-grd-primary px-4 rounded-5">Abschicken</button>
+                      </div>
+                    </div><!--end row-->
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div><!--end row-->
+        </div>
+      </section>
+      <!--end contact form-->
+
+    </div>
+  </main>
+  <!--end main wrapper-->
+
+
+  <!--start footer -->
+  <section class="page-footer py-5">
+    <div class="container py-4 px-4 px-lg-0">
+      <div class="row g-4">
+        <div class="col-12 col-xl-4">
+          <div class="footer-widget-1">
+            <div class="footer-logo mb-4">
+              <img src="https://cdn.{{ WhiteLabel['Domain'] }}/white-label/{{ WhiteLabel['Logo_lang'] }}" width="160" alt="">
+            </div>
+            <p>{{ WhiteLabel['Bezeichnung'] }} begleitet dich auf deinem Weg  der Transformation.</p>
+            <p class="mb-2"><strong>Addresse: </strong>Eltzerhofstraße 2, 56068 Koblenz<br> Deutschland</p>
+            <p class="mb-2"><strong>Telefon: </strong>+49 (0) 1234 5678910</p>
+            <p class="mb-0"><strong>E-Mail: </strong>info@personalpeak360.de</p>
+          </div>
+        </div>
+        <div class="col-12 col-xl-2">
+          <div class="footer-widget-2">
+          </div>
+        </div>
+        <div class="col-12 col-xl-2">
+          <div class="footer-widget-3">
+            <div class="footer-links">
+              <h5 class="mb-4">Rechtliches</h5>
+              <div class="d-flex flex-column gap-2">
+                <a href="javascript:;">Impressum</a>
+                <a href="javascript:;">Datenschutzerklärung</a>
+                <a href="javascript:;">AGB</a>
+              </div>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="footer-links">
+              <h5 class="mb-4">Wichtige Links</h5>
+              <div class="d-flex flex-column gap-2">
+                <a href="https://dashboard.{{ WhiteLabel['Domain'] }}">Dashboard</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-4">
+          <div class="footer-widget-4">
+            <h5 class="mb-4">Newsletter</h5>
+            <div class="d-flex flex-column gap-2">
+              <p>Melde Dich für unseren Newsletter an und sehe schon jetzt Deinen Muskeln beim wachsen zu!</p>
+              <form>
+                <div class="input-group subscribe-control">
+                  <input type="text" class="form-control">
+                  <button class="btn btn-grd btn-grd-primary px-4" type="button">Anmelden</button>
+                </div>
+              </form>
+            </div>
+            <h6 class="mb-3 mt-4">Folge uns!</h6>
+            <div class="d-flex align-items-center justify-content-start gap-3">
+              <a href="javascript:;"
+                class="wh-42 bg-grd-info text-white rounded-circle d-flex align-items-center justify-content-center"><i
+                  class="bi bi-facebook fs-5"></i>
+              </a>
+              <a href="javascript:;"
+                class="wh-42 bg-grd-voilet text-white rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-instagram fs-5"></i>
+              </a>
+              <a href="javascript:;"
+                class="wh-42 bg-grd-danger text-white rounded-circle d-flex align-items-center justify-content-center">
+                <i class="bi bi-youtube fs-5"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+  
+      </div><!--end row-->
+    </div>
+  </section>
+  <!--end footer section-->
+
+
+  <!--start footer strip-->
+   <footer class="footer-strip py-3 px-4 px-lg-0 text-center border-top">
+     <p class="mb-0">© 2024 {{ WhiteLabel['Bezeichnung'] }} | Alle Rechte vorbehalten.</p>
+   </footer>
+  <!--end footer strip-->
+
+
+  <!--Start Back To Top Button-->
+     <a href="javaScript:;" class="back-to-top"><i class="material-icons-outlined">arrow_upward</i></a>
+  <!--End Back To Top Button-->
+
+  <!--start switcher-->
+  <button class="btn btn-grd btn-grd-danger btn-switcher position-fixed top-50 d-flex align-items-center gap-2"
+    type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop">
+    <i class="material-icons-outlined">tune</i>Anpassungen
+  </button>
+
+  <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="staticBackdrop">
+    <div class="offcanvas-header border-bottom h-70">
+      <div class="">
+        <h5 class="mb-0">Design-Anpassungen</h5>
+        <p class="mb-0">Passe das Design an!</p>
+      </div>
+      <a href="javascript:;" class="primaery-menu-close" data-bs-dismiss="offcanvas">
+        <i class="material-icons-outlined">close</i>
+      </a>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <p>Theme variation</p>
+
+        <div class="row g-3">
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="BlueTheme" checked>
+            <label
+              class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
+              for="BlueTheme">
+              <span class="material-icons-outlined">contactless</span>
+              <span>Blau-Töne</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="LightTheme">
+            <label
+              class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
+              for="LightTheme">
+              <span class="material-icons-outlined">light_mode</span>
+              <span>Hell</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="DarkTheme">
+            <label
+              class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
+              for="DarkTheme">
+              <span class="material-icons-outlined">dark_mode</span>
+              <span>Dunkel</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="SemiDarkTheme">
+            <label
+              class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
+              for="SemiDarkTheme">
+              <span class="material-icons-outlined">contrast</span>
+              <span>Halbdunkel</span>
+            </label>
+          </div>
+          <div class="col-12 col-xl-6">
+            <input type="radio" class="btn-check" name="theme-options" id="BoderedTheme">
+            <label
+              class="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
+              for="BoderedTheme">
+              <span class="material-icons-outlined">border_style</span>
+              <span>Eingerahmt</span>
+            </label>
+          </div>
+        </div><!--end row-->
+
+      </div>
+    </div>
+  </div>
+  <!--start switcher-->
+
+  <!--bootstrap js-->
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/js/bootstrap.bundle.min.js"></script>
+
+  <!--plugins-->
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/js/jquery.min.js"></script>
+  <!--plugins-->
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/plugins/OwlCarousel/js/owl.carousel.min.js"></script>
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/plugins/OwlCarousel/js/owl.carousel2.thumbs.min.js"></script>
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/js/main.js"></script>
+
+  <script src="https://cdn.personalpeak360.de/maxtron/assets/frontend/plugins/lightbox/dist/js/glightbox.min.js"></script>
+  
+  <script>
+    var lightbox = GLightbox();
+    lightbox.on('open', (target) => {
+      console.log('lightbox opened');
+    });
+    var lightboxDescription = GLightbox({
+      selector: '.glightbox2'
+    });
+    var lightboxVideo = GLightbox({
+      selector: '.glightbox3'
+    });
+    lightboxVideo.on('slide_changed', ({ prev, current }) => {
+      console.log('Prev slide', prev);
+      console.log('Current slide', current);
+
+      const { slideIndex, slideNode, slideConfig, player } = current;
+
+      if (player) {
+        if (!player.ready) {
+          // If player is not ready
+          player.on('ready', (event) => {
+            // Do something when video is ready
+          });
+        }
+
+        player.on('play', (event) => {
+          console.log('Started play');
+        });
+
+        player.on('volumechange', (event) => {
+          console.log('Volume change');
+        });
+
+        player.on('ended', (event) => {
+          console.log('Video ended');
+        });
+      }
+    });
+
+    var lightboxInlineIframe = GLightbox({
+      selector: '.glightbox4'
+    });
+
+  </script>
+
+  <script>
+
+    $('.clients-shops').owlCarousel({
+      loop: true,
+      margin: 24,
+      responsiveClass: true,
+      nav: false,
+      navText: [
+        "<i class='bx bx-chevron-left'></i>",
+        "<i class='bx bx-chevron-right' ></i>"
+      ],
+      autoplay: true,
+      autoplayTimeout: 3000,
+      dots: false,
+      responsive: {
+        0: {
+          nav: false,
+          items: 1
+        },
+        576: {
+          nav: false,
+          items: 2
+        },
+        768: {
+          nav: false,
+          items: 3
+        },
+        1024: {
+          nav: false,
+          items: 3
+        },
+        1366: {
+          items: 4
+        },
+        1400: {
+          items: 5
+        }
+      },
+    })
+
+  </script>
+
+
+<script>
+  new Vue({
+      el: '#app',
+      data: {
+          error: "{{ error }}",
+          success: "{{ success }}"
+      },
+      methods: {
+          showMessages() {
+          if (this.isErrorVisible) {
+              this.showError();
+          }
+          if (this.isSuccessVisible) {
+              this.showSuccess();
+          }
+          },
+          showError() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.error('{{ error }}');
+          },
+          showSuccess() {
+              // Create an instance of Notyf
+              var message = new nachricht({
+                  duration: 5000,
+                  position: {
+                      x: 'right',
+                      y: 'top',
+                  },
+                  dismissible: true
+              });
+
+              // Display an error notification
+              message.success('{{ success }}');
+          }
+      },
+      computed: {
+          isErrorVisible: function () {
+              return this.error && this.error !== '' && this.error !== 'None';
+          },
+          isSuccessVisible: function() {
+              return this.success && this.success !== '' && this.success !== 'None';
+          }
+      },
+      watch: {
+          isErrorVisible(newVal) {
+              if (!newVal) {
+                  this.closeError();
+              }
+          },
+          isSuccessVisible(newVal) {
+              if (!newVal) {
+                  this.closeSuccess();
+              }
+          }
+      },
+      created() {
+          this.$nextTick(() => {
+              this.showMessages();
+          })
+      }
+  });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Fitness-Tests - Trainingshalle → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+					<div id="modalContainer" class="modal fade" tabindex="-1" aria-hidden="true" style="z-index: 9999 !important;"></div>
+
+
+					{% for anfrage in Individuelle_Anfragen %}
+						<div class="modal fade" id="modalDetails-{{ anfrage['id'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" backdrop="static" style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Individuell" method="post">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Individuellen Fitness-Test erstellen<h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+											{% for i in range(1, 11) %}
+												{% set übung_key = 'Uebung_' ~ i %}
+												{% if anfrage[übung_key] is defined %}
+													<label>Übung {{ i }}:</label><br>
+													<div class="card exercise-cardDetails bg-dark radius-15 mb-1"
+														data-bs-toggle="modal" 
+														data-bs-target="#modal_{{ i }}"
+														data-animation="{{ anfrage[übung_key]['Animation'] }}"
+														{% for lang, details in anfrage[übung_key]['Texte'].items() %}
+															data-name_{{ lang.lower() }}="{{ details['Name'] }}"
+															data-hinweise_{{ lang.lower() }}="{{ details['Hinweise'] }}"
+															data-tipps_{{ lang.lower() }}="{{ details['Tipps'] }}"
+															data-voiceover_{{ lang.lower() }}="{{ details['Voiceover_ID'] }}"
+														{% endfor %}
+														style="cursor: pointer;">
+														<div class="card-body">
+															<p class="card-text text-white">{{ anfrage[übung_key]['Texte']['DE']['Name'] }}</p>
+														</div>
+													</div>
+												{% endif %}
+											{% endfor %}
+
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+
+					<script>
+						document.addEventListener('DOMContentLoaded', function () {
+							// Selektiere nur die gewünschten Karten mit einer spezifischen Klasse
+							const cards = document.querySelectorAll('.exercise-cardDetails');
+
+							// Modal Container
+							const modalContainer = document.getElementById('modalContainer');
+
+							// Event Listener für jede Karte hinzufügen
+							cards.forEach(card => {
+								card.addEventListener('click', function () {
+									// Daten aus den data-* Attributen extrahieren
+									const übungsDetails = {};
+									const dataAttributes = card.dataset;
+
+									// Über alle Attribute iterieren und sprachspezifische Details extrahieren
+									Object.keys(dataAttributes).forEach(key => {
+										const match = key.match(/(name|hinweise|tipps|voiceover)_(.+)/);
+										if (match) {
+											const [_, type, lang] = match; // z.B. type = "name", lang = "de"
+											übungsDetails[lang] = übungsDetails[lang] || {};
+											übungsDetails[lang][type] = dataAttributes[key];
+										}
+									});
+
+									languages = [
+										{
+											code: 'DE',
+											name: 'Deutsch',
+											flag: 'de',
+											placeholders: {
+												name: 'Liegestütze',
+												hinweise: 'Achten Sie darauf, dass der Rücken gerade bleibt ...',
+												tipps: 'Um die Übung effektiver zu machen, ...',
+											},
+										},
+										{
+											code: 'EN',
+											name: 'Englisch',
+											flag: 'um',
+											placeholders: {
+												name: 'Push-ups',
+												hinweise: 'Make sure that your back remains straight ...',
+												tipps: 'To make the exercise more effective, ...',
+											},
+										},
+										{
+											code: 'ES',
+											name: 'Spanisch',
+											flag: 'es',
+											placeholders: {
+												name: 'Flexiones',
+												hinweise: 'Asegúrese de que su espalda permanezca recta ...',
+												tipps: 'Para hacer el ejercicio más efectivo, ...',
+											},
+										},
+										{
+											code: 'AR',
+											name: 'Arabisch',
+											flag: 'sa',
+											placeholders: {
+												name: 'تمارين الضغط',
+												hinweise: 'تأكد من أن ظهرك يظل مستقيماً ...',
+												tipps: 'لجعل التمرين أكثر فعالية ...',
+											},
+										},
+										{
+											code: 'GR',
+											name: 'Griechisch',
+											flag: 'gr',
+											placeholders: {
+												name: 'Κάμψεις',
+												hinweise: 'Βεβαιωθείτε ότι η πλάτη σας παραμένει ευθεία ...',
+												tipps: 'Για να κάνετε την άσκηση πιο αποτελεσματική, ...',
+											},
+										},
+										{
+											code: 'RU',
+											name: 'Russisch',
+											flag: 'ru',
+											placeholders: {
+												name: 'Отжимания',
+												hinweise: 'Убедитесь, что ваша спина остается прямой ...',
+												tipps: 'Чтобы сделать упражнение более эффективным, ...',
+											},
+										},
+									];
+
+									// Modal-Inhalt generieren
+									const modalContent = `
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">${übungsDetails['de']?.name || 'Übung'}</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+														${languages.map((lang, index) => `
+															<li class="nav-item" role="presentation">
+																<a class="nav-link ${index === 0 ? 'active' : ''}" id="pills-${lang.code.toLowerCase()}-tab" data-bs-toggle="pill" href="#pills-${lang.code.toLowerCase()}" role="tab" aria-controls="pills-${lang.code.toLowerCase()}" aria-selected="${index === 0}">
+																	<i class="flag-icon flag-icon-${lang.flag}"></i>
+																	${lang.name}
+																</a>
+															</li>
+														`).join('')}
+													</ul>
+													<div class="tab-content" id="pills-tabContent">
+														${Object.keys(übungsDetails).map((lang, index) => `
+															<div class="tab-pane fade ${index === 0 ? 'show active' : ''}" id="pills-${lang}" role="tabpanel" aria-labelledby="pills-${lang}-tab">
+																<div class="form-group mb-3">
+																	<label>Name (${lang.toUpperCase()})</label>
+																	<input type="text" class="form-control" value="${übungsDetails[lang]?.name || ''}" readonly>
+																</div>
+																<div class="form-group mb-3">
+																	<label>Hinweise (${lang.toUpperCase()})</label>
+																	<textarea class="form-control" readonly>${übungsDetails[lang]?.hinweise || ''}</textarea>
+																</div>
+																<div class="form-group mb-3">
+																	<label>Tipps (${lang.toUpperCase()})</label>
+																	<textarea class="form-control" readonly>${übungsDetails[lang]?.tipps || ''}</textarea>
+																</div>
+																
+																<div class="form-group mb-3">
+																	<label>Voiceover (${lang.toUpperCase()})</label>
+																	<audio class="w-100" controls>
+																		<source src="https://cdn.personalpeak360.de/trainingshalle/${übungsDetails[lang]?.voiceover || ''}" type="audio/mp3">
+																		Dein Browser unterstützt das Audio-Element nicht.
+																	</audio>
+																</div>
+															</div>
+														`).join('')}
+
+														
+														<div class="form-group mb-3">
+															<label for="Video_Animation">Animation (Video)</label>
+															
+															<video class="w-100" muted controls>
+																<source src="https://cdn.personalpeak360.de/trainingshalle/${dataAttributes['animation']}" type="video/mp4">
+																Dein Browser unterstützt das Video-Element nicht.
+															</video>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									`;
+
+									// Modal-Inhalt einfügen
+									modalContainer.innerHTML = modalContent;
+
+									// Modal anzeigen
+									const modal = new bootstrap.Modal(modalContainer);
+									modal.show();
+								});
+							});
+						});
+					</script>
+
+					<div class="modal fade" id="createFitnessTest" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" backdrop="static" style="display: none;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Individuell" method="post">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Individuellen Fitness-Test erstellen<h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+										<div class="form-group mb-3">
+											<label for="Grund">Grund für die Erstellung des Fitness-Tests</label>
+											<textarea class="form-control" name="Grund" id="Grund" placeholder="Erneuter Fitness-Test, da beim vorherigen Test zu wenig Übungen durchführbar waren." rows="4"></textarea>
+										</div>
+										<div class="form-group mb-3">
+											<label for="Kunde">Für wen ist dieser Fitness-Test</label>
+											<select class="form-select" name="Kunde" id="Kunde">
+												<option selected disabled>--- BITTE EINEN NUTZER WÄHLEN ---</option>
+												{% for Nutzer in Nutzer_Liste %}
+													<option value="{{ Nutzer['id'] }}">{{ Nutzer['Vorname'] }} {{ Nutzer['Nachname'] }}</option>
+												{% endfor %}
+											</select>
+										</div>
+
+										<label for="Übungen">Bitte wähle 10 Übungen für den Fitness-Test aus</label>
+										<div class="row">
+											{% for i in range(1, 11) %}
+												<div class="col-md-12 {% if not loop.last %} mb-1{% endif %}">
+													<div class="card shadow-sm">
+														<div class="card-body">
+															<h6 class="card-title">Übung {{ loop.index }}</h6>
+
+															<button 
+																type="button" 
+																class="btn btn-sm btn-primary w-100" 
+																data-bs-toggle="modal" 
+																data-bs-target="#exampleFullScreenModal" 
+																data-tab="Indiviudell" 
+																data-task="Übung {{ loop.index }}">
+																Übung auswählen...
+															</button>
+															<input type="hidden" name="Übung_{{ loop.index }}" id="Übung_{{ loop.index }}">
+														</div>
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+										<button type="submit" class="btn btn-primary">Fitness-Test erstellen & aktivieren</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+
+                    <div class="card radius-15">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Fitness-Tests</h4>
+								<h6 class="mb-0">White-Label Instanz: '{{ WhiteLabel['Bezeichnung'] }}'</h6>
+								<hr>
+                                <h6 class="mb-0">Auf dieser Seite kannst Du für Deine Kunden die Fitness-Tests für alle Trainingsmethoden zur Verfügung stellen.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+
+					<style>
+						.yellow-dot {
+							color: var(--primary-color) !important; /* Die Farbe des Punktes auf Gelb setzen */
+							font-size: 1.5em; /* Die Größe des Punktes anpassen, falls nötig */
+						}
+					</style>
+
+					<script>
+						document.addEventListener("DOMContentLoaded", function () {
+							const cards = document.querySelectorAll(".trainingshalle .card");
+							const exerciseDetails = document.querySelector(".exercise-details");
+							const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+							const loadingSpinner = document.getElementById('loading-spinner');
+
+							if (!exerciseInfo) {
+								console.error("Element 'exercise-info' nicht gefunden.");
+								return;
+							}
+
+							const exerciseName = exerciseInfo.querySelector("h4");
+							const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+							const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+							const hintsTab = document.querySelector("#pills-Hinweise");
+							const tipsTab = document.querySelector("#pills-Tipps");
+							const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+
+							if (!exerciseName || !exerciseVideo || !exerciseAudio || !hintsTab || !tipsTab || !muscleGroupsTab) {
+								console.error("Ein oder mehrere Elemente wurden nicht gefunden.");
+								return;
+							}
+
+							cards.forEach(card => {
+								card.addEventListener("click", () => {
+									loadingSpinner.classList.remove('d-none');
+
+									const name = card.getAttribute("data-name");
+									const tips = card.getAttribute("data-tipps");
+									const hints = card.getAttribute("data-hinweise");
+									const animation = card.getAttribute("data-animation");
+									const muscleGroups = card.getAttribute("data-muskelgruppen");
+									const voiceover = card.getAttribute("data-voiceover");
+
+									// Übungsdetails aktualisieren
+									exerciseName.innerHTML = '<span class="yellow-dot">•</span> ' + name + ' <span class="yellow-dot">•</span>';
+									exerciseVideo.setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + animation);
+									exerciseAudio.querySelector("source").setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + voiceover);
+
+									// Ladeereignisse hinzufügen
+									let videoLoaded = false;
+									let audioLoaded = false;
+
+									exerciseVideo.onloadeddata = () => {
+										videoLoaded = true;
+										checkIfLoaded();
+									};
+
+									exerciseAudio.oncanplaythrough = () => {
+										audioLoaded = true;
+										checkIfLoaded();
+									};
+
+									// Funktion zum Überprüfen, ob beide Ressourcen geladen sind
+									function checkIfLoaded() {
+										if (videoLoaded && audioLoaded) {
+											loadingSpinner.classList.add('d-none'); // Spinner ausblenden
+										}
+									}
+
+									exerciseAudio.load(); // Neue Audio-Datei laden
+
+									// Textinhalte aktualisieren
+									hintsTab.textContent = hints;
+									tipsTab.textContent = tips;
+									muscleGroupsTab.textContent = muscleGroups;
+
+									// Zeige die Übungsdetails an
+									exerciseDetails.querySelector("p").classList.add("d-none");
+									exerciseInfo.classList.remove("d-none");
+								});
+							});
+						});
+					</script>
+
+
+
+					<script>
+						////////////////////////////////
+						// RENDERN DER SUCHERGEBNISSE //
+						////////////////////////////////
+						
+						// RENDERN DER SUCHERGEBNISSE
+						document.addEventListener('DOMContentLoaded', function() {
+							// Füge den Event-Listener für den Suchbutton und die Enter-Taste hinzu
+							const searchButton = document.getElementById('button-suche');
+							const searchBar = document.getElementById('search-bar');
+							const loadingSpinner = document.getElementById('loading-spinner');
+							const loadingSpinnerBackground = document.getElementById('loading-spinnerBackground');
+							
+							const exerciseDetails = document.querySelector(".exercise-details");
+							const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+
+							if (!exerciseInfo) {
+								console.error("Element 'exercise-info' nicht gefunden.");
+								return;
+							}
+
+							const trainingshalle = document.querySelector('.trainingshalle div');
+							const paginationContainer = document.querySelector('.pagination.round-pagination'); // Verweis auf deine Paginierung
+
+							if (!paginationContainer) {
+								console.error("Element 'pagination' nicht gefunden.");
+								return;
+							}
+
+							const exerciseName = exerciseInfo.querySelector("h4");
+							const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+							const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+							const hintsTab = document.querySelector("#pills-Hinweise");
+							const tipsTab = document.querySelector("#pills-Tipps");
+							const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+
+							if (!exerciseName || !exerciseVideo || !exerciseAudio || !hintsTab || !tipsTab || !muscleGroupsTab) {
+								console.error("Ein oder mehrere Elemente wurden nicht gefunden.");
+								return;
+							}
+
+							let currentPage = 1;
+							let totalPages = 1;
+
+							// Funktion zum Ausführen der Suche
+							const performSearch = (page = 1) => {
+								if (typeof page !== 'number') {
+									console.error("Page-Parameter ist keine Zahl:", page);
+									return;
+								}
+
+								trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+								const searchValue = searchBar.value;
+								const url = `https://dashboard.personalpeak360.de/trainingshalle/übungen?SUCHE_Name=${encodeURIComponent(searchValue)}&SEITE=${page}`;
+
+								console.log(url)
+
+								// Ladeanimation anzeigen
+								loadingSpinner.classList.remove('d-none');
+								loadingSpinnerBackground.classList.remove('d-none');
+
+								// Führe die POST-Anfrage aus
+								fetch(url, {
+									method: 'POST'
+								})
+								.then(response => response.json())
+								.then(data => {
+									trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+									totalPages = data.Seiten; // Die Zuweisung erfolgt jetzt innerhalb des `then`-Blocks
+
+									if (data.Seiten_Inhalt.length > 0) {
+										data.Seiten_Inhalt.forEach(übung => {
+											const card = document.createElement('div');
+											card.className = 'card bg-dark radius-15 mb-1';
+											card.style.cursor = 'pointer';
+											card.dataset.id = übung.id;
+											
+
+
+											const languages = ["DE", "EN", "ES", "AR", "GR", "RU"]; // Verfügbare Sprachen
+											// Annahme: "übung.Texte" enthält die Sprachdaten
+											languages.forEach(lang => {
+												card.dataset[`name_${lang}`] = übung.Texte[lang]?.Name || "";
+												card.dataset[`tipps_${lang}`] = übung.Texte[lang]?.Tipps || "";
+												card.dataset[`hinweise_${lang}`] = übung.Texte[lang]?.Hinweise || "";
+												card.dataset[`voiceover_${lang}`] = übung.Texte[lang]?.Voiceover_ID || "";
+											});
+
+
+											card.dataset.animation = übung.Animation;
+											// Prüfe, ob es Muskelgruppen gibt
+											if (übung.Muskelgruppen && übung.Muskelgruppen.length > 1) {
+											// Erstelle den Text mit "und" vor dem letzten Element
+											const muscleGroupsText = übung.Muskelgruppen.slice(0, -1).join(', ') + ' und ' + übung.Muskelgruppen.slice(-1);
+											card.dataset.muskelgruppen = muscleGroupsText;
+											} else {
+											// Wenn nur eine Muskelgruppe vorhanden ist oder keine, direkt verwenden
+											card.dataset.muskelgruppen = übung.Muskelgruppen.join(', ');
+											}
+
+											const cardBody = document.createElement('div');
+											cardBody.className = 'card-body';
+
+											const cardText = document.createElement('p');
+											cardText.className = 'card-text text-white';
+											cardText.textContent = card.dataset[`name_${selectedLang}`];
+
+											cardBody.appendChild(cardText);
+											card.appendChild(cardBody);
+											trainingshalle.appendChild(card);
+
+											// Click-Event-Listener für die Karten hinzufügen
+											card.addEventListener('click', () => {
+												const id = card.getAttribute("data-id");
+												const name = card.getAttribute("data-name");
+												const tips = card.getAttribute("data-tipps");
+												const hints = card.getAttribute("data-hinweise");
+												const animation = card.getAttribute("data-animation");
+												const muscleGroups = card.getAttribute("data-muskelgruppen");
+												const voiceover = card.getAttribute("data-voiceover");
+
+												// Ladeanimation anzeigen
+												loadingSpinner.classList.remove("d-none");
+												loadingSpinnerBackground.classList.remove("d-none");
+
+												// Übungsdetails aktualisieren
+												exerciseName.innerHTML = `<span class="yellow-dot">•</span> ${card.dataset[`name_${selectedLang}`]} <span class="yellow-dot">•</span>`;
+												exerciseVideo.setAttribute("src", `https://cdn.personalpeak360.de/trainingshalle/${card.dataset.animation}`);
+
+												// Audio aktualisieren
+												exerciseAudio.querySelector("source").setAttribute("src", `https://cdn.personalpeak360.de/trainingshalle/${card.dataset[`voiceover_${selectedLang}`]}`);
+												exerciseAudio.load(); // Audio laden
+
+												// Textinhalte aktualisieren
+												hintsTab.textContent = card.dataset[`hinweise_${selectedLang}`];
+												tipsTab.textContent = card.dataset[`tipps_${selectedLang}`];
+												muscleGroupsTab.textContent = muscleGroups;
+
+												// Zeige die Übungsdetails an
+												exerciseDetails.querySelector("p").classList.add("d-none");
+												exerciseInfo.classList.remove("d-none");
+
+												// Warte, bis sowohl Video als auch Audio geladen sind
+												let videoLoaded = false;
+												let audioLoaded = false;
+
+												// Funktion zum Überprüfen, ob beide Ressourcen geladen sind
+												const checkIfLoaded = () => {
+													if (videoLoaded && audioLoaded) {
+														loadingSpinner.classList.add("d-none");
+														loadingSpinnerBackground.classList.add("d-none");
+													}
+												};
+
+												// Ladeereignis für das Video
+												exerciseVideo.onloadeddata = () => {
+													videoLoaded = true;
+													checkIfLoaded();
+												};
+
+												// Ladeereignis für das Audio
+												exerciseAudio.oncanplaythrough = () => {
+													audioLoaded = true;
+													checkIfLoaded();
+												};
+																				
+												// Lese die ID der geklickten Karte aus
+												selectedNAME_Übung = card.dataset[`name_${selectedLang}`];
+												selectedID_Übung = id;
+
+												console.log(`Übung ausgewählt: ID = ${selectedID_Übung}`);
+												console.log(`Übung ausgewählt: Name = ${selectedNAME_Übung}`);
+
+												// Finde den "Auswählen"-Button
+												const selectButton = document.getElementById('button-auswählen');
+												selectButton.disabled = false;
+											});
+										});
+
+										// Paginierung aktualisieren
+										updatePagination();
+										loadingSpinner.classList.add('d-none');
+										loadingSpinnerBackground.classList.add('d-none');
+									} else {
+										loadingSpinner.classList.add('d-none');
+										loadingSpinnerBackground.classList.add('d-none');
+
+										const noResults = document.createElement('p');
+										noResults.className = 'text-center text-muted';
+										noResults.textContent = 'Keine Übungen gefunden.';
+										trainingshalle.appendChild(noResults);
+									}
+								})
+								.catch(error => {
+									console.error('Fehler bei der Suchanfrage:', error);
+								});
+							};
+
+							
+
+							const updatePagination = () => {
+								paginationContainer.innerHTML = ''; // Alte Paginierung löschen
+
+								const prevPageItem = document.createElement('li');
+								prevPageItem.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+								const prevLink = document.createElement('a');
+								prevLink.className = 'page-link';
+								prevLink.href = 'javascript:;';
+								prevLink.textContent = 'Zurück';
+								prevLink.addEventListener('click', () => {
+									if (currentPage > 1) {
+										currentPage--;
+										performSearch(currentPage); // Korrekt: Zahl übergeben
+									}
+								});
+								prevPageItem.appendChild(prevLink);
+								paginationContainer.appendChild(prevPageItem);
+
+								for (let i = 1; i <= totalPages; i++) {
+									const pageItem = document.createElement('li');
+									pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+									const pageLink = document.createElement('a');
+									pageLink.className = 'page-link';
+									pageLink.href = 'javascript:;';
+									pageLink.textContent = i;
+									pageLink.addEventListener('click', () => {
+										currentPage = i;
+										performSearch(currentPage); // Korrekt: Zahl übergeben
+									});
+									pageItem.appendChild(pageLink);
+									paginationContainer.appendChild(pageItem);
+								}
+
+								const nextPageItem = document.createElement('li');
+								nextPageItem.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+								const nextLink = document.createElement('a');
+								nextLink.className = 'page-link';
+								nextLink.href = 'javascript:;';
+								nextLink.textContent = 'Weiter';
+								nextLink.addEventListener('click', () => {
+									if (currentPage < totalPages) {
+										currentPage++;
+										performSearch(currentPage); // Korrekt: Zahl übergeben
+									}
+								});
+								nextPageItem.appendChild(nextLink);
+								paginationContainer.appendChild(nextPageItem);
+							};
+							
+							if (searchButton) {
+								searchButton.addEventListener('click', () => performSearch(1));
+							}
+
+
+							if (searchBar) {
+								searchBar.addEventListener('keypress', function(event) {
+									if (event.key === 'Enter') {
+										performSearch(1);
+									}
+								});
+							}
+
+							// Führe die Suche beim Laden der Seite aus
+							performSearch(1);
+						});
+					</script>
+
+
+					<div class="modal fade" id="exampleFullScreenModal" tabindex="-1" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog modal-fullscreen">
+							<div class="modal-content" id="modalContent">
+								<div class="modal-header">
+									<h5 class="modal-title">Übung zum Fitness-Test hinzufügen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<!-- Linke Spalte (kleiner) -->
+										<div class="col-md-4 text-left">
+											<!-- Kategorien oben -->
+											<div class="categories">
+												<ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+													<li class="nav-item" role="presentation">
+														<a class="nav-link active" id="pills-Suche-tab" data-bs-toggle="pill" href="#pills-Suche" role="tab" aria-controls="pills-Suche" aria-selected="false">Suche</a>
+													</li>
+													<li class="nav-item" role="presentation">
+														<a class="nav-link" id="pills-Muskeln-tab" data-bs-toggle="pill" href="#pills-Muskeln" role="tab" aria-controls="pills-Muskeln" aria-selected="false">Muskelgruppen</a>
+													</li>
+													<li class="nav-item" role="presentation">
+														<a class="nav-link" id="pills-Krankheitsbilder-tab" data-bs-toggle="pill" href="#pills-Krankheitsbilder" role="tab" aria-controls="pills-Krankheitsbilder" aria-selected="true">Krankheitsbilder</a>
+													</li>
+												</ul>
+							
+												<div class="tab-content" id="pills-tabContent">
+													<div class="tab-pane fade active show" id="pills-Suche" role="tabpanel" aria-labelledby="pills-Suche-tab">
+														<!-- Suchleiste oben -->
+														<div class="input-group search-bar mb-3" style="width: 100%;">
+															<input type="text" class="form-control" placeholder="Suche nach Übungen..." aria-label="Suche nach Übungen..." id="search-bar" aria-describedby="button-addon2">
+															<button class="btn btn-outline-secondary" type="button" id="button-suche">Suchen</button>
+														</div>
+														<!-- Übungen unten -->
+													</div>
+							
+													<div class="tab-pane fade" id="pills-Muskeln" role="tabpanel" aria-labelledby="pills-Muskeln-tab">
+														<style>
+															.filter-container {
+																display: flex;
+																flex-wrap: wrap;
+																gap: 10px;
+																margin-bottom: 20px;
+															}
+		
+															.filter-pill {
+																padding: 8px 16px;
+																border: none;
+																border-radius: 20px;
+																background-color: #f1f1f1;
+																color: #333;
+																cursor: pointer;
+																transition: background-color 0.3s;
+															}
+		
+															.filter-pill:hover {
+																background-color: #ddd;
+															}
+		
+															.filter-pill.active {
+																background-color: var(--primary-color);
+																color: #fff;
+															}
+														</style>
+														<script>
+															// Globales Set, um die ausgewählten Muskelgruppen zu speichern
+															const selectedMuscleGroups = new Set();
+															let currentPage = 1;
+															let totalPages = 1;
+															document.addEventListener('DOMContentLoaded', () => {
+																// Füge den Event-Listener für den Suchbutton und die Enter-Taste hinzu
+																const searchButton = document.getElementById('button-suche');
+																const searchBar = document.getElementById('search-bar');
+		
+																
+																const exerciseDetails = document.querySelector(".exercise-details");
+																const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+																const exerciseName = exerciseInfo.querySelector("h4");
+																const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+																const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+																const hintsTab = document.querySelector("#pills-Hinweise");
+																const tipsTab = document.querySelector("#pills-Tipps");
+																const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+		
+																if (!exerciseInfo) {
+																	console.error("Element 'exercise-info' nicht gefunden.");
+																	return;
+																}
+		
+																const trainingshalle = document.querySelector('.trainingshalle div');
+																const paginationContainer = document.querySelector('.pagination.round-pagination'); // Verweis auf deine Paginierung
+		
+																if (!paginationContainer) {
+																	console.error("Element 'pagination' nicht gefunden.");
+																	return;
+																}
+																
+		
+																if (!exerciseName || !exerciseVideo || !exerciseAudio || !hintsTab || !tipsTab || !muscleGroupsTab) {
+																	console.error("Ein oder mehrere Elemente wurden nicht gefunden.");
+																	return;
+																}
+		
+		
+																// Füge Event-Listener zu allen Pills hinzu
+																document.querySelectorAll('.filter-pill').forEach(button => {
+																button.addEventListener('click', function() {
+																	// Toggle der aktiven Klasse und des Sets
+																	if (this.classList.contains('active')) {
+																	this.classList.remove('active');
+																	selectedMuscleGroups.delete(this.dataset.value);
+																	} else {
+																	this.classList.add('active');
+																	selectedMuscleGroups.add(this.dataset.value);
+																	}
+															
+																	// Debug-Ausgabe
+																	console.log("Aktuell ausgewählte Muskelgruppen:", Array.from(selectedMuscleGroups));
+																	
+																	// Suche ausführen
+																	performSearch();
+																});
+																});
+															});
+															
+															// Funktion zum Ausführen der Suche
+															const performSearch = (page = 1) => {
+																const trainingshalle = document.querySelector('.trainingshalle div');
+																trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+																// Elemente mit den IDs `loading-spinner` und `loading-spinnerBackground` definieren
+																const loadingSpinner = document.getElementById('loading-spinner');
+																const loadingSpinnerBackground = document.getElementById('loading-spinnerBackground');
+																const paginationContainer = document.querySelector('.pagination.round-pagination'); // Verweis auf deine Paginierung
+		
+																if (typeof page !== 'number') {
+																console.error("Page-Parameter ist keine Zahl:", page);
+																return;
+																}
+															
+																const muscleGroupsArray = Array.from(selectedMuscleGroups);
+																const searchValue = muscleGroupsArray.join(',');
+															
+																const url = `https://dashboard.personalpeak360.de/trainingshalle/übungen?SUCHE_Muskelgruppe=${encodeURIComponent(searchValue)}&SEITE=${page}`;
+															
+																console.log("Such-URL:", url);
+															
+																// Ladeanimation anzeigen
+																loadingSpinner.classList.remove('d-none');
+																loadingSpinnerBackground.classList.remove('d-none');
+															
+																// Führe die POST-Anfrage aus
+																fetch(url, {
+																method: 'POST'
+																})
+																.then(response => response.json())
+																.then(data => {
+																trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+															
+																if (data.Seiten_Inhalt && data.Seiten_Inhalt.length > 0) {
+																	data.Seiten_Inhalt.forEach(übung => {
+																	// Karten generieren (siehe ursprünglicher Code)
+																	const card = document.createElement('div');
+																	card.className = 'card bg-dark radius-15 mb-1';
+																	card.style.cursor = 'pointer';
+																	card.dataset.id = übung.id;
+																	card.dataset.name = übung.Name;
+																	card.dataset.tipps = übung.Tipps;
+																	card.dataset.hinweise = übung.Hinweise;
+																	card.dataset.animation = übung.Animation;
+																	card.dataset.voiceover = übung.Voiceover;
+																	// Prüfe, ob es Muskelgruppen gibt
+																	if (übung.Muskelgruppen && übung.Muskelgruppen.length > 1) {
+																	// Erstelle den Text mit "und" vor dem letzten Element
+																	const muscleGroupsText = übung.Muskelgruppen.slice(0, -1).join(', ') + ' und ' + übung.Muskelgruppen.slice(-1);
+																	card.dataset.muskelgruppen = muscleGroupsText;
+																	} else {
+																	// Wenn nur eine Muskelgruppe vorhanden ist oder keine, direkt verwenden
+																	card.dataset.muskelgruppen = übung.Muskelgruppen.join(', ');
+																	}
+															
+																	const cardBody = document.createElement('div');
+																	cardBody.className = 'card-body';
+															
+																	const cardText = document.createElement('p');
+																	cardText.className = 'card-text text-white';
+																	cardText.textContent = übung.Name;
+															
+																	cardBody.appendChild(cardText);
+																	card.appendChild(cardBody);
+																	trainingshalle.appendChild(card);
+															
+																	
+																	// Click-Event-Listener für die Karten hinzufügen
+																	card.addEventListener('click', () => {
+																		const exerciseDetails = document.querySelector(".exercise-details");
+																		const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+																		const exerciseName = exerciseInfo.querySelector("h4");
+																		const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+																		const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+																		const hintsTab = document.querySelector("#pills-Hinweise");
+																		const tipsTab = document.querySelector("#pills-Tipps");
+																		const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+		
+																		const id = card.getAttribute("data-id");
+																		const name = card.getAttribute("data-name");
+																		const tips = card.getAttribute("data-tipps");
+																		const hints = card.getAttribute("data-hinweise");
+																		const animation = card.getAttribute("data-animation");
+																		const muscleGroups = card.getAttribute("data-muskelgruppen");
+																		const voiceover = card.getAttribute("data-voiceover");
+		
+																		// Ladeanimation anzeigen
+																		loadingSpinner.classList.remove("d-none");
+																		loadingSpinnerBackground.classList.remove("d-none");
+		
+																		// Übungsdetails aktualisieren
+																		exerciseName.innerHTML = '<span class="yellow-dot">•</span> ' + name + ' <span class="yellow-dot">•</span>';
+																		exerciseVideo.setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + animation);
+		
+																		// Audio aktualisieren
+																		exerciseAudio.querySelector("source").setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + voiceover);
+																		exerciseAudio.load(); // Audio laden
+		
+																		// Textinhalte aktualisieren
+																		hintsTab.textContent = hints;
+																		tipsTab.textContent = tips;
+																		muscleGroupsTab.textContent = muscleGroups;
+		
+																		// Zeige die Übungsdetails an
+																		exerciseDetails.querySelector("p").classList.add("d-none");
+																		exerciseInfo.classList.remove("d-none");
+		
+																		// Warte, bis sowohl Video als auch Audio geladen sind
+																		let videoLoaded = false;
+																		let audioLoaded = false;
+		
+																		// Funktion zum Überprüfen, ob beide Ressourcen geladen sind
+																		const checkIfLoaded = () => {
+																			if (videoLoaded && audioLoaded) {
+																				loadingSpinner.classList.add("d-none");
+																				loadingSpinnerBackground.classList.add("d-none");
+																			}
+																		};
+		
+																		// Ladeereignis für das Video
+																		exerciseVideo.onloadeddata = () => {
+																			videoLoaded = true;
+																			checkIfLoaded();
+																		};
+		
+																		// Ladeereignis für das Audio
+																		exerciseAudio.oncanplaythrough = () => {
+																			audioLoaded = true;
+																			checkIfLoaded();
+																		};
+																				
+																		// Lese die ID der geklickten Karte aus
+																		selectedNAME_Übung = name;
+												selectedID_Übung = id;
+
+																		onsole.log(`Übung ausgewählt: ID = ${selectedID_Übung}`);
+												console.log(`Übung ausgewählt: Name = ${selectedNAME_Übung}`);
+
+																		// Finde den "Auswählen"-Button
+																		const selectButton = document.getElementById('button-auswählen');
+																		selectButton.disabled = false;
+																	});
+																	});
+															
+																	updatePagination(); // Paginierung aktualisieren
+																	loadingSpinner.classList.add('d-none');
+																	loadingSpinnerBackground.classList.add('d-none');
+																} else {
+																	// Keine Ergebnisse gefunden
+																	loadingSpinner.classList.add('d-none');
+																	loadingSpinnerBackground.classList.add('d-none');
+															
+																	const noResults = document.createElement('p');
+																	noResults.className = 'text-center text-muted';
+																	noResults.textContent = 'Keine Übungen gefunden.';
+																	trainingshalle.appendChild(noResults);
+																}
+																})
+																.catch(error => {
+																console.error('Fehler bei der Suchanfrage:', error);
+																});
+															};
+		
+															const updatePagination = () => {
+																const paginationContainer = document.querySelector('.pagination.round-pagination'); // Verweis auf deine Paginierung
+																paginationContainer.innerHTML = ''; // Alte Paginierung löschen
+		
+																const prevPageItem = document.createElement('li');
+																prevPageItem.className = `page-item ${currentPage_Gesundheitsproblem === 1 ? 'disabled' : ''}`;
+																const prevLink = document.createElement('a');
+																prevLink.className = 'page-link';
+																prevLink.href = 'javascript:;';
+																prevLink.textContent = 'Zurück';
+																prevLink.addEventListener('click', () => {
+																	if (currentPage_Gesundheitsproblem > 1) {
+																		currentPage_Gesundheitsproblem--;
+																		performSearch(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	}
+																});
+																prevPageItem.appendChild(prevLink);
+																paginationContainer.appendChild(prevPageItem);
+		
+																for (let i = 1; i <= totalPages; i++) {
+																	const pageItem = document.createElement('li');
+																	pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+																	const pageLink = document.createElement('a');
+																	pageLink.className = 'page-link';
+																	pageLink.href = 'javascript:;';
+																	pageLink.textContent = i;
+																	pageLink.addEventListener('click', () => {
+																		currentPage_Gesundheitsproblem = i;
+																		performSearch(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	});
+																	pageItem.appendChild(pageLink);
+																	paginationContainer.appendChild(pageItem);
+																}
+		
+																const nextPageItem = document.createElement('li');
+																nextPageItem.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+																const nextLink = document.createElement('a');
+																nextLink.className = 'page-link';
+																nextLink.href = 'javascript:;';
+																nextLink.textContent = 'Weiter';
+																nextLink.addEventListener('click', () => {
+																	if (currentPage_Gesundheitsproblem < totalPages) {
+																		currentPage_Gesundheitsproblem++;
+																		performSearch(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	}
+																});
+																nextPageItem.appendChild(nextLink);
+																paginationContainer.appendChild(nextPageItem);
+															};
+														</script>
+														
+														<!-- <div id="selected-filter mb-2">Bitte eine Option auswählen</div>
+														<br> -->
+														<div class="filter-container">
+															<button class="filter-pill" data-value="Brust">Brust</button>
+															<button class="filter-pill" data-value="Rücken">Rücken</button>
+															<button class="filter-pill" data-value="Schultern">Schultern</button>
+															<button class="filter-pill" data-value="Beine">Beine</button>
+															<button class="filter-pill" data-value="Arme">Arme</button>
+															<button class="filter-pill" data-value="Bauchmuskeln">Bauchmuskeln</button>
+															<button class="filter-pill" data-value="Waden">Waden</button>
+															<button class="filter-pill" data-value="Unterarme">Unterarme</button>
+															<button class="filter-pill" data-value="Trapezmuskeln">Trapezmuskeln</button>
+															<button class="filter-pill" data-value="Gesäßmuskeln">Gesäßmuskeln</button>
+															<button class="filter-pill" data-value="Beinbizeps">Beinbizeps</button>
+															<button class="filter-pill" data-value="Beinstrecker">Beinstrecker</button>
+															<button class="filter-pill" data-value="Latissimus">Latissimus</button>
+															<button class="filter-pill" data-value="Trizeps">Trizeps</button>
+															<button class="filter-pill" data-value="Bizeps">Bizeps</button>
+															<button class="filter-pill" data-value="Schulterdeltamuskeln">Schulterdeltamuskeln</button>
+															<button class="filter-pill" data-value="Schräge Bauchmuskeln">Schräge Bauchmuskeln</button>
+															<button class="filter-pill" data-value="Hüftbeuger">Hüftbeuger</button>
+															<button class="filter-pill" data-value="Rumpf">Rumpf</button>
+														  </div>
+														  
+													</div>
+							
+													<div class="tab-pane fade" id="pills-Krankheitsbilder" role="tabpanel" aria-labelledby="pills-Krankheitsbilder-tab">
+														<script>
+															// Globales Set, um die ausgewählten Muskelgruppen zu speichern
+															const selectedMuscleGroups_Gesundheitsproblem = new Set();
+															let currentPage_Gesundheitsproblem = 1;
+															let totalPages_Gesundheitsproblem = 1;
+														
+															document.addEventListener('DOMContentLoaded', () => {
+																// Füge den Event-Listener für den Suchbutton und die Enter-Taste hinzu
+																const searchButton = document.getElementById('button-suche');
+																const searchBar = document.getElementById('search-bar');
+														
+																const exerciseDetails = document.querySelector(".exercise-details");
+																const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+																const exerciseName = exerciseInfo.querySelector("h4");
+																const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+																const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+																const hintsTab = document.querySelector("#pills-Hinweise");
+																const tipsTab = document.querySelector("#pills-Tipps");
+																const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+														
+																if (!exerciseInfo) {
+																	console.error("Element 'exercise-info' nicht gefunden.");
+																	return;
+																}
+														
+																const trainingshalle = document.querySelector('.trainingshalle div');
+																const paginationContainer = document.querySelector('.pagination.round-pagination'); // Verweis auf deine Paginierung
+														
+																if (!paginationContainer) {
+																	console.error("Element 'pagination' nicht gefunden.");
+																	return;
+																}
+														
+																if (!exerciseName || !exerciseVideo || !exerciseAudio || !hintsTab || !tipsTab || !muscleGroupsTab) {
+																	console.error("Ein oder mehrere Elemente wurden nicht gefunden.");
+																	return;
+																}
+														
+																// Event-Listener für das Auswahlmenü für Gesundheitsprobleme hinzufügen
+																const gesundheitsproblemSelect = document.getElementById('Gesundheitsproblem');
+																gesundheitsproblemSelect.addEventListener('change', () => {
+																	const selectedHealthProblem = gesundheitsproblemSelect.value;
+																	performSearch_Gesundheitsproblem(currentPage_Gesundheitsproblem, selectedHealthProblem);
+																});
+															});
+														
+															// Funktion zum Ausführen der Suche
+															const performSearch_Gesundheitsproblem = (page = 1, healthProblem = 'Alles') => {
+																const trainingshalle = document.querySelector('.trainingshalle div');
+																trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+																// Elemente mit den IDs `loading-spinner` und `loading-spinnerBackground` definieren
+																const loadingSpinner = document.getElementById('loading-spinner');
+																const loadingSpinnerBackground = document.getElementById('loading-spinnerBackground');
+														
+																if (typeof page !== 'number') {
+																	console.error("Page-Parameter ist keine Zahl:", page);
+																	return;
+																}
+														
+																const muscleGroupsArray = Array.from(selectedMuscleGroups);
+																const searchValue = muscleGroupsArray.join(',');
+														
+																const url = `https://dashboard.personalpeak360.de/trainingshalle/übungen?SUCHE_Gesundheitsproblem=${encodeURIComponent(healthProblem)}&SEITE=${page}`;
+														
+																console.log("Such-URL:", url);
+														
+																// Ladeanimation anzeigen
+																loadingSpinner.classList.remove('d-none');
+																loadingSpinnerBackground.classList.remove('d-none');
+														
+																// Führe die POST-Anfrage aus
+																fetch(url, {
+																	method: 'POST'
+																})
+																.then(response => response.json())
+																.then(data => {
+																	trainingshalle.innerHTML = ''; // Alte Inhalte löschen
+														
+																	if (data.Seiten_Inhalt && data.Seiten_Inhalt.length > 0) {
+																		data.Seiten_Inhalt.forEach(übung => {
+																			// Karten generieren (siehe ursprünglicher Code)
+																			const card = document.createElement('div');
+																			card.className = 'card bg-dark radius-15 mb-1';
+																			card.style.cursor = 'pointer';
+																			card.dataset.id = übung.id;
+																			card.dataset.name = übung.Name;
+																			card.dataset.tipps = übung.Tipps;
+																			card.dataset.hinweise = übung.Hinweise;
+																			card.dataset.animation = übung.Animation;
+																			card.dataset.voiceover = übung.Voiceover;
+																			// Prüfe, ob es Muskelgruppen gibt
+																			if (übung.Muskelgruppen && übung.Muskelgruppen.length > 1) {
+																				// Erstelle den Text mit "und" vor dem letzten Element
+																				const muscleGroupsText = übung.Muskelgruppen.slice(0, -1).join(', ') + ' und ' + übung.Muskelgruppen.slice(-1);
+																				card.dataset.muskelgruppen = muscleGroupsText;
+																			} else {
+																				// Wenn nur eine Muskelgruppe vorhanden ist oder keine, direkt verwenden
+																				card.dataset.muskelgruppen = übung.Muskelgruppen.join(', ');
+																			}
+														
+																			const cardBody = document.createElement('div');
+																			cardBody.className = 'card-body';
+														
+																			const cardText = document.createElement('p');
+																			cardText.className = 'card-text text-white';
+																			cardText.textContent = übung.Name;
+														
+																			cardBody.appendChild(cardText);
+																			card.appendChild(cardBody);
+																			trainingshalle.appendChild(card);
+
+																			// Modal-Referenz
+																			const modal = document.getElementById('exampleFullScreenModal');
+																			const modalContent = document.getElementById('modalContent');
+
+																			// Beispiel: Wenn Modal geöffnet wird, füge den Button hinzu
+																			modal.addEventListener('show.bs.modal', () => {
+																				// Alte Buttons löschen, um Duplikate zu vermeiden
+																				modalContent.innerHTML = '';
+																			});
+														
+																			// Click-Event-Listener für die Karten hinzufügen
+																			card.addEventListener('click', () => {
+																				const exerciseDetails = document.querySelector(".exercise-details");
+																				const exerciseInfo = exerciseDetails ? exerciseDetails.querySelector(".exercise-info") : null;
+																				const exerciseName = exerciseInfo.querySelector("h4");
+																				const exerciseVideo = exerciseInfo.querySelector(".exercise-video video");
+																				const exerciseAudio = exerciseInfo.querySelector(".exercise-audio audio");
+																				const hintsTab = document.querySelector("#pills-Hinweise");
+																				const tipsTab = document.querySelector("#pills-Tipps");
+																				const muscleGroupsTab = document.querySelector("#pills-Muskelgruppen");
+														
+																				const id = card.getAttribute("data-id");
+																				const name = card.getAttribute("data-name");
+																				const tips = card.getAttribute("data-tipps");
+																				const hints = card.getAttribute("data-hinweise");
+																				const animation = card.getAttribute("data-animation");
+																				const muscleGroups = card.getAttribute("data-muskelgruppen");
+																				const voiceover = card.getAttribute("data-voiceover");
+														
+																				// Ladeanimation anzeigen
+																				loadingSpinner.classList.remove("d-none");
+																				loadingSpinnerBackground.classList.remove("d-none");
+														
+																				// Übungsdetails aktualisieren
+																				exerciseName.innerHTML = '<span class="yellow-dot">•</span> ' + name + ' <span class="yellow-dot">•</span>';
+																				exerciseVideo.setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + animation);
+														
+																				// Audio aktualisieren
+																				exerciseAudio.querySelector("source").setAttribute("src", 'https://cdn.personalpeak360.de/trainingshalle/' + voiceover);
+																				exerciseAudio.load(); // Audio laden
+														
+																				// Textinhalte aktualisieren
+																				hintsTab.textContent = hints;
+																				tipsTab.textContent = tips;
+																				muscleGroupsTab.textContent = muscleGroups;
+														
+																				// Zeige die Übungsdetails an
+																				exerciseDetails.querySelector("p").classList.add("d-none");
+																				exerciseInfo.classList.remove("d-none");
+														
+																				// Warte, bis sowohl Video als auch Audio geladen sind
+																				let videoLoaded = false;
+																				let audioLoaded = false;
+														
+																				// Funktion zum Überprüfen, ob beide Ressourcen geladen sind
+																				const checkIfLoaded = () => {
+																					if (videoLoaded && audioLoaded) {
+																						loadingSpinner.classList.add("d-none");
+																						loadingSpinnerBackground.classList.add("d-none");
+																					}
+																				};
+														
+																				// Ladeereignis für das Video
+																				exerciseVideo.onloadeddata = () => {
+																					videoLoaded = true;
+																					checkIfLoaded();
+																				};
+														
+																				// Ladeereignis für das Audio
+																				exerciseAudio.oncanplaythrough = () => {
+																					audioLoaded = true;
+																					checkIfLoaded();
+																				};
+																				
+																				// Lese die ID der geklickten Karte aus
+																				selectedNAME_Übung = name;
+												selectedID_Übung = id;
+
+																				onsole.log(`Übung ausgewählt: ID = ${selectedID_Übung}`);
+												console.log(`Übung ausgewählt: Name = ${selectedNAME_Übung}`);
+
+																				// Finde den "Auswählen"-Button
+																				const selectButton = document.getElementById('button-auswählen');
+																				selectButton.disabled = false;
+																			});
+																		});
+														
+																		updatePagination_Gesundheitsproblem(); // Paginierung aktualisieren
+																		loadingSpinner.classList.add('d-none');
+																		loadingSpinnerBackground.classList.add('d-none');
+																	} else {
+																		// Keine Ergebnisse gefunden
+																		loadingSpinner.classList.add('d-none');
+																		loadingSpinnerBackground.classList.add('d-none');
+														
+																		const noResults = document.createElement('p');
+																		noResults.className = 'text-center text-muted';
+																		noResults.textContent = 'Keine Übungen gefunden.';
+																		trainingshalle.appendChild(noResults);
+																	}
+																})
+																.catch(error => {
+																	console.error('Fehler bei der Suchanfrage:', error);
+																});
+															};
+														
+															const updatePagination_Gesundheitsproblem = () => {
+																const paginationContainer = document.querySelector('.pagination.round-pagination');
+																paginationContainer.innerHTML = '';
+														
+																const prevPageItem = document.createElement('li');
+																prevPageItem.className = `page-item ${currentPage_Gesundheitsproblem === 1 ? 'disabled' : ''}`;
+																const prevLink = document.createElement('a');
+																prevLink.className = 'page-link';
+																prevLink.href = 'javascript:;';
+																prevLink.textContent = 'Zurück';
+																prevLink.addEventListener('click', () => {
+																	if (currentPage_Gesundheitsproblem > 1) {
+																		currentPage_Gesundheitsproblem--;
+																		performSearch_Gesundheitsproblem(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	}
+																});
+																prevPageItem.appendChild(prevLink);
+																paginationContainer.appendChild(prevPageItem);
+														
+																for (let i = 1; i <= totalPages; i++) {
+																	const pageItem = document.createElement('li');
+																	pageItem.className = `page-item ${i === currentPage_Gesundheitsproblem ? 'active' : ''}`;
+																	const pageLink = document.createElement('a');
+																	pageLink.className = 'page-link';
+																	pageLink.href = 'javascript:;';
+																	pageLink.textContent = i;
+																	pageLink.addEventListener('click', () => {
+																		currentPage_Gesundheitsproblem = i;
+																		performSearch_Gesundheitsproblem(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	});
+																	pageItem.appendChild(pageLink);
+																	paginationContainer.appendChild(pageItem);
+																}
+														
+																const nextPageItem = document.createElement('li');
+																nextPageItem.className = `page-item ${currentPage_Gesundheitsproblem === totalPages ? 'disabled' : ''}`;
+																const nextLink = document.createElement('a');
+																nextLink.className = 'page-link';
+																nextLink.href = 'javascript:;';
+																nextLink.textContent = 'Weiter';
+																nextLink.addEventListener('click', () => {
+																	if (currentPage_Gesundheitsproblem < totalPages) {
+																		currentPage_Gesundheitsproblem++;
+																		performSearch_Gesundheitsproblem(currentPage_Gesundheitsproblem); // Korrekt: Zahl übergeben
+																	}
+																});
+																nextPageItem.appendChild(nextLink);
+																paginationContainer.appendChild(nextPageItem);
+															};
+														</script>
+		
+		
+														<select class="form-control" id="Gesundheitsproblem" name="Gesundheitsproblem">
+															<option selected value="Alles">Alle anzeigen</option>
+															<option value="Rückenschmerzen">Rückenschmerzen</option>
+															<option value="Schulterschmerzen">Schulterschmerzen</option>
+															<option value="Nackenschmerzen">Nackenschmerzen</option>
+															<option value="Hüftschmerzen">Hüftschmerzen</option>
+															<option value="Knieschmerzen">Knieschmerzen</option>
+															<option value="Fuß&Knöchelschmerzen">Fuß & Knöchelschmerzen</option>
+															<option value="Schreibtisch-Athlet">Schreibtisch-Athlet</option>
+															<option value="Rehasport_Basis">Rehasport Basis</option>
+														</select>
+													</div>
+												</div>
+											</div>
+							
+											<!-- Übungen für Trainingshalle -->
+											<div class="trainingshalle mt-3">
+												<div style="max-height: 340px; overflow-y: scroll;">
+													{% for übung in Übungen %}
+														<div class="card bg-dark radius-15 mb-1" style="cursor: pointer;" data-name="{{ übung['Name'] }}" data-tipps="{{ übung['Tipps'] }}" data-hinweise="{{ übung['Hinweise'] }}" data-animation="{{ übung['Animation'] }}" data-voiceover="{{ übung['Voiceover'] }}" data-muskelgruppen="{% for muskel in übung['Muskelgruppen'] %}{{ muskel }}{% if not loop.last %}{% if loop.index == loop.length - 1 %} und {% else %}, {% endif %}{% endif %}{% endfor %}" data-suchbegriffe="{{ übung['Suchbegriffe'] }}">
+															<div class="card-body">
+																<p class="card-text text-white">{{ übung['Name'] }}</p>
+															</div>
+														</div>
+													{% endfor %}
+												</div>
+												<br>
+		
+												<!-- Ladeanimation als Overlay -->
+												<div id="loading-spinner" class="loading-overlay d-none text-center">
+													<div class="spinner-wrapper">
+														<div class="spinner-border text-primary" role="status"></div>
+														<p class="loading-text text-white">Bitte warten...</p>
+													</div>
+												</div>
+												<div id="loading-spinnerBackground" class="d-none mb-3">
+													<!-- Hier kann eine beliebige Ladeanimation sein, z.B. ein Spinner -->
+													<div class="spinner-border text-primary" role="status">
+														<span class="sr-only"></span>
+													</div>
+												</div>
+		
+												<style>
+													/* Ladeoverlay für den gesamten Bildschirm */
+													.loading-overlay {
+														position: fixed;
+														top: 0;
+														left: 0;
+														width: 100%;
+														height: 100%;
+														background-color: rgba(0, 0, 0, 0.6); /* Halbtransparenter schwarzer Hintergrund */
+														display: flex;
+														justify-content: center;
+														align-items: center;
+														z-index: 1000; /* Über alle anderen Elemente legen */
+													}
+		
+													.spinner-border {
+														color: var(--primary-color) !important; /* Farbe des Spinners */
+													}
+		
+													/* Wrapper für den Spinner und den Text */
+													.spinner-wrapper {
+														display: flex;
+														flex-direction: column;
+														align-items: center;
+														animation: fadeIn 0.5s ease-in-out; /* Sanfte Einblendanimation */
+													}
+		
+													/* Ladeanimationstext */
+													.loading-text {
+														  color: var(--primary-color) !important; /* Farbe des Textes */
+														margin-top: 15px;
+														font-size: 1.2rem;
+														animation: pulse 1s infinite; /* Pulsierende Animation */
+													}
+		
+													/* Animationen */
+													@keyframes fadeIn {
+														from {
+															opacity: 0;
+														}
+														to {
+															opacity: 1;
+														}
+													}
+		
+													@keyframes pulse {
+														0%, 100% {
+															opacity: 1;
+														}
+														50% {
+															opacity: 0.5;
+														}
+													}
+												</style>
+												
+		
+												<!-- Übungen hier aufführen -->
+												<nav aria-label="Page navigation example" class="d-flex justify-content-center align-items-center">
+													<ul class="pagination round-pagination">
+														<li class="page-item"><a class="page-link" href="javascript:;">Zurück</a></li>
+														<li class="page-item"><a class="page-link" href="javascript:;">1</a></li>
+														<li class="page-item active"><a class="page-link" href="javascript:;">2</a></li>
+														<li class="page-item"><a class="page-link" href="javascript:;">3</a></li>
+														<li class="page-item"><a class="page-link" href="javascript:;">Weiter</a></li>
+													</ul>
+												</nav>
+											</div>
+										</div>
+							
+										<!-- Rechte Spalte (größer) -->
+										<div class="col-md-8 d-flex justify-content-center align-items-center">
+											<div class="exercise-details text-center">
+												<p>Bitte wähle eine Übung von links aus, um deren Details zu sehen.</p>
+												<!-- Details zur Übung -->
+												<div class="exercise-info d-none">
+													<h4>Übungsname</h4>
+													<div class="exercise-video">
+														<video class="w-100" autoplay loop muted controlsList="nodownload">
+															<source type="video/mp4">
+															Dein Browser unterstützt das Video-Element nicht.
+														</video>
+													</div>
+													<br>
+													<div class="exercise-audio">
+														<audio class="w-100" controls controlsList="nodownload">
+															<source type="audio/mp3">
+															Dein Browser unterstützt das Video-Element nicht.
+														</audio>
+													</div>
+		
+													<style>
+														.exercise-video {
+															border-radius: 40px; /* Oder ein anderer Wert */
+															overflow: hidden; /* Um sicherzustellen, dass das Video nicht über die Ecken hinausragt */
+														}
+													</style>
+		
+													<br>
+													
+													<ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+														<li class="nav-item" role="presentation">
+															<a class="nav-link active" id="pills-Hinweise-tab" data-bs-toggle="pill" href="#pills-Hinweise" role="tab" aria-controls="pills-Hinweise" aria-selected="false">Hinweise</a>
+														</li>
+														<li class="nav-item" role="presentation">
+															<a class="nav-link" id="pills-Tipps-tab" data-bs-toggle="pill" href="#pills-Tipps" role="tab" aria-controls="pills-Tipps" aria-selected="false">Tipps</a>
+														</li>
+														<li class="nav-item" role="presentation">
+															<a class="nav-link" id="pills-Muskelgruppen-tab" data-bs-toggle="pill" href="#pills-Muskelgruppen" role="tab" aria-controls="pills-Muskelgruppen" aria-selected="false">Muskelgruppen</a>
+														</li>
+													</ul>
+								
+													<div class="tab-content" id="pills-tabContent">
+														<div class="tab-pane fade active show" id="pills-Hinweise" role="tabpanel" aria-labelledby="pills-Hinweise-tab">
+															<p>Inhalt von "data-hinweise"</p>
+														</div>
+														<div class="tab-pane fade" id="pills-Tipps" role="tabpanel" aria-labelledby="pills-Tipps-tab">
+															<p>Inhalt von "data-hinweise"</p>
+														</div>
+														<div class="tab-pane fade" id="pills-Muskelgruppen" role="tabpanel" aria-labelledby="pills-Muskelgruppen-tab">
+															<p>Inhalt von "data-muskelgruppen"</p>
+														</div>
+													</div>
+													<!-- Weitere Details zur Übung -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+									<button type="button" id="button-auswählen" class="btn btn-primary" disabled>Auswählen</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<script>
+						let selectedID_Übung = null;
+						let selectedNAME_Übung = null;
+
+						document.addEventListener('DOMContentLoaded', function () {
+							let selectedTab = null;
+							let selectedTask = null;
+
+							// Event-Listener für Buttons, die das Modal öffnen
+							document.querySelectorAll('[data-bs-toggle="modal"]').forEach((button) => {
+								button.addEventListener('click', function () {
+									// Attribute auslesen
+									selectedTab = this.getAttribute('data-tab');
+									selectedTask = this.getAttribute('data-task');
+
+									if (!selectedTab || !selectedTask) {
+										console.error('Tab oder Aufgabe fehlt:', { selectedTab, selectedTask });
+									} else {
+										console.log(`Tab: ${selectedTab}, Aufgabe: ${selectedTask}`);
+									}
+
+									// Temporär die ID des Buttons speichern, um ihn später zu ersetzen
+									this.setAttribute('data-selected', 'true');
+								});
+							});
+
+							// Event-Listener für den "Auswählen"-Button im Modal
+							const selectButton = document.getElementById('button-auswählen');
+							selectButton.addEventListener('click', () => {
+								if (!selectedTab || !selectedTask) {
+									alert('Keine Übung ausgewählt.');
+									return;
+								}
+
+								// Finde den Button, der zuletzt geklickt wurde
+								const activeButton = document.querySelector('[data-selected="true"]');
+								if (activeButton) {
+									// Finde das nächstgelegene Input-Feld
+									const parentCard = activeButton.closest('.card');
+									const inputField = parentCard.querySelector('input');
+									if (inputField) {
+										inputField.value = selectedID_Übung; // Setze die Übungs-ID in das Input-Feld
+										// inputField.hidden = false; // Optional: Zeige das Input-Feld
+									}
+
+									activeButton.textContent = `Ausgewählte Übung: ${selectedNAME_Übung}`
+
+									activeButton.classList.remove('btn-primary')
+									activeButton.classList.add('btn-secondary')
+
+									// Entferne das temporäre Attribut
+									activeButton.removeAttribute('data-selected');
+								}
+
+								console.log(`Auswahl: Tab=${selectedTab}, Aufgabe=${selectedTask}, Übungs_ID=${selectedID_Übung}, Übungs_NAME=${selectedNAME_Übung}`);
+
+								// Modal automatisch schließen
+								const modal = bootstrap.Modal.getInstance(document.getElementById('exampleFullScreenModal'));
+        						modal.hide();
+
+								if (selectedTab == "Indiviudell") {
+									// Modal automatisch schließen
+									const modal_createFitnessTest = bootstrap.Modal.getInstance(document.getElementById('createFitnessTest'));
+									modal_createFitnessTest.show();
+								}
+							});
+						});
+					</script>
+
+					<div class="card radius-15">
+						<div class="card-body">
+							<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+								<li class="nav-item" role="presentation"> <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Fitnessstudio</a>
+								</li>
+								<li class="nav-item" role="presentation"> <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Zuhause</a>
+								</li>
+								<li class="nav-item" role="presentation"> <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Gesundheitliche Probleme</a>
+								</li>
+							</ul>
+							<div class="tab-content" id="pills-tabContent">
+								<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+									<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Fitnessstudio" method="post">
+										<div class="row">
+											<!-- Iterate over exercises -->
+											{% for i in range(1, 11) %}
+												<div class="col-md-6 col-lg-4 mb-2">
+													<div class="card shadow-sm">
+														<div class="card-body">
+															<h6 class="card-title">Übung {{ i }}</h6>
+															{% set uebung = Fitnesstest_EINTRÄGE.get('Fitnessstudio', {}).get("Uebung_{}".format(i)) %}
+															{% if uebung %}
+																<button
+																	type="button" 
+																	class="btn btn-sm btn-secondary w-100" 
+																	data-bs-toggle="modal" 
+																	data-bs-target="#exampleFullScreenModal" 
+																	data-tab="Fitnessstudio" 
+																	data-task="Übung {{ i }}">
+																	Ausgewählte Übung: {{ uebung.Name }}
+																</button>
+																<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+															{% else %}
+																<button 
+																	type="button" 
+																	class="btn btn-sm btn-primary w-100" 
+																	data-bs-toggle="modal" 
+																	data-bs-target="#exampleFullScreenModal" 
+																	data-tab="Fitnessstudio" 
+																	data-task="Übung {{ i }}">
+																	Übung auswählen...
+																</button>
+																<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+															{% endif %}
+														</div>
+													</div>
+												</div>
+											{% endfor %}
+
+											
+											<div class="col-12 d-flex justify-content-end">
+												<button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+									<div class="row">
+										<div class="col-2">
+											<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+												<a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Mit Geräten</a>
+												<a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Ohne Geräte</a>
+											</div>
+										</div>
+										<div class="col-10">
+											<div class="tab-content" id="v-pills-tabContent">
+												<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+													<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Zuhause_GERÄTE" method="post">
+														<div class="row">
+															<!-- Iterate over exercises -->
+															{% for i in range(1, 11) %}
+																<div class="col-md-6 col-lg-4 mb-2">
+																	<div class="card shadow-sm">
+																		<div class="card-body">
+																			<h6 class="card-title">Übung {{ i }}</h6>
+																			{% set uebung = Fitnesstest_EINTRÄGE.get('Zuhause_GERÄTE', {}).get("Uebung_{}".format(i)) %}
+																			{% if uebung %}
+																				<button 
+																					type="button" 
+																					class="btn btn-sm btn-secondary w-100" 
+																					data-bs-toggle="modal" 
+																					data-bs-target="#exampleFullScreenModal" 
+																					data-tab="Zuhause_Geräte" 
+																					data-task="Übung {{ i }}">
+																					Ausgewählte Übung: {{ uebung.Name }}
+																				</button>
+																				<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+																			{% else %}
+																				<button 
+																					type="button" 
+																					class="btn btn-sm btn-primary w-100" 
+																					data-bs-toggle="modal" 
+																					data-bs-target="#exampleFullScreenModal" 
+																					data-tab="Zuhause_Geräte" 
+																					data-task="Übung {{ i }}">
+																					Übung auswählen...
+																				</button>
+																				<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+																			{% endif %}
+																		</div>
+																	</div>
+																</div>
+															{% endfor %}
+											
+															<div class="col-12 d-flex justify-content-end">
+																<button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+															</div>
+														</div>
+													</form>
+												</div>
+												<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+													<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Zuhause" method="post">
+														<div class="row">
+															<!-- Iterate over exercises -->
+															{% for i in range(1, 11) %}
+																<div class="col-md-6 col-lg-4 mb-2">
+																	<div class="card shadow-sm">
+																		<div class="card-body">
+																			<h6 class="card-title">Übung {{ i }}</h6>
+																			{% set uebung = Fitnesstest_EINTRÄGE.get('Zuhause', {}).get("Uebung_{}".format(i)) %}
+																			{% if uebung %}
+																				<button 
+																					type="button" 
+																					class="btn btn-sm btn-secondary w-100" 
+																					data-bs-toggle="modal" 
+																					data-bs-target="#exampleFullScreenModal" 
+																					data-tab="Zuhause" 
+																					data-task="Übung {{ i }}">
+																					Ausgewählte Übung: {{ uebung.Name }}
+																				</button>
+																				<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+																			{% else %}
+																				<button 
+																					type="button" 
+																					class="btn btn-sm btn-primary w-100" 
+																					data-bs-toggle="modal" 
+																					data-bs-target="#exampleFullScreenModal" 
+																					data-tab="Zuhause" 
+																					data-task="Übung {{ i }}">
+																					Übung auswählen...
+																				</button>
+																				<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+																			{% endif %}
+																		</div>
+																	</div>
+																</div>
+															{% endfor %}
+											
+															<div class="col-12 d-flex justify-content-end">
+																<button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+															</div>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+									<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/trainingshalle/fitness-tests?Art=Gesundheitliche_Probleme" method="post">
+										<div class="row">
+											<!-- Iterate over exercises -->
+											{% for i in range(1, 11) %}
+												<div class="col-md-6 col-lg-4 mb-2">
+													<div class="card shadow-sm">
+														<div class="card-body">
+															<h6 class="card-title">Übung {{ i }}</h6>
+															{% set uebung = Fitnesstest_EINTRÄGE.get('Gesundheit', {}).get("Uebung_{}".format(i)) %}
+															{% if uebung %}
+																<button 
+																	type="button" 
+																	class="btn btn-sm btn-secondary w-100" 
+																	data-bs-toggle="modal" 
+																	data-bs-target="#exampleFullScreenModal" 
+																	data-tab="Gesundheitliche Probleme" 
+																	data-task="Übung {{ i }}">
+																	Ausgewählte Übung: {{ uebung.Name }}
+																</button>
+																<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+															{% else %}
+																<button 
+																	type="button" 
+																	class="btn btn-sm btn-primary w-100" 
+																	data-bs-toggle="modal" 
+																	data-bs-target="#exampleFullScreenModal" 
+																	data-tab="Gesundheitliche Probleme" 
+																	data-task="Übung {{ i }}">
+																	Übung auswählen...
+																</button>
+																<input type="hidden" name="Übung_{{ i }}" id="Übung_{{ i }}">
+															{% endif %}
+														</div>
+													</div>
+												</div>
+											{% endfor %}
+											
+											<div class="col-12 d-flex justify-content-end">
+												<button type="submit" class="btn btn-primary px-5">Änderungen veröffentlichen</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="card radius-15">
+						<div class="card-body">
+								<div class="card-title">
+									<h4 class="mb-0">Individuelle Fitness-Tests</h4>
+								</div>
+								<hr/>
+								<!-- Button trigger modal -->
+								<button type="button" id="btn_createFitnessTest" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createFitnessTest">Fitness-Test erstellen</button>
+								
+								<style>
+									/* Setze den z-index für das Select2-Dropdown höher als den z-index des Modals */
+									.select2-container--open {
+										z-index: 1050 !important; /* Normalerweise ist der Modal z-index 1050 */
+									}
+	
+									.select2-container {
+										z-index: 3000 !important; /* Ein höherer Wert als der Modal */
+									}
+								</style>
+	
+								<div class="table-responsive">
+									<table id="example" class="table table-striped table-bordered" style="width:100%">
+										<thead>
+											<tr>
+												<th>Kunde</th>
+												<th>Grund</th>
+												<th>Status</th>
+												<th>Aktionen</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for anfrage in Individuelle_Anfragen %}
+												<tr>
+													<td>{{ anfrage['Nutzer-Details']['Vorname'] }} {{ anfrage['Nutzer-Details']['Nachname'] }}</td>
+													<td>{{ anfrage['Grund'] }}</td>
+													<td>
+														{% if anfrage['Abgeschlossen'] %}
+															Abgeschlossen
+														{% else %}
+															Noch nicht abgeschlossen
+														{% endif %}
+													</td>
+													<td>
+														<button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetails-{{ anfrage['id'] }}">Details ansehen</button>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+										<tfoot>
+											<th>Kunde</th>
+											<th>Grund</th>
+											<th>Status</th>
+											<th>Aktionen</th>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

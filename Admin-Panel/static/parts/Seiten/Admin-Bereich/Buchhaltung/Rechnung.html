@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Rechnung (#{{ rechnung['WhiteLabel_RechnungsID'] }}) → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!-- Vector CSS -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- Modal -->
+	<div class="modal fade" id="modalStatusChange" tabindex="-1" aria-labelledby="modalStatusChange" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Status der Rechnung ändern</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/rechnung/Change_Status/{{ rechnung['id'] }}?WL_ID={{ rechnung['WhiteLabel_RechnungsID'] }}" method="post">
+					<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+						Die vorliegende Rechnung ist derzeit im Status
+							{% if rechnung['Status'] == "Offen" %}
+								<span class="badge bg-warning">OFFEN</span>
+							{% elif rechnung['Status'] == "Bezahlt" %}
+								<span class="badge bg-success">BEZAHLT</span>
+							{% elif rechnung['Status'] == "Überfällig" %}
+								<span class="badge bg-danger">IM VERZUG</span>
+							{% else %}
+								<span class="badge bg-secondary">UNBEKANNT</span>
+							{% endif %}
+
+						<hr>
+
+						<select name="status" id="status" class="form-select">
+							<option value="Offen">Offen</option>
+							<option value="Bezahlt">Bezahlt</option>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+						<button type="submit" class="btn btn-primary">Status-Änderung durchführen</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="modal_GeneratePDF" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Generierung der PDF-Rechnung (#{{ rechnung['WhiteLabel_RechnungsID'] }})</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+					<!-- Ladeanimation -->
+					<div id="loadingSpinner" class="text-center">
+						<div class="spinner-border text-primary" role="status">
+							<span class="visually-hidden">Laden...</span>
+						</div>
+					</div>
+					<!-- PDF-Vorschau -->
+					<div id="pdfPreview" style="display: none;">
+						<iframe id="pdfFrame" style="width: 100%; height: 500px;"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			// Event-Listener für das Anzeigen des Modals
+			const modalGeneratePDF = document.getElementById('modal_GeneratePDF');
+			modalGeneratePDF.addEventListener('show.bs.modal', function () {
+				// Ladeanimation sichtbar machen
+				document.getElementById('loadingSpinner').style.display = 'block';
+				document.getElementById('pdfPreview').style.display = 'none';
+				
+				// URL für den GET-Aufruf zur PDF-Generierung
+				const pdfUrl = `https://dashboard.personalpeak360.de/admin/buchhaltung/rechnung/generate_PDF/{{ rechnung['WhiteLabel_RechnungsID'] }}`;
+
+				// Abrufen der PDF
+				fetch(pdfUrl)
+					.then(response => response.blob())
+					.then(blob => {
+						// PDF im iframe anzeigen
+						const pdfFrame = document.getElementById('pdfFrame');
+						const pdfObjectURL = URL.createObjectURL(blob);
+						pdfFrame.src = pdfObjectURL;
+
+						// Ladeanimation ausblenden, PDF-Vorschau anzeigen
+						document.getElementById('loadingSpinner').style.display = 'none';
+						document.getElementById('pdfPreview').style.display = 'block';
+					})
+					.catch(error => {
+						console.error('Fehler beim Abrufen der PDF:', error);
+						alert('Die PDF-Rechnung konnte nicht abgerufen werden.');
+						document.getElementById('loadingSpinner').style.display = 'none';
+					});
+			});
+		});
+	</script>
+
+
+
+	{% if rechnung['Typ'] == "Wiederkehrend" %}
+		<!-- Modal -->
+		<div class="modal fade" id="modal_Wiederkehrend" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Informationen zur wiederkehrenden Rechnung</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+						Die vorliegende Rechnung ist eine wiederkehrende Rechnung - das heißt diese wird zu einem bestimmten Zeitpunkt um Mitternacht automatisch verlängert bzw. neu erstellt.
+						<br>
+						<ul>
+							<li><b>Datum der Verlängerung: </b>{{ rechnung['Verlaengerungsdatum'] | format_datetime('%Y-%m-%d', '%d.%m.%Y') }}</li>
+						</ul>
+
+						<hr>
+
+						<h6>Aktionen</h6>
+						<a class="btn btn-warning" href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/rechnung/Deaktiviere_AutoVerlängerung/{{ rechnung['id'] }}?WL_ID={{ rechnung['WhiteLabel_RechnungsID'] }}">Automatische Verlängerung deaktivieren</a>
+						<br>
+						<br>
+						<b>Datum der Verlängerung ändern: </b> <input class="form-control" type="date" name="" id="" min="{{ heute }}">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+						<button type="button" class="btn btn-primary">Änderungen übernehmen</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% else %}
+		<!-- Modal -->
+		<div class="modal fade" id="modal_Einmalig" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Informationen zur Rechnung</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form id="verlangerungs_form" action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/buchhaltung/rechnung/Aktiviere_AutoVerlängerung/{{ rechnung['id'] }}?WL_ID={{ rechnung['WhiteLabel_RechnungsID'] }}" method="post">
+						<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+							Die vorliegende Rechnung ist eine einmalige Rechnung - das heißt diese wird NICHT zu einem bestimmten Zeitpunkt um Mitternacht automatisch verlängert bzw. neu erstellt.
+
+							<hr>
+
+							<h6>Aktionen</h6>
+							<b>Datum der Verlängerung festlegen: </b> <input class="form-control" type="date" id="verlaengerungs_datum" name="verlaengerungs_datum" min="{{ heute }}">
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+							<button type="button" onclick="handleChanges()" class="btn btn-primary">Automatische Verlängerung aktivieren</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function handleChanges() {
+				const verlangerungsDatum = document.getElementById('verlaengerungs_datum').value;
+				if (verlangerungsDatum) {
+					// Hier kannst du eine AJAX-Anfrage senden oder die Daten an den Server übermitteln
+					console.log("Neues Verlängerungsdatum:", verlangerungsDatum);
+					// Formular über JS abschicken
+					document.getElementById('verlangerungs_form').submit();
+					// Füge hier den gewünschten Code für die Verarbeitung hinzu
+				} else {
+					alert("Bitte ein Verlängerungsdatum auswählen.");
+				}
+			}
+		</script>
+	{% endif %}
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="card">
+						<div class="card-body">
+							<div id="invoice">
+								<div class="toolbar hidden-print">
+									<div class="text-end">
+										<button type="button" data-bs-toggle="modal" data-bs-target="#modalStatusChange" class="btn btn-primary"><i class="fa fa-money-bill"></i> Status ändern</button>
+										<button type="button" data-bs-toggle="modal" data-bs-target="#modal_GeneratePDF" class="btn btn-dark"><i class="fa fa-money-bill"></i> Rechnung als PDF herunterladen</button>
+										<a type="button" href="https://dashboard.personalpeak360.de/admin/buchhaltung/rechnung/generate_E-Invoice/{{ rechnung['WhiteLabel_RechnungsID'] }}" class="btn btn-dark"><i class="fa fa-money-bill"></i> Rechnung als XML herunterladen (E-Rechnung)</a>
+										<!--
+											<button type="button" class="btn btn-dark"><i class="fa fa-print"></i> Drucken</button>
+											<button type="button" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Exportieren (als PDF)</button>
+										-->
+									</div>
+									<hr/>
+								</div>
+								<div class="invoice overflow-auto">
+									<div style="min-width: 600px">
+										<header>
+											<div class="row">
+												<div class="col">
+													<a href="javascript:;">
+														<img src="https://cdn.personalpeak360.de/white-label/{{ rechnung['WhiteLabel-Details']['Logo_lang'] }}" width="260" alt="" />
+													</a>
+												</div>
+												<div class="col company-details">
+													<h2 class="name">
+												<a target="_blank" href="javascript:;">
+													{{ rechnung['WhiteLabel-Details']['Firmenname'] }}
+												</a>
+											</h2>
+													<div>{{ rechnung['WhiteLabel-Details']['Strasse'] }} {{ rechnung['WhiteLabel-Details']['Hausnummer'] }}</div>
+													<div>{{ rechnung['WhiteLabel-Details']['PLZ'] }} {{ rechnung['WhiteLabel-Details']['Ort'] }}</div>
+													<div><a href="mailto:{{ rechnung['WhiteLabel-Details']['EMail'] }}">{{ rechnung['WhiteLabel-Details']['EMail'] }}</a></div>
+												</div>
+											</div>
+										</header>
+										<main>
+											<div class="row contacts">
+												<div class="col invoice-to">
+													<div class="text-gray-light">RECHNUNG AN:</div>
+													<h2 class="to">{{ rechnung['Nutzer-Details']['Vorname'] }} {{ rechnung['Nutzer-Details']['Nachname'] }}</h2>
+													<div class="address">{{ rechnung['Nutzer-Details']['Strasse'] }} {{ rechnung['Nutzer-Details']['Hausnummer'] }}</div>
+													<div class="address">{{ rechnung['Nutzer-Details']['PLZ'] }} {{ rechnung['Nutzer-Details']['Ort'] }}</div>
+													<div class="email"><a href="mailto:{{ rechnung['Nutzer-Details']['EMail'] }}">{{ rechnung['Nutzer-Details']['EMail'] }}</a>
+													</div>
+												</div>
+												<div class="col invoice-details">
+													<h1 class="invoice-id">RECHNUNG #{{ rechnung['WhiteLabel_RechnungsID'] }}</h1>
+													<div class="date">Status:
+                                                        {% if rechnung['Status'] == "Offen" %}
+                                                            <span class="badge bg-warning" data-bs-toggle="modal" data-bs-target="#modalStatusChange" style="cursor: pointer;">OFFEN</span>
+                                                        {% elif rechnung['Status'] == "Bezahlt" %}
+                                                            <span class="badge bg-success" data-bs-toggle="modal" data-bs-target="#modalStatusChange" style="cursor: pointer;">BEZAHLT</span>
+                                                        {% elif rechnung['Status'] == "Überfällig" %}
+                                                            <span class="badge bg-danger" data-bs-toggle="modal" data-bs-target="#modalStatusChange" style="cursor: pointer;">IM VERZUG</span>
+                                                        {% else %}
+                                                            <span class="badge bg-secondary" data-bs-toggle="modal" data-bs-target="#modalStatusChange" style="cursor: pointer;">UNBEKANNT</span>
+                                                        {% endif %}
+                                                    </div>
+													<div class="date">Rechnungsdatum: {{ rechnung['Rechnungsdatum'] | format_datetime('%Y-%m-%d', '%d.%m.%Y') }}</div>
+													<div class="date">Fälligkeitsdatum: {{ rechnung['Faelligkeitsdatum'] | format_datetime('%Y-%m-%d', '%d.%m.%Y') }}</div>
+													<div class="date">Typ: <span class="badge bg-secondary"{% if rechnung['Typ'] == "Wiederkehrend" %}data-bs-toggle="modal" data-bs-target="#modal_Wiederkehrend" style="cursor: pointer;"{% else %}data-bs-toggle="modal" data-bs-target="#modal_Einmalig" style="cursor: pointer;"{% endif %}>{{ rechnung['Typ'] }}</span></div>
+												</div>
+											</div>
+											<table>
+												<thead>
+													<tr>
+														<th>#</th>
+														<th class="text-left">Beschreibung</th>
+														<th class="text-right">STÜCKPREIS</th>
+														<th class="text-right">ANZAHL</th>
+														<th class="text-right">GESAMT</th>
+													</tr>
+												</thead>
+												<tbody>
+                                                    {% for position in rechnung['Items'] %}
+                                                        <tr>
+                                                            <td class="no">{{ loop.index }}</td>
+                                                            <td class="text-left">
+                                                                <h3>{{ position['Bezeichnung'] }}</h3>
+                                                                {{ position['Beschreibung'] }}
+                                                            </td>
+                                                            <td class="unit">{{ '{:.2f}'.format(position['Preis']).replace('.', ',') }} €</td>
+                                                            <td class="qty">{{ position['Anzahl'] }}</td>
+                                                            <td class="total">{{ '{:.2f}'.format(position['Preis'] * position['Anzahl']).replace('.', ',') }} €</td>
+                                                        </tr>
+                                                    {% endfor %}
+												</tbody>
+												<tfoot>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="2">ZWISCHENSUMME</td>
+														<td>{{ '{:.2f}'.format(rechnung['Preise']['Zwischensumme']).replace('.', ',') }} €</td>
+													</tr>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="2">Steuern ({{ rechnung['Steuersatz'] }}%)</td>
+														<td>{{ '{:.2f}'.format(rechnung['Preise']['Steuer']).replace('.', ',') }} €</td>
+													</tr>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="2">GESAMTSUMME</td>
+														<td>{{ '{:.2f}'.format(rechnung['Preise']['Gesamt']).replace('.', ',') }} €</td>
+													</tr>
+												</tfoot>
+											</table>
+											<div class="thanks">Vielen Dank!</div>
+											{% if rechnung['Hinweise'] %}
+												<div class="notices">
+													<div>Wichtiger Hinweis:</div>
+													<div class="notice">{{ rechnung['Hinweise'] }}</div>
+												</div>
+											{% endif %}
+										</main>
+										<footer>Die Rechnung wurde digital erstellt und ist ohne Unterschrift und Siegel gültig.</footer>
+									</div>
+									<!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+									<div></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+
+		{{ footer | safe }}
+		
+	</div>
+	<!-- end wrapper -->
+	
+	{{ theme_customizer | safe }}
+
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/index.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+	<script>
+		new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries');
+	</script>
+    
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

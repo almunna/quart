@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Kanban-Board → Admin-Bereich</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/kanban/kanban.css">
+
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+		<style>
+			/* PFLICHTFELDER IM FORMULAR */
+			.required:after {
+				content: " (*)";
+				color: red;
+			}
+		</style>
+
+
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="card radius-15">
+						<div class="card-body">
+							<div class="card-title">
+								<h4 class="mb-0">Kanban-Board's</h4>
+                                <h6 class="mb-0">Auf dieser Seite kannst du auf Kanban-Boards zugreifen, welche du selbst erstellt hast oder auf welche du Zugriff erhalten hast.</h6>
+							</div>
+						</div>
+					</div>
+					
+					{% if Kanban_Boards == [] or "error" in Kanban_Boards %}
+						<div class="card radius-15 bg-light-warning">
+							<div class="card-body text-center">
+								<h5 class="mb-3">Zurzeit sind keine Kanban-Boards verfügbar</h5>
+								<p>Leider hast du keinen Zugriff auf ein Kanban-Board und hast noch keine eigenen erstellt. Nutze jetzt dieses Feature, um dein erstes Kanban-Board zu erstellen!</p>
+								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBoardErstellen">Neues Kanban-Board erstellen</button>
+							</div>
+						</div>
+					{% else %}
+						<div class="row">
+							{% for Board in Kanban_Boards %}
+								<div class="col-12 col-lg-4 col-xl-4">
+									<div class="card bg-secondary radius-15 h-100">
+										<div class="card-body">
+											<h5 class="card-title text-white">{{ Board['Name'] }}</h5>
+											<p class="text-white">{{ Board['Beschreibung'] }}</p>
+											
+											<a class="btn btn-primary" href="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban/{{ Board['id'] }}">ÖFFNEN</a>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+
+							
+							<div class="col-12 col-lg-4 col-xl-4">
+								<div class="card radius-15 h-100 d-flex justify-content-center align-items-center text-center" style="background-color: #ffeeba; border-color: #ffeeba;">
+									<div class="card-body">
+										<h5 class="card-title">Weiteres Kanban-Board erstellen?</h5>
+										<p>Erstelle jetzt ein neues Kanban-Board</p>
+										<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalBoardErstellen">Neues Kanban-Board erstellen</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					
+
+					<div class="modal fade" id="modalBoardErstellen" tabindex="-1" aria-labelledby="modalBoardErstellen" style="display: none;" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Neues Kanban-Board erstellen</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body" style="word-wrap: break-word; white-space: normal;">
+									<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/admin/kanban" method="post" id="kanbanForm">
+										<!-- Name -->
+										<div class="form-group mb-2">
+											<label class="required" for="name">Name</label>
+											<input type="text" class="form-control" id="name" name="name" placeholder="Bezeichnung für das Kanban-Board" required>
+										</div>
+
+
+										<label for="tabs">Tabs</label>
+										<div id="tabContainer">
+											<div class="tab-item">
+												<input type="text" name="tabs[]" placeholder="Tab-Name" class="form-control mb-2">
+											</div>
+										</div>
+										<button type="button" class="btn btn-light-secondary btn-sm m-1 mt-2" id="addTab">Weiteren Tab hinzufügen</button>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+									<button type="submit" class="btn btn-primary" form="kanbanForm">Board erstellen</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<script>
+						document.getElementById('addTab').addEventListener('click', function() {
+							const tabContainer = document.getElementById('tabContainer');
+							const newTabItem = document.createElement('div');
+							newTabItem.className = 'tab-item';
+							newTabItem.innerHTML = `
+								<input type="text" name="tabs[]" placeholder="Tab-Name" class="form-control mb-2">
+							`;
+							tabContainer.appendChild(newTabItem);
+						});
+					</script>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script src="https://cdn.personalpeak360.de/assets/custom/kanban/kanban.js"></script>
+	
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			//Default data table
+			$('#example').DataTable();
+			var table = $('#example2').DataTable({
+				lengthChange: false,
+				buttons: ['copy', 'excel', 'pdf', 'print', 'colvis']
+			});
+			table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
+		});
+	</script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>

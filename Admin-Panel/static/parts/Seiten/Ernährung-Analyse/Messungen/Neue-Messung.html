@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>{{ WhiteLabel['Bezeichnung'] }} | Neue Messung → Ernährung & Analyse</title>
+	<!--favicon-->
+	<link rel="icon" href="https://cdn.personalpeak360.de/white-label/{{ WhiteLabel['Favicon'] }}" type="image/png">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.css">
+	<!--Data Tables -->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+	<!--plugins-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/fullcalendar/css/main.min.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/css/apexcharts.css" rel="stylesheet">
+	<!-- loader-->
+	<link href="https://cdn.personalpeak360.de/syndash/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto&display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/app.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/syndash/assets/css/dark-theme.css" />
+
+	<script src="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.js"></script>
+	<link rel="stylesheet" href="https://cdn.personalpeak360.de/assets/custom/benachrichtigung/benachrichtigung.css">
+	<script src="https://cdn.personalpeak360.de/assets/vendor/js/vue.js"></script>
+
+</head>
+
+<body>
+    {% if not ErnährungsAnalyse_Details['Status'] %}
+		<!-- Fake Button -->
+		<button id="fakeOpenModalButton" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modal_AktivitätsLevel_Festlegen"></button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="modal_AktivitätsLevel_Festlegen" tabindex="-1" aria-labelledby="modal_Erstellen" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog">
+				<form action="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/aktualisieren/Level?Redirect_URL=https://dashboard.{{ WhiteLabel['Domain'] }}/Messung/Neu" method="post" id="Erstellen_FORM">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Aktivitäts-Level festlegen</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group mb-3">
+								<label for="Aktivitäts-Level">Aktivitäts-Level</label>
+								<select class="form-select" name="Aktivitäts-Level" id="Aktivitäts-Level">
+									<option value="Sitzend">Sitzend (geringe Aktivität)</option>
+									<option value="Stehend">Stehend (leichte Tätigkeit)</option>
+									<option value="Aktiv">Aktiv (regelmäßige Bewegung)</option>
+									<option value="Athlet">Athlet (intensives Training)</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Aktivitäts-Level festlegen</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<style>
+			/* Standard Body */
+			body {
+				cursor: default; /* Normaler Cursor */
+			}
+		
+			/* Wenn das Modal geöffnet ist */
+			body.modal-open {
+				overflow: hidden; /* Verhindert Scrollen */
+			}
+		
+			/* Zeige gesperrten Cursor für alle Inhalte außerhalb des Modals */
+			body.modal-open > *:not(.modal) {
+				pointer-events: none; /* Blockiert alle Klicks */
+				cursor: not-allowed; /* Zeigt gesperrten Cursor */
+			}
+		
+			/* Erlaube Interaktionen im Modal */
+			.modal {
+				pointer-events: auto; /* Aktiviert Interaktionen im Modal */
+				cursor: default; /* Normaler Cursor im Modal */
+			}
+		</style>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Zeige das Modal an
+				const fakeButton = document.getElementById('fakeOpenModalButton');
+				if (fakeButton) {
+					fakeButton.click();
+				}
+		
+				// Schließen des Modals verhindern
+				const modal = document.getElementById('modal_AktivitätsLevel_Festlegen');
+				if (modal) {
+					modal.addEventListener('hide.bs.modal', function (event) {
+						event.preventDefault(); // Verhindert das Schließen
+					});
+				}
+			});
+		</script>
+	{% endif %}
+
+
+
+	<!-- wrapper -->
+	<div class="wrapper">
+		<!--sidebar-wrapper-->
+		{{ sidebar | safe }}
+		<!--end sidebar-wrapper-->
+		
+		{{ header | safe }}
+
+
+		<!--page-wrapper-->
+        <div class="page-wrapper">
+            <!--page-content-wrapper-->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="card radius-15 mb-3">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4 class="mb-0">Neue Messung durchführen</h4>
+                                <h6 class="mb-0">In der Ernährungs- und Analyse-Halle kannst Du unter anderem auf Deine Ernährungspläne zugreifen und Dein Ernährung tracken.</h6>
+                                <h6 class="mb-0">Bevor Du aber einen Ernährungsplan erhalten kannst, musst Du zu guter letzt jetzt noch diese initiale Messung durchführen, sodass Dein Trainer einen auf Dich abgestimmten Plan anfertigen kann.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <script>
+                        // Funktion, die den Countdown initialisiert
+                        function initializeFlipDown() {
+                            // Überprüfen, ob das Ziel-Element existiert
+                            const flipdownElement = document.getElementById('flipdown2');
+                            if (!flipdownElement) {
+                                console.error('FlipDown element not found!');
+                                return;
+                            }
+                
+                            // Aktuelles Datum in Sekunden
+                            var currentDate = Math.floor(new Date().getTime() / 1000);
+                
+                            // 48 Stunden in Sekunden
+                            var hours48 = 48 * 60 * 60;
+                
+                            // Ziel-Datum (heute + 48 Stunden)
+                            var targetDate = currentDate + hours48;
+                
+                            // FlipDown initialisieren
+                            var flipdown = new FlipDown(targetDate, 'flipdown2', {
+                                headings: ["Tage", "Stunden", "Minuten", "Sekunden"]
+                            })
+                
+                            // Countdown starten
+                            .start()
+                
+                            // Funktion ausführen, wenn der Countdown endet
+                            .ifEnded(() => {
+                                console.log('Der Countdown ist abgelaufen!');
+                            });
+                
+                            // Version anzeigen
+                            var ver = document.getElementById('ver');
+                            if (ver) {
+                                ver.innerHTML = flipdown.version;
+                            }
+                        }
+                    </script>
+
+                    <form action="https://dashboard.{{ WhiteLabel['Domain'] }}/Ernährung-Analyse/Messung/Neu" method="post">
+                        <div class="card radius-15 mb-4">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h5 class="mb-0">Persönliche Informationen</h5>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label for="Geschlecht">Bitte wähle Dein Geschlecht:</label>
+                                    <select class="form-select" name="Geschlecht" id="Geschlecht" required>
+                                        <option value="" disabled selected>Geschlecht auswählen</option>
+                                        <option value="Männlich">Männlich</option>
+                                        <option value="Weiblich">Weiblich</option>
+                                    </select>
+                                    <div class="invalid-feedback">Bitte wähle Dein Geschlecht aus.</div>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="Alter">Bitte gib Dein Alter ein:</label>
+                                    <input type="number" class="form-control" name="Alter" id="Alter" placeholder="Alter" required>
+                                    <div class="invalid-feedback">Bitte gib Dein Alter an.</div>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="Grösse">Bitte gib Deine Größe ein:</label>
+                                    <input type="number" class="form-control" name="Grösse" id="Grösse" placeholder="Größe (cm)" required>
+                                    <div class="invalid-feedback">Bitte gib Deine Größe in cm an.</div>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label for="Gewicht">Bitte gib Dein derzeitiges Gewicht in Kilogram an:</label>
+                                    <input type="number" class="form-control" name="Gewicht" id="Gewicht" placeholder="Gewicht (kg)" required min="1" max="300">
+                                    <div class="invalid-feedback">Bitte gib ein Gewicht zwischen 1 und 300 kg an.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card radius-15 mb-0">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h5 class="mb-0">Körpermessungen</h5>
+                                </div>
+                                <div class="alert alert-warning" role="alert">
+                                    <h6 class="mb-3">Verwende ein flexibles Maßband und notiere Deine Ergebnisse.</h6>
+                                    <hr>
+                                    <ol>
+                                        <li>
+                                            <strong>Oberarm messen:</strong>
+                                            <ul>
+                                                <li><strong>Position:</strong> Stehe aufrecht mit entspannten Schultern und lasse den Arm locker an der Seite deines Körpers hängen.</li>
+                                                <li><strong>Messpunkt:</strong> Miss den Umfang deines Oberarms an der dicksten Stelle, in der Regel auf halber Strecke zwischen Schulter und Ellenbogen.</li>
+                                                <li><strong>Achtung:</strong> Das Maßband sollte gerade und parallel zum Boden liegen. Ziehe es fest genug an, um Kontakt zu halten, aber nicht so fest, dass es in die Haut einschneidet.</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <strong>Taille messen:</strong>
+                                            <ul>
+                                                <li><strong>Position:</strong> Stehe aufrecht, Füße schulterbreit auseinander.</li>
+                                                <li><strong>Messpunkt:</strong> Miss deine Taille an der schmalsten Stelle, normalerweise direkt über dem Bauchnabel.</li>
+                                                <li><strong>Achtung:</strong> Achte darauf, dass das Maßband gerade und parallel zum Boden verläuft. Atme normal und ziehe das Maßband nicht zu fest.</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <strong>Hüfte messen:</strong>
+                                            <ul>
+                                                <li><strong>Position:</strong> Stehe mit geschlossenen Füßen aufrecht.</li>
+                                                <li><strong>Messpunkt:</strong> Miss um die breiteste Stelle deiner Hüfte, dies umfasst oft den Gesäßbereich.</li>
+                                                <li><strong>Achtung:</strong> Das Maßband sollte gerade sein und auf gleicher Höhe mit dem Boden verlaufen. Es sollte locker liegen, um eine genaue Messung zu ermöglichen.</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <strong>Oberschenkel messen:</strong>
+                                            <ul>
+                                                <li><strong>Position:</strong> Stehe aufrecht, Beine leicht auseinander, etwa 15 cm.</li>
+                                                <li><strong>Messpunkt:</strong> Miss den Umfang deines Oberschenkels nahe seinem oberen Ende, direkt unter dem Gesäß.</li>
+                                                <li><strong>Achtung:</strong> Das Maßband sollte waagerecht zum Boden und straff genug sein, um nicht zu verrutschen, ohne in die Haut einzuschneiden.</li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <input type="number" class="form-control" id="Oberarm_CM" name="Oberarm_CM" placeholder="Oberarm (cm):" required>
+                                    <div class="invalid-feedback">Bitte gib den Umfang Deines Oberarms an.</div>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <input type="number" class="form-control" id="Taille_CM" name="Taille_CM" placeholder="Taille (cm):" required>
+                                    <div class="invalid-feedback">Bitte gib den Umfang Deiner Taille an.</div>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <input type="number" class="form-control" id="Hüfte_CM" name="Hüfte_CM" placeholder="Hüfte (cm):" required>
+                                    <div class="invalid-feedback">Bitte gib den Umfang Deiner Hüfte an.</div>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <input type="number" class="form-control" id="Oberschenkel_CM" name="Oberschenkel_CM" placeholder="Oberschenkel (cm):" required>
+                                    <div class="invalid-feedback">Bitte gib den Umfang Deines Oberschenkels an.</div>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Messung eintragen</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--end page-content-wrapper-->
+        </div>
+        <!--end page-wrapper-->
+
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		
+        {{ footer | safe }}
+
+	</div>
+	<!-- end wrapper -->
+	
+    {{ theme_customizer | safe }}
+    
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/jquery.min.js"></script>
+    <script src="https://cdn.personalpeak360.de/syndash/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flipdown/dist/flipdown.min.js"></script>
+	<!--Data Tables js-->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/plugins/datatable/js/jquery.dataTables.min.js"></script>
+	<!-- App JS -->
+	<script src="https://cdn.personalpeak360.de/syndash/assets/js/app.js"></script>
+
+	
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				error: "{{ error }}",
+				success: "{{ success }}",
+				punkte: "{{ punkte_nachricht }}"
+			},
+			methods: {
+				showMessages() {
+					if (this.isErrorVisible) {
+						this.showError();
+					}
+					if (this.isSuccessVisible) {
+						this.showSuccess();
+					}
+					if (this.isPunkteVisible) {
+						this.showPunkte();
+					}
+				},
+				showError() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display an error notification
+					message.error('{{ error }}');
+				},
+				showSuccess() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display a success notification
+					message.success('{{ success }}');
+				},
+				showPunkte() {
+					// Create an instance of Notyf
+					var message = new nachricht({
+						duration: 5000,
+						position: {
+							x: 'right',
+							y: 'top',
+						},
+						dismissible: true
+					});
+	
+					// Display points notification
+					message.success('{{ punkte }}'); // or use message.error() if it should be an error
+				}
+			},
+			computed: {
+				isErrorVisible: function () {
+					return this.error && this.error !== '' && this.error !== 'None';
+				},
+				isSuccessVisible: function() {
+					return this.success && this.success !== '' && this.success !== 'None';
+				},
+				isPunkteVisible: function() {
+					return this.punkte && this.punkte !== '' && this.punkte !== 'None';
+				}
+			},
+			watch: {
+				isErrorVisible(newVal) {
+					if (!newVal) {
+						this.closeError();
+					}
+				},
+				isSuccessVisible(newVal) {
+					if (!newVal) {
+						this.closeSuccess();
+					}
+				},
+				isPunkteVisible(newVal) {
+					if (!newVal) {
+						this.closePunkte(); // You can implement this method if needed
+					}
+				}
+			},
+			created() {
+				this.$nextTick(() => {
+					this.showMessages();
+				})
+			}
+		});
+	</script>	
+</body>
+
+</html>
