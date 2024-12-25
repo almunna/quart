@@ -17,3 +17,4 @@ quart-cors
 requests
 user-agents
 werkzeug
+gunicorn
