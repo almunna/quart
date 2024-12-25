@@ -17,5 +17,5 @@ quart-cors
 requests
 user-agents
 werkzeug
-gunicorn main:app
+gunicorn
 
